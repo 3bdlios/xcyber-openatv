@@ -1,0 +1,3416 @@
+Package: alsa-topology-conf
+Version: 1.2.5.1-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 01537395973975811f0623d37b0e3565
+SHA256sum: 3f5cf3931b9965eb77c9ef76da4a4303a9600fb2efea2dbf3b72c0e570f2ada4
+Size: 15192
+Filename: alsa-topology-conf_1.2.5.1-r0_all.ipk
+Source: alsa-topology-conf_1.2.5.1.bb
+Description: ALSA topology configuration files
+OE: alsa-topology-conf
+HomePage: https://alsa-project.org
+License: BSD-3-Clause
+Priority: optional
+
+Package: alsa-ucm-conf
+Version: 1.2.16.1-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: c5773e3769e4335ce63739ab53c1d03c
+SHA256sum: 3e40ef8b3af6bf9995a45f8f1bfccf9c7ef2cac35d5348e5bd8aae0aae0113b1
+Size: 123192
+Filename: alsa-ucm-conf_1.2.16.1-r0_all.ipk
+Source: alsa-ucm-conf_1.2.16.1.bb
+Description: ALSA Use Case Manager configuration
+OE: alsa-ucm-conf
+HomePage: https://alsa-project.org
+License: BSD-3-Clause
+Priority: optional
+
+Package: autoconf-archive-doc
+Version: 2024.10.16-r0
+Section: doc
+Architecture: all
+Maintainer: openATV
+MD5Sum: 46c481d149adb5191847d2a406cebc9e
+SHA256sum: 526a99886cb2674009d9c5afb670eae68d2a781823a3df90d6127e34f3a11571
+Size: 182524
+Filename: autoconf-archive-doc_2024.10.16-r0_all.ipk
+Source: autoconf-archive_2024.10.16.bb
+Description: a collection of freely re-usable Autoconf macros - Documentation files
+OE: autoconf-archive
+HomePage: http://www.gnu.org/software/autoconf-archive/
+License: GPL-3.0-or-later WITH Autoconf-exception-3.0
+Priority: optional
+
+Package: autoconf-archive
+Version: 2024.10.16-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 9e20678659f3f68b252026f2bb8830b8
+SHA256sum: b5e14fc3b4832e7ba8619cbdf8450b66a61db3fbdf8a86f62b96beca42c54950
+Size: 406956
+Filename: autoconf-archive_2024.10.16-r0_all.ipk
+Source: autoconf-archive_2024.10.16.bb
+Description: a collection of freely re-usable Autoconf macros
+OE: autoconf-archive
+HomePage: http://www.gnu.org/software/autoconf-archive/
+License: GPL-3.0-or-later WITH Autoconf-exception-3.0
+Priority: optional
+
+Package: bootlogos-enigma2-meta-dbg
+Version: 1.0-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 93ad048add709b50ea5801c0349b199d
+SHA256sum: 333cc028d4819a3e2191d3f34f0a23e1f1d8692accdb91edf56e8d887f8dd238
+Size: 568
+Filename: bootlogos-enigma2-meta-dbg_1.0-r0_all.ipk
+Source: bootlogos-enigma2-meta.bb
+Description: meta file for bootlogos - Debugging files
+OE: bootlogos-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: bootlogos-enigma2-meta-dev
+Version: 1.0-r0
+Recommends: bootlogos-enigma2-meta (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: d885dc523cb921ddfa2d33b0e18f8d42
+SHA256sum: 72a2836651ce28a060c1253a78c89af4b2b752bf083c98b6d1f0c9eb80831ede
+Size: 606
+Filename: bootlogos-enigma2-meta-dev_1.0-r0_all.ipk
+Source: bootlogos-enigma2-meta.bb
+Description: meta file for bootlogos - Development files
+OE: bootlogos-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: bootlogos-enigma2-meta
+Version: 1.0-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 0dbd94b753c4e4abd18c00b8c1c7db94
+SHA256sum: 0011d3a9ef87fd43559391be69f93c2e48be1dc218b68f225aaa9583adce817f
+Size: 506
+Filename: bootlogos-enigma2-meta_1.0-r0_all.ipk
+Source: bootlogos-enigma2-meta.bb
+Description: meta file for bootlogos
+OE: bootlogos-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: ca-certificates-dbg
+Version: 20260816-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 24cf427c4e09decb89ec5870f006a39d
+SHA256sum: 8647e39066ea5f659a51a2c94d9ec0236eb405a5c53abbc9a42eb4470233993e
+Size: 676
+Filename: ca-certificates-dbg_20260816-r0_all.ipk
+Source: ca-certificates_20260816.bb
+Description: Common CA certificates - Debugging files
+OE: ca-certificates
+HomePage: http://packages.debian.org/sid/ca-certificates
+License: GPL-2.0-or-later AND MPL-2.0
+Priority: optional
+
+Package: ca-certificates-dev
+Version: 20260816-r0
+Recommends: ca-certificates (= 20260816-r0), openssl-bin-dev, openssl-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 08608bcdffd72d5beefac390f36d135d
+SHA256sum: 404767d771d87594fdcdba592cbfe391d025129e231f133bc7db370e6bd7119a
+Size: 724
+Filename: ca-certificates-dev_20260816-r0_all.ipk
+Source: ca-certificates_20260816.bb
+Description: Common CA certificates - Development files
+OE: ca-certificates
+HomePage: http://packages.debian.org/sid/ca-certificates
+License: GPL-2.0-or-later AND MPL-2.0
+Priority: optional
+
+Package: ca-certificates-doc
+Version: 20260816-r0
+Section: doc
+Architecture: all
+Maintainer: openATV
+MD5Sum: b2cb26652868558870971f755cbef891
+SHA256sum: 06cdd064dd8933c2f799908dba44a736e6a7ec98f29ef904a3adaf7b6c533e7f
+Size: 2306
+Filename: ca-certificates-doc_20260816-r0_all.ipk
+Source: ca-certificates_20260816.bb
+Description: Common CA certificates - Documentation files
+OE: ca-certificates
+HomePage: http://packages.debian.org/sid/ca-certificates
+License: GPL-2.0-or-later AND MPL-2.0
+Priority: optional
+
+Package: ca-certificates
+Version: 20260816-r0
+Depends: openssl, openssl-bin
+Section: libs/network
+Architecture: all
+Maintainer: openATV
+MD5Sum: beb5807bf427c6402adf6db78fd0e4ff
+SHA256sum: 88e1ede2d10ee94ca59d1c1065862bf67c01152d8482e58b7309d95593cafeb0
+Size: 112358
+Filename: ca-certificates_20260816-r0_all.ipk
+Source: ca-certificates_20260816.bb
+Description: Common CA certificates
+OE: ca-certificates
+HomePage: http://packages.debian.org/sid/ca-certificates
+License: GPL-2.0-or-later AND MPL-2.0
+Priority: optional
+
+Package: crontab-clearmen-dbg
+Version: 0.1-r0
+Section: devel
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: fbc0c1f53c771e0a74e2bef62c5b287e
+SHA256sum: 4eef00d1ab9075a04afc1ab69153a8e3160cd9861c51ea319f95d27ced6f5e33
+Size: 574
+Filename: crontab-clearmen-dbg_0.1-r0_all.ipk
+Source: crontab-clearmen_0.1.bb
+Description: crontab Clearmen - Debugging files
+OE: crontab-clearmen
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: crontab-clearmen-dev
+Version: 0.1-r0
+Recommends: crontab-clearmen (= 0.1-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: 6f9dc9b6d318e4c9d20f7b22c1d3c4ab
+SHA256sum: 93cc574240546fd46c1da2050cc15b76d06c7a76617badfe85b1534bde16efb5
+Size: 606
+Filename: crontab-clearmen-dev_0.1-r0_all.ipk
+Source: crontab-clearmen_0.1.bb
+Description: crontab Clearmen - Development files
+OE: crontab-clearmen
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: crontab-clearmen
+Version: 0.1-r0
+Section: base
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: a256da748bf7d119a66a71cf622d47bd
+SHA256sum: 35416e1576200c88eb71b444efc9e2177df6a045f587bd640069364ba331b2ae
+Size: 706
+Filename: crontab-clearmen_0.1-r0_all.ipk
+Source: crontab-clearmen_0.1.bb
+Description: crontab Clearmen
+OE: crontab-clearmen
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: dabstreamer
+Version: 0.1+git1+8d84fef0+8d84fef64b-r0
+Depends: eti-tools, python3-core, tsniv2ni
+Recommends: update-rc.d
+Section: devel/python
+Architecture: all
+Maintainer: SatDreamGR
+MD5Sum: 842606eb446467fede074f29b78921c2
+SHA256sum: 2ff68aa194ed1a620b904be7fad28259d974cb1795d4b732bc20198ffbad953d
+Size: 3858
+Filename: dabstreamer_0.1+git1+8d84fef0+8d84fef64b-r0_all.ipk
+Source: dabstreamer.bb
+Description: dabstreamer version 0.1+git-r0
+OE: dabstreamer
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: dreamplex-skins-meta-dbg
+Version: 8.0.1-r0
+Recommends: enigma2-plugin-skinpacks-dreamplex-plex-experience-dbg, enigma2-plugin-skinpacks-dreamplex-youplex-blue-dbg, enigma2-plugin-skinpacks-dreamplex-youplex-green-dbg, enigma2-plugin-skinpacks-dreamplex-youplex-purple-dbg, enigma2-plugin-skinpacks-dreamplex-youplex-red-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: d8f1213efa11e46ae6a41797702d1675
+SHA256sum: abc33ac76def71f0d0c2b3dd40c27fca1a1a07743486ad798f89219a4d56a2ed
+Size: 628
+Filename: dreamplex-skins-meta-dbg_8.0.1-r0_all.ipk
+Source: dreamplex-skins-meta.bb
+Description: Skins for Dreamplex - Debugging files
+OE: dreamplex-skins-meta
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: dreamplex-skins-meta-dev
+Version: 8.0.1-r0
+Recommends: dreamplex-skins-meta (= 8.0.1-r0), enigma2-plugin-skinpacks-dreamplex-plex-experience-dev, enigma2-plugin-skinpacks-dreamplex-youplex-blue-dev, enigma2-plugin-skinpacks-dreamplex-youplex-green-dev, enigma2-plugin-skinpacks-dreamplex-youplex-purple-dev, enigma2-plugin-skinpacks-dreamplex-youplex-red-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 2794696cee4c9d4026b943bad860d0ad
+SHA256sum: 5065694e9e4f9a4ddff35de5daf93dfc6dbe88d163951389571c784c3ed5ce8e
+Size: 652
+Filename: dreamplex-skins-meta-dev_8.0.1-r0_all.ipk
+Source: dreamplex-skins-meta.bb
+Description: Skins for Dreamplex - Development files
+OE: dreamplex-skins-meta
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: dreamplex-skins-meta
+Version: 8.0.1-r0
+Depends: enigma2-plugin-skinpacks-dreamplex-plex-experience, enigma2-plugin-skinpacks-dreamplex-youplex-blue, enigma2-plugin-skinpacks-dreamplex-youplex-green, enigma2-plugin-skinpacks-dreamplex-youplex-purple, enigma2-plugin-skinpacks-dreamplex-youplex-red
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 7c89edb8ccd642bb3184aa71578676c8
+SHA256sum: 01c5110ce5a0df130deb2b61c04b15581118d66606317d9048af0e7986cfb23d
+Size: 556
+Filename: dreamplex-skins-meta_8.0.1-r0_all.ipk
+Source: dreamplex-skins-meta.bb
+Description: Skins for Dreamplex
+OE: dreamplex-skins-meta
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: easy-rsa-dbg
+Version: 2.3.0-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3c8d7f027a8334b6e95f1193324095d6
+SHA256sum: 027160f01c49dbe7b28a631a8499f50e468e6037327c24e52553e2b8671e9d16
+Size: 648
+Filename: easy-rsa-dbg_2.3.0-r0_all.ipk
+Source: easy-rsa_2.3.0.bb
+Description: Simple shell based CA utility - Debugging files
+OE: easy-rsa
+HomePage: https://community.openvpn.net/openvpn
+License: GPL-2.0-only
+Priority: optional
+
+Package: easy-rsa-dev
+Version: 2.3.0-r0
+Recommends: easy-rsa (= 2.3.0-r0), libpam-dev, lzo-dev, openssl-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 4505f40ae5840a45d760047898afc189
+SHA256sum: 52f5fda09c7fd6fc69785a1c7b385e25eacd0cd4d28d68009587539023893c4c
+Size: 698
+Filename: easy-rsa-dev_2.3.0-r0_all.ipk
+Source: easy-rsa_2.3.0.bb
+Description: Simple shell based CA utility - Development files
+OE: easy-rsa
+HomePage: https://community.openvpn.net/openvpn
+License: GPL-2.0-only
+Priority: optional
+
+Package: easy-rsa
+Version: 2.3.0-r0
+Depends: openssl
+Section: console/network
+Architecture: all
+Maintainer: openATV
+MD5Sum: 0fc9c2f01eaffd723f256f94474b702f
+SHA256sum: 740311cd6b517434ad64be9558b51ca147d76457884d53b2d4c767db2267ed9c
+Size: 11224
+Filename: easy-rsa_2.3.0-r0_all.ipk
+Source: easy-rsa_2.3.0.bb
+Description: Simple shell based CA utility
+OE: easy-rsa
+HomePage: https://community.openvpn.net/openvpn
+License: GPL-2.0-only
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetcleanup-dbg
+Version: 1.0+git1+7fa71da0+7fa71da598-r0
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: 67fc6d1befacb79ae89ba5e220edd522
+SHA256sum: 4a60fcd655ad54b910fdee35b82462083b80f5237a86860cee8399a6c10bf3e9
+Size: 644
+Filename: enigma2-plugin-extensions-bouquetcleanup-dbg_1.0+git1+7fa71da0+7fa71da598-r0_all.ipk
+Source: enigma2-plugin-extensions-bouquetcleanup.bb
+Description: enigma2-plugin-extensions-bouquetcleanup version 1.0+git-r0 - Debugging files
+OE: enigma2-plugin-extensions-bouquetcleanup
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetcleanup-dev
+Version: 1.0+git1+7fa71da0+7fa71da598-r0
+Recommends: enigma2-plugin-extensions-bouquetcleanup (= 1.0+git1+7fa71da0+7fa71da598-r0)
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: 7163c491a26e5849e375dd6507bb76b3
+SHA256sum: 2370c7307be722cfbac119c703619732c1281266eb7990fa759bb9f9e3ed2f96
+Size: 680
+Filename: enigma2-plugin-extensions-bouquetcleanup-dev_1.0+git1+7fa71da0+7fa71da598-r0_all.ipk
+Source: enigma2-plugin-extensions-bouquetcleanup.bb
+Description: enigma2-plugin-extensions-bouquetcleanup version 1.0+git-r0 - Development files
+OE: enigma2-plugin-extensions-bouquetcleanup
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetcleanup-src
+Version: 1.0+git1+7fa71da0+7fa71da598-r0
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: fb457c22ce6243cc69ff7284787d005c
+SHA256sum: 36ebd378670d352238b80a7514f36d4405018069a2d77c8c120ebf9eb47aa697
+Size: 4688
+Filename: enigma2-plugin-extensions-bouquetcleanup-src_1.0+git1+7fa71da0+7fa71da598-r0_all.ipk
+Source: enigma2-plugin-extensions-bouquetcleanup.bb
+Description: enigma2-plugin-extensions-bouquetcleanup version 1.0+git-r0 - Source files
+OE: enigma2-plugin-extensions-bouquetcleanup
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetcleanup
+Version: 1.0+git1+7fa71da0+7fa71da598-r0
+Section: base
+Architecture: all
+Maintainer: Huevos
+MD5Sum: d6723b27fa4853fcd81bedf230885079
+SHA256sum: 3bebfdaf11d445deccaf9966f51ee3f396a9b35fbfa2c3f9f7c89da0ebeb9150
+Size: 11088
+Filename: enigma2-plugin-extensions-bouquetcleanup_1.0+git1+7fa71da0+7fa71da598-r0_all.ipk
+Source: enigma2-plugin-extensions-bouquetcleanup.bb
+Description: enigma2-plugin-extensions-bouquetcleanup version 1.0+git-r0
+OE: enigma2-plugin-extensions-bouquetcleanup
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetmakerxtream-dbg
+Version: 0.0-git1+cad9baa0+cad9baaaf6-r4
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 1311037706c0e21bc58dd4294a1a0216
+SHA256sum: 089be2742c41b05723eac0dc770d8bb14342f93cda1660f61c981e67d1b3166c
+Size: 622
+Filename: enigma2-plugin-extensions-bouquetmakerxtream-dbg_0.0-git1+cad9baa0+cad9baaaf6-r4_all.ipk
+Source: enigma2-plugin-extensions-bouquetmakerxtream.bb
+Description: IPTV bouquet maker - Debugging files
+OE: enigma2-plugin-extensions-bouquetmakerxtream
+HomePage: https://github.com/kiddac/Bouquet_Maker_Xtream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetmakerxtream-dev
+Version: 0.0-git1+cad9baa0+cad9baaaf6-r4
+Recommends: enigma2-plugin-extensions-bouquetmakerxtream (= 0.0-git1+cad9baa0+cad9baaaf6-r4)
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: a8398e5643252ccf7546ac62da734b41
+SHA256sum: 4027a888da740fd4a4c8f84df62ff925feb3e387a5e098ebbabcee51a136a9a5
+Size: 660
+Filename: enigma2-plugin-extensions-bouquetmakerxtream-dev_0.0-git1+cad9baa0+cad9baaaf6-r4_all.ipk
+Source: enigma2-plugin-extensions-bouquetmakerxtream.bb
+Description: IPTV bouquet maker - Development files
+OE: enigma2-plugin-extensions-bouquetmakerxtream
+HomePage: https://github.com/kiddac/Bouquet_Maker_Xtream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetmakerxtream-src
+Version: 0.0-git1+cad9baa0+cad9baaaf6-r4
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 2feaaadef49f238ff0f467811e521cbf
+SHA256sum: 805d61ad350b56b4ab9e665c4167d92d121da17d0836f6d5f5b8d0f2206aa327
+Size: 66864
+Filename: enigma2-plugin-extensions-bouquetmakerxtream-src_0.0-git1+cad9baa0+cad9baaaf6-r4_all.ipk
+Source: enigma2-plugin-extensions-bouquetmakerxtream.bb
+Description: IPTV bouquet maker - Source files
+OE: enigma2-plugin-extensions-bouquetmakerxtream
+HomePage: https://github.com/kiddac/Bouquet_Maker_Xtream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-bouquetmakerxtream
+Version: 0.0-git1+cad9baa0+cad9baaaf6-r4
+Section: base
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 60ffbe978557725843285616bf77f2f5
+SHA256sum: 7dcba15ab64c9995a5ad8314561855a92f59c5a1b65f4133d5fcae26d55a5dd6
+Size: 4240578
+Filename: enigma2-plugin-extensions-bouquetmakerxtream_0.0-git1+cad9baa0+cad9baaaf6-r4_all.ipk
+Source: enigma2-plugin-extensions-bouquetmakerxtream.bb
+Description: IPTV bouquet maker
+OE: enigma2-plugin-extensions-bouquetmakerxtream
+HomePage: https://github.com/kiddac/Bouquet_Maker_Xtream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2embyclient-dbg
+Version: 1.0+git1+da691bc0+da691bcca3-r0
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: 7662eceb3f2908349be1d90b3ea538f3
+SHA256sum: b41fcc48115ac01672f2b5d6f73c2bf266edfb158fdfe811372f7b23c693d772
+Size: 622
+Filename: enigma2-plugin-extensions-e2embyclient-dbg_1.0+git1+da691bc0+da691bcca3-r0_all.ipk
+Source: enigma2-plugin-extensions-e2embyclient.bb
+Description: enigma2-plugin-extensions-e2embyclient version 1.0+git-r0 - Debugging files
+OE: enigma2-plugin-extensions-e2embyclient
+HomePage: https://github.com/DimitarCC/e2-emby-client
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2embyclient-dev
+Version: 1.0+git1+da691bc0+da691bcca3-r0
+Recommends: enigma2-plugin-extensions-e2embyclient (= 1.0+git1+da691bc0+da691bcca3-r0), python3-core-dev, python3-dev, python3-pillow-dev, python3-requests-dev, python3-yt-dlp-dev
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: c22f803f96b5a6c0ec040b01b59b94f0
+SHA256sum: 00e42021857c0da4f2bd0019766c3870b9d72845c45da5b58088613123a59eaa
+Size: 694
+Filename: enigma2-plugin-extensions-e2embyclient-dev_1.0+git1+da691bc0+da691bcca3-r0_all.ipk
+Source: enigma2-plugin-extensions-e2embyclient.bb
+Description: enigma2-plugin-extensions-e2embyclient version 1.0+git-r0 - Development files
+OE: enigma2-plugin-extensions-e2embyclient
+HomePage: https://github.com/DimitarCC/e2-emby-client
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2embyclient-src
+Version: 1.0+git1+da691bc0+da691bcca3-r0
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: f4eb8d761648c36a3b52fd5e2cf21aec
+SHA256sum: 20b000e000b5ce82ed10672ab6ccd7ef424951585b173248f395d7d2e693bfc4
+Size: 75036
+Filename: enigma2-plugin-extensions-e2embyclient-src_1.0+git1+da691bc0+da691bcca3-r0_all.ipk
+Source: enigma2-plugin-extensions-e2embyclient.bb
+Description: enigma2-plugin-extensions-e2embyclient version 1.0+git-r0 - Source files
+OE: enigma2-plugin-extensions-e2embyclient
+HomePage: https://github.com/DimitarCC/e2-emby-client
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2embyclient
+Version: 1.0+git1+da691bc0+da691bcca3-r0
+Depends: python3-core, python3-pillow, python3-requests, python3-yt-dlp
+Section: base
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: 7939954a7158919230c1be600bbd672f
+SHA256sum: 63c44ea1f0b50e6d493a5d04de032059d6f79d9053b9672c6a0830682305aed5
+Size: 286494
+Filename: enigma2-plugin-extensions-e2embyclient_1.0+git1+da691bc0+da691bcca3-r0_all.ipk
+Source: enigma2-plugin-extensions-e2embyclient.bb
+Description: enigma2-plugin-extensions-e2embyclient version 1.0+git-r0
+OE: enigma2-plugin-extensions-e2embyclient
+HomePage: https://github.com/DimitarCC/e2-emby-client
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2piconizer-dbg
+Version: 0.0-git1+bcbdb6e0+bcbdb6ede5-r0
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 2ad0de3aa3359380db99ebed2d3f150e
+SHA256sum: 042e449e29c9ba9b117b733fc1fd3724c639d1bba626cdb374f199de6287e21f
+Size: 624
+Filename: enigma2-plugin-extensions-e2piconizer-dbg_0.0-git1+bcbdb6e0+bcbdb6ede5-r0_all.ipk
+Source: enigma2-plugin-extensions-e2piconizer.bb
+Description: enigma2-plugin-extensions-e2piconizer version git-r0 - Debugging files
+OE: enigma2-plugin-extensions-e2piconizer
+HomePage: https://github.com/kiddac/E2_Piconizer
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2piconizer-dev
+Version: 0.0-git1+bcbdb6e0+bcbdb6ede5-r0
+Recommends: enigma2-plugin-extensions-e2piconizer (= 0.0-git1+bcbdb6e0+bcbdb6ede5-r0)
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: ea15c220da8591bcae5c6b0516256aa0
+SHA256sum: 186e3d0f0916dac53f483b8a34846da314dd12d0d314e52980d0e243c00a155a
+Size: 662
+Filename: enigma2-plugin-extensions-e2piconizer-dev_0.0-git1+bcbdb6e0+bcbdb6ede5-r0_all.ipk
+Source: enigma2-plugin-extensions-e2piconizer.bb
+Description: enigma2-plugin-extensions-e2piconizer version git-r0 - Development files
+OE: enigma2-plugin-extensions-e2piconizer
+HomePage: https://github.com/kiddac/E2_Piconizer
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2piconizer-src
+Version: 0.0-git1+bcbdb6e0+bcbdb6ede5-r0
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: dc16776675e2212c2d468f8bbbf4d48e
+SHA256sum: efc6b90c1163a9020aa7814b56bf790c2d74f8e3a4a76e2ab30643c79426375a
+Size: 15488
+Filename: enigma2-plugin-extensions-e2piconizer-src_0.0-git1+bcbdb6e0+bcbdb6ede5-r0_all.ipk
+Source: enigma2-plugin-extensions-e2piconizer.bb
+Description: enigma2-plugin-extensions-e2piconizer version git-r0 - Source files
+OE: enigma2-plugin-extensions-e2piconizer
+HomePage: https://github.com/kiddac/E2_Piconizer
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-e2piconizer
+Version: 0.0-git1+bcbdb6e0+bcbdb6ede5-r0
+Section: base
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 31ddd81e64c2859c9cb8d92d15075368
+SHA256sum: 9dca6b309dec6afc5fdb6266d2549ef0c376dd68f934b19db104fd545beacf5c
+Size: 1976772
+Filename: enigma2-plugin-extensions-e2piconizer_0.0-git1+bcbdb6e0+bcbdb6ede5-r0_all.ipk
+Source: enigma2-plugin-extensions-e2piconizer.bb
+Description: enigma2-plugin-extensions-e2piconizer version git-r0
+OE: enigma2-plugin-extensions-e2piconizer
+HomePage: https://github.com/kiddac/E2_Piconizer
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-enigmawelt-dbg
+Version: 0.0-git1+9f073310+9f0733197f-r0
+Section: devel
+Architecture: all
+Maintainer: enigmawelt jbleyel CommanderData2338
+MD5Sum: 90a14f49b267f66a56c2af82141b38a3
+SHA256sum: 076200ac60b3d402b0d248fa27f46e2315438ae5f275031e56b2e4000c3ef09b
+Size: 626
+Filename: enigma2-plugin-extensions-enigmawelt-dbg_0.0-git1+9f073310+9f0733197f-r0_all.ipk
+Source: enigma2-plugin-extensions-enigmawelt.bb
+Description: The biggest DreamOS/Enigma2 Video Blog - Debugging files
+OE: enigma2-plugin-extensions-enigmawelt
+HomePage: https://enigmawelt.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-enigmawelt-dev
+Version: 0.0-git1+9f073310+9f0733197f-r0
+Recommends: enigma2-plugin-extensions-enigmawelt (= 0.0-git1+9f073310+9f0733197f-r0)
+Section: devel
+Architecture: all
+Maintainer: enigmawelt jbleyel CommanderData2338
+MD5Sum: 5e5b7ee4649ee9b02454ffa566d637af
+SHA256sum: db23f6500ebc53e264aa78bfbf4158a2b690f56d00bd919952b8cd80457209db
+Size: 662
+Filename: enigma2-plugin-extensions-enigmawelt-dev_0.0-git1+9f073310+9f0733197f-r0_all.ipk
+Source: enigma2-plugin-extensions-enigmawelt.bb
+Description: The biggest DreamOS/Enigma2 Video Blog - Development files
+OE: enigma2-plugin-extensions-enigmawelt
+HomePage: https://enigmawelt.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-enigmawelt-src
+Version: 0.0-git1+9f073310+9f0733197f-r0
+Section: devel
+Architecture: all
+Maintainer: enigmawelt jbleyel CommanderData2338
+MD5Sum: 525ece0174ba80fe972d94e8d402e94a
+SHA256sum: 5cdea78dd655b377f640caf1c858fad88f51986f8737cd309f93c8567bb25636
+Size: 7172
+Filename: enigma2-plugin-extensions-enigmawelt-src_0.0-git1+9f073310+9f0733197f-r0_all.ipk
+Source: enigma2-plugin-extensions-enigmawelt.bb
+Description: The biggest DreamOS/Enigma2 Video Blog - Source files
+OE: enigma2-plugin-extensions-enigmawelt
+HomePage: https://enigmawelt.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-enigmawelt
+Version: 0.0-git1+9f073310+9f0733197f-r0
+Section: base
+Architecture: all
+Maintainer: enigmawelt jbleyel CommanderData2338
+MD5Sum: 7776cbadf61786569d367bbe7c9dd13f
+SHA256sum: 6b685cd2ddc8c8dc5d9ea409bf18a4d821c474310adb4247c06edc13998bb7b0
+Size: 349028
+Filename: enigma2-plugin-extensions-enigmawelt_0.0-git1+9f073310+9f0733197f-r0_all.ipk
+Source: enigma2-plugin-extensions-enigmawelt.bb
+Description: The biggest DreamOS/Enigma2 Video Blog
+OE: enigma2-plugin-extensions-enigmawelt
+HomePage: https://enigmawelt.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-estalker-dbg
+Version: 0.0-git1+f5bc2040+f5bc204b9e-r0
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 9654067787c32c468c80b2f20894a9b8
+SHA256sum: b899926a7bd2f966b29298d80883327b8a666ca40e8a1d4064fbf224f5121732
+Size: 622
+Filename: enigma2-plugin-extensions-estalker-dbg_0.0-git1+f5bc2040+f5bc204b9e-r0_all.ipk
+Source: enigma2-plugin-extensions-estalker.bb
+Description: IPTV Ministra stalker player by KiddaC - Debugging files
+OE: enigma2-plugin-extensions-estalker
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-estalker-dev
+Version: 0.0-git1+f5bc2040+f5bc204b9e-r0
+Recommends: enigma2-plugin-extensions-estalker (= 0.0-git1+f5bc2040+f5bc204b9e-r0), enigma2-plugin-systemplugins-serviceapp-dev, gstplayer-dev, gstplayer2-dev, python3-multiprocessing-dev, python3-pillow-dev, python3-requests-dev
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 92b69e0aedf3d5efb58c7dc25ca4fc5e
+SHA256sum: 8294c9643168f0ed31da6a226508828bc4fd964e1af2a6a98bc5352bfd7b1e5a
+Size: 720
+Filename: enigma2-plugin-extensions-estalker-dev_0.0-git1+f5bc2040+f5bc204b9e-r0_all.ipk
+Source: enigma2-plugin-extensions-estalker.bb
+Description: IPTV Ministra stalker player by KiddaC - Development files
+OE: enigma2-plugin-extensions-estalker
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-estalker-src
+Version: 0.0-git1+f5bc2040+f5bc204b9e-r0
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: ae3c71d5145c9c487d1b07782165a5e6
+SHA256sum: 8c8e1a96562370cea5eb218c9b6c2eac6a80ef81d9312d221e09b9107cef2a06
+Size: 106398
+Filename: enigma2-plugin-extensions-estalker-src_0.0-git1+f5bc2040+f5bc204b9e-r0_all.ipk
+Source: enigma2-plugin-extensions-estalker.bb
+Description: IPTV Ministra stalker player by KiddaC - Source files
+OE: enigma2-plugin-extensions-estalker
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-estalker
+Version: 0.0-git1+f5bc2040+f5bc204b9e-r0
+Depends: enigma2-plugin-systemplugins-serviceapp, gstplayer, gstplayer2, python3-multiprocessing, python3-pillow, python3-requests
+Section: base
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 41e7c10160dc2c37495173df70428026
+SHA256sum: c893e084c96ec36a1465a29be850ba2f58358f00a2118eacd8f4ed6c4459dd08
+Size: 3401712
+Filename: enigma2-plugin-extensions-estalker_0.0-git1+f5bc2040+f5bc204b9e-r0_all.ipk
+Source: enigma2-plugin-extensions-estalker.bb
+Description: IPTV Ministra stalker player by KiddaC
+OE: enigma2-plugin-extensions-estalker
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-jediepgxtream-dbg
+Version: 0.0-git1+7cf0d7d0+7cf0d7db6c-r3
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 924de82db88eaf7465d50dbd231acb17
+SHA256sum: 01e1785e9c5a60a6dedd1d9b0abb78a1e22441d17a6c346b9656c3ff3e8f52e7
+Size: 612
+Filename: enigma2-plugin-extensions-jediepgxtream-dbg_0.0-git1+7cf0d7d0+7cf0d7db6c-r3_all.ipk
+Source: enigma2-plugin-extensions-jediepgxtream.bb
+Description: enigma2-plugin-extensions-jediepgxtream version git-r3 - Debugging files
+OE: enigma2-plugin-extensions-jediepgxtream
+HomePage: https://github.com/kiddac/Jedi-EPG-XStream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-jediepgxtream-dev
+Version: 0.0-git1+7cf0d7d0+7cf0d7db6c-r3
+Recommends: enigma2-plugin-extensions-jediepgxtream (= 0.0-git1+7cf0d7d0+7cf0d7db6c-r3), python3-backports-lzma-dev
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: dcdb6f5807427d17b204a8229de9deb2
+SHA256sum: 8f4646e6a1e76e06c5860ea5995ddf348145f2ab9fee722d9ce90653584bb5f4
+Size: 668
+Filename: enigma2-plugin-extensions-jediepgxtream-dev_0.0-git1+7cf0d7d0+7cf0d7db6c-r3_all.ipk
+Source: enigma2-plugin-extensions-jediepgxtream.bb
+Description: enigma2-plugin-extensions-jediepgxtream version git-r3 - Development files
+OE: enigma2-plugin-extensions-jediepgxtream
+HomePage: https://github.com/kiddac/Jedi-EPG-XStream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-jediepgxtream-src
+Version: 0.0-git1+7cf0d7d0+7cf0d7db6c-r3
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 67c2f0761e76ed0c85d7e04031154829
+SHA256sum: 9ea672c6711c4464ebd8dfc07c87e935aa36fda9e7a4d8b42f7af6c3b61cf6cb
+Size: 10758
+Filename: enigma2-plugin-extensions-jediepgxtream-src_0.0-git1+7cf0d7d0+7cf0d7db6c-r3_all.ipk
+Source: enigma2-plugin-extensions-jediepgxtream.bb
+Description: enigma2-plugin-extensions-jediepgxtream version git-r3 - Source files
+OE: enigma2-plugin-extensions-jediepgxtream
+HomePage: https://github.com/kiddac/Jedi-EPG-XStream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-jediepgxtream
+Version: 0.0-git1+7cf0d7d0+7cf0d7db6c-r3
+Section: base
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 042b72f083d254812eb55c73a508feb7
+SHA256sum: 6c38b269f0bff193dad5d3763a4c35bfba7e6bd248182568e77230e56acc1f44
+Size: 271388
+Filename: enigma2-plugin-extensions-jediepgxtream_0.0-git1+7cf0d7d0+7cf0d7db6c-r3_all.ipk
+Source: enigma2-plugin-extensions-jediepgxtream.bb
+Description: enigma2-plugin-extensions-jediepgxtream version git-r3
+OE: enigma2-plugin-extensions-jediepgxtream
+HomePage: https://github.com/kiddac/Jedi-EPG-XStream
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-lamedbmerger-dbg
+Version: 1.0+git1+16be3870+16be387903-r0
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: c7d577311b209022d62e607ad3d4a177
+SHA256sum: d211e2601b33a3c9f0bc2468ae6dba3ec17fb87c3e5d8a59f506bc22c1ec59da
+Size: 632
+Filename: enigma2-plugin-extensions-lamedbmerger-dbg_1.0+git1+16be3870+16be387903-r0_all.ipk
+Source: enigma2-plugin-extensions-lamedbmerger.bb
+Description: enigma2-plugin-extensions-lamedbmerger version 1.0+git-r0 - Debugging files
+OE: enigma2-plugin-extensions-lamedbmerger
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-lamedbmerger-dev
+Version: 1.0+git1+16be3870+16be387903-r0
+Recommends: enigma2-plugin-extensions-lamedbmerger (= 1.0+git1+16be3870+16be387903-r0)
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: ed01435d6523f308f839da5e8adbc7b0
+SHA256sum: 0507c3cd347d53ec6aa417027f234fb93754f3cfa3b315d825c1ce3e55933698
+Size: 668
+Filename: enigma2-plugin-extensions-lamedbmerger-dev_1.0+git1+16be3870+16be387903-r0_all.ipk
+Source: enigma2-plugin-extensions-lamedbmerger.bb
+Description: enigma2-plugin-extensions-lamedbmerger version 1.0+git-r0 - Development files
+OE: enigma2-plugin-extensions-lamedbmerger
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-lamedbmerger-src
+Version: 1.0+git1+16be3870+16be387903-r0
+Section: devel
+Architecture: all
+Maintainer: Huevos
+MD5Sum: 401f4c9a021508269a9354a72fdcfd9a
+SHA256sum: cf2a6c32a202c6fd81848c503da791829f21659c14440aaa1fb1a5cfa28b9282
+Size: 6742
+Filename: enigma2-plugin-extensions-lamedbmerger-src_1.0+git1+16be3870+16be387903-r0_all.ipk
+Source: enigma2-plugin-extensions-lamedbmerger.bb
+Description: enigma2-plugin-extensions-lamedbmerger version 1.0+git-r0 - Source files
+OE: enigma2-plugin-extensions-lamedbmerger
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-lamedbmerger
+Version: 1.0+git1+16be3870+16be387903-r0
+Section: base
+Architecture: all
+Maintainer: Huevos
+MD5Sum: 277e5d56345718e08dadb27765f5aa98
+SHA256sum: 5889e03469f17829a73040a86159826d84cfd93f521223226b5c065133b865f7
+Size: 14720
+Filename: enigma2-plugin-extensions-lamedbmerger_1.0+git1+16be3870+16be387903-r0_all.ipk
+Source: enigma2-plugin-extensions-lamedbmerger.bb
+Description: enigma2-plugin-extensions-lamedbmerger version 1.0+git-r0
+OE: enigma2-plugin-extensions-lamedbmerger
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-serienrecorder-dbg
+Version: 0.0-git1+bac58700+bac5870ec6-r0
+Section: devel
+Architecture: all
+Maintainer: einfall & w22754 & egn & MacDisein
+MD5Sum: 43e739cfe37769b8f559ea3798199f5e
+SHA256sum: f176c74e9aa1cf2e151b5667d4ee08009cdb408969371dfed061fbbba69e1f16
+Size: 668
+Filename: enigma2-plugin-extensions-serienrecorder-dbg_0.0-git1+bac58700+bac5870ec6-r0_all.ipk
+Source: enigma2-plugin-extensions-serienrecorder.bb
+Description: Erstellt automatisiert Timer fuer deine Lieblings-Serien - nie mehr eine Folge verpassen! - Debugging files
+OE: enigma2-plugin-extensions-serienrecorder
+HomePage: http://www.serienserver.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-serienrecorder-dev
+Version: 0.0-git1+bac58700+bac5870ec6-r0
+Recommends: enigma2-plugin-extensions-serienrecorder (= 0.0-git1+bac58700+bac5870ec6-r0), python3-email-dev, python3-json-dev, python3-sqlite3-dev, python3-xmlrpc-dev
+Section: devel
+Architecture: all
+Maintainer: einfall & w22754 & egn & MacDisein
+MD5Sum: 7907f8bedee6294aaaea89af73cf03ec
+SHA256sum: 7149da2930404ce55523320e4e10c457ec685569e7344406e2bc6fc59e0c917c
+Size: 742
+Filename: enigma2-plugin-extensions-serienrecorder-dev_0.0-git1+bac58700+bac5870ec6-r0_all.ipk
+Source: enigma2-plugin-extensions-serienrecorder.bb
+Description: Erstellt automatisiert Timer fuer deine Lieblings-Serien - nie mehr eine Folge verpassen! - Development files
+OE: enigma2-plugin-extensions-serienrecorder
+HomePage: http://www.serienserver.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-serienrecorder-src
+Version: 0.0-git1+bac58700+bac5870ec6-r0
+Section: devel
+Architecture: all
+Maintainer: einfall & w22754 & egn & MacDisein
+MD5Sum: ca36ea3e9a8bb3aa0cffee6ffa6b33d3
+SHA256sum: 62527574847a14c41ebceb38e4f9c7aecee416309202420dbbeafe95b7d0528e
+Size: 231984
+Filename: enigma2-plugin-extensions-serienrecorder-src_0.0-git1+bac58700+bac5870ec6-r0_all.ipk
+Source: enigma2-plugin-extensions-serienrecorder.bb
+Description: Erstellt automatisiert Timer fuer deine Lieblings-Serien - nie mehr eine Folge verpassen! - Source files
+OE: enigma2-plugin-extensions-serienrecorder
+HomePage: http://www.serienserver.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-serienrecorder
+Version: 0.0-git1+bac58700+bac5870ec6-r0
+Depends: python3-email, python3-json, python3-sqlite3, python3-xmlrpc
+Section: extra
+Architecture: all
+Maintainer: einfall & w22754 & egn & MacDisein
+MD5Sum: 7ccb42444e2a8a0f34afebdd4389e3d0
+SHA256sum: 8ad09942b11535972b256325f7454407d5adfcc9c3d57639c7c4e79d13d0da7b
+Size: 843916
+Filename: enigma2-plugin-extensions-serienrecorder_0.0-git1+bac58700+bac5870ec6-r0_all.ipk
+Source: enigma2-plugin-extensions-serienrecorder.bb
+Description: Erstellt automatisiert Timer fuer deine Lieblings-Serien - nie mehr eine Folge verpassen!
+OE: enigma2-plugin-extensions-serienrecorder
+HomePage: http://www.serienserver.de
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-xstreamity-dbg
+Version: 0.0-git1+8353ba30+8353ba3c15-r1
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 490e5458a1724b9ae06c867389412578
+SHA256sum: e579a21a103d26a374b731d1fd0cdeb7afa3b3b786834e9b4f8c88973004988b
+Size: 628
+Filename: enigma2-plugin-extensions-xstreamity-dbg_0.0-git1+8353ba30+8353ba3c15-r1_all.ipk
+Source: enigma2-plugin-extensions-xstreamity.bb
+Description: IPTV Xtream Codes playlists player by KiddaC - Debugging files
+OE: enigma2-plugin-extensions-xstreamity
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-xstreamity-dev
+Version: 0.0-git1+8353ba30+8353ba3c15-r1
+Recommends: enigma2-plugin-extensions-xstreamity (= 0.0-git1+8353ba30+8353ba3c15-r1), python3-multiprocessing-dev, python3-pillow-dev, python3-requests-dev
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: cba100d4fdbeea1e637c56888b45cbf1
+SHA256sum: 899890345b7038d2e5c151ff9581c502388d3b0eef0203a9d5fb727ee2e5856b
+Size: 698
+Filename: enigma2-plugin-extensions-xstreamity-dev_0.0-git1+8353ba30+8353ba3c15-r1_all.ipk
+Source: enigma2-plugin-extensions-xstreamity.bb
+Description: IPTV Xtream Codes playlists player by KiddaC - Development files
+OE: enigma2-plugin-extensions-xstreamity
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-xstreamity-src
+Version: 0.0-git1+8353ba30+8353ba3c15-r1
+Section: devel
+Architecture: all
+Maintainer: kiddac
+MD5Sum: b7b93a4ba3f2ac4626d66e767573dce6
+SHA256sum: 5b33772aa2265f3047b9f3d46f43831d7b459c5b6989a011ba9794ac7d8c0885
+Size: 124450
+Filename: enigma2-plugin-extensions-xstreamity-src_0.0-git1+8353ba30+8353ba3c15-r1_all.ipk
+Source: enigma2-plugin-extensions-xstreamity.bb
+Description: IPTV Xtream Codes playlists player by KiddaC - Source files
+OE: enigma2-plugin-extensions-xstreamity
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-extensions-xstreamity
+Version: 0.0-git1+8353ba30+8353ba3c15-r1
+Depends: python3-multiprocessing, python3-pillow, python3-requests
+Section: base
+Architecture: all
+Maintainer: kiddac
+MD5Sum: 37d53538ab2fcf875a5b438c60b1391e
+SHA256sum: 01e43a431c2610523bc9645967b069e4de6c27ace21350cff59935a7eb9ac787
+Size: 8850912
+Filename: enigma2-plugin-extensions-xstreamity_0.0-git1+8353ba30+8353ba3c15-r1_all.ipk
+Source: enigma2-plugin-extensions-xstreamity.bb
+Description: IPTV Xtream Codes playlists player by KiddaC
+OE: enigma2-plugin-extensions-xstreamity
+HomePage: https://www.linuxsat-support.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-picons-tv-australia
+Version: 3.0+git1+cee51200+cee512043a-r1
+Section: base
+Architecture: all
+Maintainer: Beyonwiz
+MD5Sum: 848ec60099e3aa7da034f1638a45df77
+SHA256sum: ba31e6534d6c941da07b9674eee6abbbbcab5be3d7b890ac1657281cac3b55be
+Size: 507394
+Filename: enigma2-plugin-picons-tv-australia_3.0+git1+cee51200+cee512043a-r1_all.ipk
+Source: enigma2-plugin-picons-tv-australia.bb
+Description: Australia Picons
+OE: enigma2-plugin-picons-tv-australia
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: required
+
+Package: enigma2-plugin-settings-defaultsat-dbg
+Version: 8.0.1+git1+6b809e40+6b809e4e4d-r0
+Section: devel
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: 7ea9ec7de79218e3f42a6f7571b4e5f5
+SHA256sum: b358e7bd022a224cb546afe4ccdce63f8f140ee33407a4975b796a3c6c95e3e8
+Size: 608
+Filename: enigma2-plugin-settings-defaultsat-dbg_8.0.1+git1+6b809e40+6b809e4e4d-r0_all.ipk
+Source: enigma2-plugin-settings-defaultsat.bb
+Description: openATV default SAT Settings Archiv - Debugging files
+OE: enigma2-plugin-settings-defaultsat
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-settings-defaultsat-dev
+Version: 8.0.1+git1+6b809e40+6b809e4e4d-r0
+Recommends: enigma2-plugin-settings-defaultsat (= 8.0.1+git1+6b809e40+6b809e4e4d-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: 090367ac276cc78ce49064e89d03c8e2
+SHA256sum: 8d98c209ada668b1e289b4e47ed59e5e6bb3ec9f92119aa16fcc0f5f2020dc9d
+Size: 644
+Filename: enigma2-plugin-settings-defaultsat-dev_8.0.1+git1+6b809e40+6b809e4e4d-r0_all.ipk
+Source: enigma2-plugin-settings-defaultsat.bb
+Description: openATV default SAT Settings Archiv - Development files
+OE: enigma2-plugin-settings-defaultsat
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-settings-defaultsat
+Version: 8.0.1+git1+6b809e40+6b809e4e4d-r0
+Section: base
+Architecture: all
+Maintainer: openATV Team
+MD5Sum: 84b565f3908d603c540978366bb69271
+SHA256sum: ec379265e018319bf3d34c0329dce24ebbefeaa060a5354e6f4cc2abb4b1c21f
+Size: 47876
+Filename: enigma2-plugin-settings-defaultsat_8.0.1+git1+6b809e40+6b809e4e4d-r0_all.ipk
+Source: enigma2-plugin-settings-defaultsat.bb
+Description: openATV default SAT Settings Archiv
+OE: enigma2-plugin-settings-defaultsat
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skincomponents-skinparts-metrixhd-hd75hdpack
+Version: 0.0+git1+672fb190+672fb19a8e-r1
+Section: base
+Architecture: all
+Maintainer: www.opena.tv Fischreiher
+MD5Sum: 9ee2d07c34d7c38f8680419e6233b626
+SHA256sum: 08527076adadbfac09d0bc59fb55f593da1be51e166f4fdca8c8bb6dbcec56cc
+Size: 1412538
+Filename: enigma2-plugin-skincomponents-skinparts-metrixhd-hd75hdpack_0.0+git1+672fb190+672fb19a8e-r1_all.ipk
+Source: openatv-skinparts.bb
+Description: Enigma2 Skinpart: skinparts-metrixhd-hd75hdpack
+OE: openatv-skinparts
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skincomponents-skinparts-universal-fischreiherinfobars
+Version: 0.0+git1+672fb190+672fb19a8e-r1
+Section: base
+Architecture: all
+Maintainer: www.opena.tv Fischreiher
+MD5Sum: ef667e605ce38aeae632a042d7e783b4
+SHA256sum: a80ea3265cbcf26f3a87d2146f633446878446baa111fc727df1837b70201d68
+Size: 859540
+Filename: enigma2-plugin-skincomponents-skinparts-universal-fischreiherinfobars_0.0+git1+672fb190+672fb19a8e-r1_all.ipk
+Source: openatv-skinparts.bb
+Description: Enigma2 Skinpart: skinparts-universal-fischreiherinfobars
+OE: openatv-skinparts
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skinpacks-dreamplex-plex-experience
+Version: 8.0.1+git1+90c01a10+90c01a1ef7-r1
+Section: base
+Architecture: all
+Maintainer: rossi2000 and stein17
+MD5Sum: 432b8d9b0ef570fa307bab9723b78b94
+SHA256sum: 77948ff835f97c2fec67add175248dcb9b65c529db24576dffb8134c48f64d92
+Size: 10470002
+Filename: enigma2-plugin-skinpacks-dreamplex-plex-experience_8.0.1+git1+90c01a10+90c01a1ef7-r1_all.ipk
+Source: enigma2-plugin-skinpacks-dreamplex.bb
+Description: Dreamplex skinpacks
+OE: enigma2-plugin-skinpacks-dreamplex
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skinpacks-dreamplex-youplex-blue
+Version: 8.0.1+git1+90c01a10+90c01a1ef7-r1
+Section: base
+Architecture: all
+Maintainer: rossi2000 and stein17
+MD5Sum: 407d7626a3c10a97719c5fb15891ba96
+SHA256sum: 26e9bb87c912c04c5c8ba22e5837f8943ef35920fab6fedc7d9495c5894deea1
+Size: 456552
+Filename: enigma2-plugin-skinpacks-dreamplex-youplex-blue_8.0.1+git1+90c01a10+90c01a1ef7-r1_all.ipk
+Source: enigma2-plugin-skinpacks-dreamplex.bb
+Description: Dreamplex skinpacks
+OE: enigma2-plugin-skinpacks-dreamplex
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skinpacks-dreamplex-youplex-green
+Version: 8.0.1+git1+90c01a10+90c01a1ef7-r1
+Section: base
+Architecture: all
+Maintainer: rossi2000 and stein17
+MD5Sum: f83c1e158725d7c0b0701d4f9cb87ae3
+SHA256sum: 0ec0298bba6a9ec9fb76bf94a9e0f54490efc4c662173d5988a32442def3d69c
+Size: 456562
+Filename: enigma2-plugin-skinpacks-dreamplex-youplex-green_8.0.1+git1+90c01a10+90c01a1ef7-r1_all.ipk
+Source: enigma2-plugin-skinpacks-dreamplex.bb
+Description: Dreamplex skinpacks
+OE: enigma2-plugin-skinpacks-dreamplex
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skinpacks-dreamplex-youplex-purple
+Version: 8.0.1+git1+90c01a10+90c01a1ef7-r1
+Section: base
+Architecture: all
+Maintainer: rossi2000 and stein17
+MD5Sum: f73f622451b00489e673add15732a51e
+SHA256sum: 7999170ac460f3b88c73c06e1e24143dd96fcef0e3c1ce2cb37f2938d66fef50
+Size: 456942
+Filename: enigma2-plugin-skinpacks-dreamplex-youplex-purple_8.0.1+git1+90c01a10+90c01a1ef7-r1_all.ipk
+Source: enigma2-plugin-skinpacks-dreamplex.bb
+Description: Dreamplex skinpacks
+OE: enigma2-plugin-skinpacks-dreamplex
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skinpacks-dreamplex-youplex-red
+Version: 8.0.1+git1+90c01a10+90c01a1ef7-r1
+Section: base
+Architecture: all
+Maintainer: rossi2000 and stein17
+MD5Sum: 8e1fbaf09fcdd3c0f84af5be32c427be
+SHA256sum: 95287602244ff0b1de1bc2b35169066cb7166f4f68bdf3728cc99a1ed9776aae
+Size: 455850
+Filename: enigma2-plugin-skinpacks-dreamplex-youplex-red_8.0.1+git1+90c01a10+90c01a1ef7-r1_all.ipk
+Source: enigma2-plugin-skinpacks-dreamplex.bb
+Description: Dreamplex skinpacks
+OE: enigma2-plugin-skinpacks-dreamplex
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-army-moodblue-hd-dbg
+Version: 1.0+git1+8716a820+8716a829af-r0
+Section: devel
+Architecture: all
+Maintainer: Taykun345/OldSkulRide from OpenPLi/ViX forums
+MD5Sum: 6fca8f5679910e869d8aec9a3e262a51
+SHA256sum: 38a6b2b3c31dbd4d5844e9f20a8dd596fe59892bb0ac03b2791ab202ebc63e6b
+Size: 688
+Filename: enigma2-plugin-skins-army-moodblue-hd-dbg_1.0+git1+8716a820+8716a829af-r0_all.ipk
+Source: enigma2-plugin-skins-army-moodblue-hd.bb
+Description: Modification is based on open-source skin from Army. It is adapted to work on OpenPLi, OpenViX, OpenATV images. - Debugging files
+OE: enigma2-plugin-skins-army-moodblue-hd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-army-moodblue-hd-dev
+Version: 1.0+git1+8716a820+8716a829af-r0
+Recommends: enigma2-plugin-skins-army-moodblue-hd (= 1.0+git1+8716a820+8716a829af-r0)
+Section: devel
+Architecture: all
+Maintainer: Taykun345/OldSkulRide from OpenPLi/ViX forums
+MD5Sum: 36f9d85b89f3d82a01ba970503fbf652
+SHA256sum: 26856f6adda80779ecd65816da7bb434e6e13560f9f95e804b2ebbbb61189806
+Size: 726
+Filename: enigma2-plugin-skins-army-moodblue-hd-dev_1.0+git1+8716a820+8716a829af-r0_all.ipk
+Source: enigma2-plugin-skins-army-moodblue-hd.bb
+Description: Modification is based on open-source skin from Army. It is adapted to work on OpenPLi, OpenViX, OpenATV images. - Development files
+OE: enigma2-plugin-skins-army-moodblue-hd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-army-moodblue-hd
+Version: 1.0+git1+8716a820+8716a829af-r0
+Section: base
+Architecture: all
+Maintainer: Taykun345/OldSkulRide from OpenPLi/ViX forums
+MD5Sum: 937058d72bac10d84b48115b14643bec
+SHA256sum: 4d5b96e54ebb80bab41d2695d2b6f5fd5ca50369eae56b4a0e09b757381d8fab
+Size: 1970788
+Filename: enigma2-plugin-skins-army-moodblue-hd_1.0+git1+8716a820+8716a829af-r0_all.ipk
+Source: enigma2-plugin-skins-army-moodblue-hd.bb
+Description: Modification is based on open-source skin from Army. It is adapted to work on OpenPLi, OpenViX, OpenATV images.
+OE: enigma2-plugin-skins-army-moodblue-hd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligafhd-dbg
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 21b1f5c623694efa9b8488e113edf98f
+SHA256sum: a990a647933089c4effac0034ac1b481514a1e6b7df7b87aba00929efa77dbf0
+Size: 644
+Filename: enigma2-plugin-skins-bundesligafhd-dbg_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligafhd.bb
+Description: BundesligaFHD skin for openATV images - Debugging files
+OE: enigma2-plugin-skins-bundesligafhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligafhd-dev
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Recommends: enigma2-plugin-extensions-oaweather-dev, enigma2-plugin-skins-bundesligafhd (= 1.4+git1+3ca5d510+3ca5d51a06-r0)
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 9415980a7d82081ecd97c86a2f8674c9
+SHA256sum: bf9c4eb16b5b70ad9e584ad96692a0c6bd6f9dbdc8ac328be47c3af3af14e8ab
+Size: 700
+Filename: enigma2-plugin-skins-bundesligafhd-dev_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligafhd.bb
+Description: BundesligaFHD skin for openATV images - Development files
+OE: enigma2-plugin-skins-bundesligafhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligafhd-src
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 758f8ac420c72b4fea765194511fa104
+SHA256sum: 7e2109ec2e8905c13bb1aff8429dcd5b8a3a061204af9531ac26a07c6a0f7622
+Size: 65370
+Filename: enigma2-plugin-skins-bundesligafhd-src_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligafhd.bb
+Description: BundesligaFHD skin for openATV images - Source files
+OE: enigma2-plugin-skins-bundesligafhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligafhd
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Depends: enigma2-plugin-extensions-oaweather
+Section: skins
+Architecture: all
+Maintainer: stein17
+MD5Sum: aa19cc4e83ae40716f69a72c9c743f21
+SHA256sum: 07cca00e8315e5c30f5d60471623e4221b44697ebeecb0dd0f1d550d59dd9be4
+Size: 4688772
+Filename: enigma2-plugin-skins-bundesligafhd_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligafhd.bb
+Description: BundesligaFHD skin for openATV images
+OE: enigma2-plugin-skins-bundesligafhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligawqhd-dbg
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 8cb32f3fd4bb3ee5dc452996eebbea30
+SHA256sum: dc03ae6f81c2f6748e22155483291d4406d214befc81e7c8c5f0c0b8dbbfafd8
+Size: 644
+Filename: enigma2-plugin-skins-bundesligawqhd-dbg_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligawqhd.bb
+Description: BundesligaWQHD skin for openATV images - Debugging files
+OE: enigma2-plugin-skins-bundesligawqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligawqhd-dev
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Recommends: enigma2-plugin-extensions-oaweather-dev, enigma2-plugin-skins-bundesligawqhd (= 1.4+git1+3ca5d510+3ca5d51a06-r0)
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 2ba4a6ea5cc26cc427a85d1fea153474
+SHA256sum: 34eadc79f88901220b5e35d36ac98fb6ae94dccb590e02be177e70c25210c72d
+Size: 698
+Filename: enigma2-plugin-skins-bundesligawqhd-dev_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligawqhd.bb
+Description: BundesligaWQHD skin for openATV images - Development files
+OE: enigma2-plugin-skins-bundesligawqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligawqhd-src
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 8437aafc00cc84ae2af6ddfdd5e92aac
+SHA256sum: d2314a4a699f50890a1c9d1d023d7628b569074a04eca23746667996aa5d5e23
+Size: 64752
+Filename: enigma2-plugin-skins-bundesligawqhd-src_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligawqhd.bb
+Description: BundesligaWQHD skin for openATV images - Source files
+OE: enigma2-plugin-skins-bundesligawqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-bundesligawqhd
+Version: 1.4+git1+3ca5d510+3ca5d51a06-r0
+Depends: enigma2-plugin-extensions-oaweather
+Section: skins
+Architecture: all
+Maintainer: stein17
+MD5Sum: 9bcabfebed19df45a0c43c4d9f8987ec
+SHA256sum: a332cac2918fbc26d2099e2760bde1a54b554f766f8ed5fe3deb36050ec5cd0c
+Size: 10551526
+Filename: enigma2-plugin-skins-bundesligawqhd_1.4+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-bundesligawqhd.bb
+Description: BundesligaWQHD skin for openATV images
+OE: enigma2-plugin-skins-bundesligawqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-glamouraurafhd-atv-dbg
+Version: 14.x+git1+5bad8ef0+5bad8ef389-r0
+Section: devel
+Architecture: all
+Maintainer: MCelliotG
+MD5Sum: 2b754908c715b0befdc13b4e93b84ea2
+SHA256sum: a713fb1733fcd2b980d7a8a15f9b5601957987eadbcb7cf42acb437011ba1acb
+Size: 654
+Filename: enigma2-plugin-skins-glamouraurafhd-atv-dbg_14.x+git1+5bad8ef0+5bad8ef389-r0_all.ipk
+Source: enigma2-plugin-skins-glamouraurafhd-atv.bb
+Description: Glamour Aura FHD ATV skin for new generation STBs with OpenATV/OE-A based images - Debugging files
+OE: enigma2-plugin-skins-glamouraurafhd-atv
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-glamouraurafhd-atv-dev
+Version: 14.x+git1+5bad8ef0+5bad8ef389-r0
+Recommends: enigma2-plugin-skins-glamouraurafhd-atv (= 14.x+git1+5bad8ef0+5bad8ef389-r0)
+Section: devel
+Architecture: all
+Maintainer: MCelliotG
+MD5Sum: 00cbced010031f672f6d57c0c6ee7d9b
+SHA256sum: 5d4487bfe1d678d7dc85366a9fd4ef471bfb0855da392d39f7c8b913bec5f89e
+Size: 688
+Filename: enigma2-plugin-skins-glamouraurafhd-atv-dev_14.x+git1+5bad8ef0+5bad8ef389-r0_all.ipk
+Source: enigma2-plugin-skins-glamouraurafhd-atv.bb
+Description: Glamour Aura FHD ATV skin for new generation STBs with OpenATV/OE-A based images - Development files
+OE: enigma2-plugin-skins-glamouraurafhd-atv
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-glamouraurafhd-atv-src
+Version: 14.x+git1+5bad8ef0+5bad8ef389-r0
+Section: devel
+Architecture: all
+Maintainer: MCelliotG
+MD5Sum: ee37a6203ceb84d89d18045da73ee79a
+SHA256sum: 4d7a46ec543f87b04ae9f333e6f33fed798c000c44b8c2d65c873094a3daf5e4
+Size: 83650
+Filename: enigma2-plugin-skins-glamouraurafhd-atv-src_14.x+git1+5bad8ef0+5bad8ef389-r0_all.ipk
+Source: enigma2-plugin-skins-glamouraurafhd-atv.bb
+Description: Glamour Aura FHD ATV skin for new generation STBs with OpenATV/OE-A based images - Source files
+OE: enigma2-plugin-skins-glamouraurafhd-atv
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-glamouraurafhd-atv
+Version: 14.x+git1+5bad8ef0+5bad8ef389-r0
+Recommends: enigma2-plugin-extensions-bitrate, enigma2-plugin-extensions-weathermsn
+Section: base
+Architecture: all
+Maintainer: MCelliotG
+MD5Sum: f4800b60be29bdc9ddaa8700aad61ca6
+SHA256sum: c75f3a9b726ae3a0cf3f5ee163b8983a99517cc1722036bc07d0f1da909f56ba
+Size: 14356018
+Filename: enigma2-plugin-skins-glamouraurafhd-atv_14.x+git1+5bad8ef0+5bad8ef389-r0_all.ipk
+Source: enigma2-plugin-skins-glamouraurafhd-atv.bb
+Description: Glamour Aura FHD ATV skin for new generation STBs with OpenATV/OE-A based images
+OE: enigma2-plugin-skins-glamouraurafhd-atv
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-gradientwqhd-dbg
+Version: 1.1+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 993c315b5e77f98a460e2b2295d42c85
+SHA256sum: 43409ef0902617abac118f83ea8c7f316b28c8b31ce2a6e2dca156257570e4b3
+Size: 642
+Filename: enigma2-plugin-skins-gradientwqhd-dbg_1.1+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-gradientwqhd.bb
+Description: GradientWQHD skin for Enigma2 - Debugging files
+OE: enigma2-plugin-skins-gradientwqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-gradientwqhd-dev
+Version: 1.1+git1+3ca5d510+3ca5d51a06-r0
+Recommends: enigma2-plugin-extensions-oaweather-dev, enigma2-plugin-skins-gradientwqhd (= 1.1+git1+3ca5d510+3ca5d51a06-r0), python3-pillow-dev, python3-requests-dev, python3-six-dev, python3-twisted-dev
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 7207616900facb045a7f0a78387284a6
+SHA256sum: a2451405834c51f754091cfcfa0a89dcf0f63ce586fdc141578e414957358c4f
+Size: 732
+Filename: enigma2-plugin-skins-gradientwqhd-dev_1.1+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-gradientwqhd.bb
+Description: GradientWQHD skin for Enigma2 - Development files
+OE: enigma2-plugin-skins-gradientwqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-gradientwqhd-src
+Version: 1.1+git1+3ca5d510+3ca5d51a06-r0
+Section: devel
+Architecture: all
+Maintainer: stein17
+MD5Sum: 49243b0f6f46e80ce3ed9328756ed70c
+SHA256sum: 0dac79b5c19b99ec0146ba3b1919a541911e63cc70c4e21f026ee85c4a4fd9ac
+Size: 230984
+Filename: enigma2-plugin-skins-gradientwqhd-src_1.1+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-gradientwqhd.bb
+Description: GradientWQHD skin for Enigma2 - Source files
+OE: enigma2-plugin-skins-gradientwqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-gradientwqhd
+Version: 1.1+git1+3ca5d510+3ca5d51a06-r0
+Depends: enigma2-plugin-extensions-oaweather, python3-pillow, python3-requests, python3-six, python3-twisted
+Section: skins
+Architecture: all
+Maintainer: stein17
+MD5Sum: dd7e7267de6e89b6f869e7e9919468dd
+SHA256sum: df56134941e068dc3fcdf11f0415bd36ee822afb53810fb8e24b8a835f792038
+Size: 14405084
+Filename: enigma2-plugin-skins-gradientwqhd_1.1+git1+3ca5d510+3ca5d51a06-r0_all.ipk
+Source: enigma2-plugin-skins-gradientwqhd.bb
+Description: GradientWQHD skin for Enigma2
+OE: enigma2-plugin-skins-gradientwqhd
+HomePage: https://github.com/stein17/Skins-for-openATV
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-kravenhd-dbg
+Version: 7.9.30+git1+b0ceb010+b0ceb01c00-r0
+Section: devel
+Architecture: all
+Maintainer: Team Kraven
+MD5Sum: 29e7ee5f71d1137c9e12e404b6d80387
+SHA256sum: e423fc408aab49e28e1d501d56640e52bbb71c0bf1acb5b02737d33e8e839532
+Size: 608
+Filename: enigma2-plugin-skins-kravenhd-dbg_7.9.30+git1+b0ceb010+b0ceb01c00-r0_all.ipk
+Source: enigma2-plugin-skins-kravenhd.bb
+Description: KravenHD Skin for Enigma2 by Team Kraven - Debugging files
+OE: enigma2-plugin-skins-kravenhd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-kravenhd-dev
+Version: 7.9.30+git1+b0ceb010+b0ceb01c00-r0
+Recommends: enigma2-plugin-extensions-oaweather-dev, enigma2-plugin-skins-kravenhd (= 7.9.30+git1+b0ceb010+b0ceb01c00-r0), enigma2-plugin-systemplugins-mphelp-dev, python3-lxml-dev, python3-pillow-dev, python3-requests-dev
+Section: devel
+Architecture: all
+Maintainer: Team Kraven
+MD5Sum: 073dfda82215cd9be9280df718d9c3c0
+SHA256sum: 8e509afceb1de011d9f86fd54066ff586a633b151a54a2c6b1b0376ec27a4e05
+Size: 702
+Filename: enigma2-plugin-skins-kravenhd-dev_7.9.30+git1+b0ceb010+b0ceb01c00-r0_all.ipk
+Source: enigma2-plugin-skins-kravenhd.bb
+Description: KravenHD Skin for Enigma2 by Team Kraven - Development files
+OE: enigma2-plugin-skins-kravenhd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-kravenhd-src
+Version: 7.9.30+git1+b0ceb010+b0ceb01c00-r0
+Section: devel
+Architecture: all
+Maintainer: Team Kraven
+MD5Sum: 662ed7ae118333262cf2be3685b09bfe
+SHA256sum: c0e41e002bb2a6bec732769f4aa1cafc684cb8aa7ce94199b1b7b805a917b2c7
+Size: 91966
+Filename: enigma2-plugin-skins-kravenhd-src_7.9.30+git1+b0ceb010+b0ceb01c00-r0_all.ipk
+Source: enigma2-plugin-skins-kravenhd.bb
+Description: KravenHD Skin for Enigma2 by Team Kraven - Source files
+OE: enigma2-plugin-skins-kravenhd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-kravenhd
+Version: 7.9.30+git1+b0ceb010+b0ceb01c00-r0
+Depends: enigma2-plugin-extensions-oaweather, enigma2-plugin-systemplugins-mphelp, python3-lxml, python3-pillow, python3-requests
+Provides: enigma2-plugin-skins-kravenfhd, enigma2-plugin-skins-kravenvb
+Replaces: enigma2-plugin-skins-kravenfhd, enigma2-plugin-skins-kravenvb
+Conflicts: enigma2-plugin-skins-kravenfhd, enigma2-plugin-skins-kravenvb
+Section: base
+Architecture: all
+Maintainer: Team Kraven
+MD5Sum: 64d243ef29eb75a4afa013c78c0cd754
+SHA256sum: 046e41210c231400ee31e72b150e7fdfaba83dbcef4249eb15d4c547596ee5f8
+Size: 4452518
+Filename: enigma2-plugin-skins-kravenhd_7.9.30+git1+b0ceb010+b0ceb01c00-r0_all.ipk
+Source: enigma2-plugin-skins-kravenhd.bb
+Description: KravenHD Skin for Enigma2 by Team Kraven
+OE: enigma2-plugin-skins-kravenhd
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2-dbg
+Version: 19.2+git1+600402d0+600402d73b-r0
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 1d1245387aecbd27ffc3c9ef3571ce1e
+SHA256sum: d2b3840ceb415fdcab195a9c2af72890cdbf74079f64e35f81af8261fd880232
+Size: 608
+Filename: enigma2-plugin-skins-mynovumhd2-dbg_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2.bb
+Description: myNOVUM_HD2 by Nashu - Debugging files
+OE: enigma2-plugin-skins-mynovumhd2
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2-dev
+Version: 19.2+git1+600402d0+600402d73b-r0
+Recommends: enigma2-plugin-skincomponents-novum-dev, enigma2-plugin-skins-mynovumhd2 (= 19.2+git1+600402d0+600402d73b-r0), enigma2-plugin-systemplugins-weathercomponenthandler-dev
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 0c65002fa1e576a5243352098494c30e
+SHA256sum: 0b9a8012f623651fc01cac72018791f9f5fef45f33b09e417e9d7ba6be5e21b6
+Size: 680
+Filename: enigma2-plugin-skins-mynovumhd2-dev_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2.bb
+Description: myNOVUM_HD2 by Nashu - Development files
+OE: enigma2-plugin-skins-mynovumhd2
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2
+Version: 19.2+git1+600402d0+600402d73b-r0
+Depends: enigma2-plugin-skincomponents-novum, enigma2-plugin-systemplugins-weathercomponenthandler
+Section: base
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 1d3b8a93c54e6fba206fce1266e1457e
+SHA256sum: 4d181fedd52556d74fc47fb915b0c3ca1e68d4ed5bf7669ac50fcc5e9029a83d
+Size: 5439266
+Filename: enigma2-plugin-skins-mynovumhd2_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2.bb
+Description: myNOVUM_HD2 by Nashu
+OE: enigma2-plugin-skins-mynovumhd2
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2black-dbg
+Version: 19.2+git1+600402d0+600402d73b-r0
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 945d25121260c810a6a85bff06ab3cef
+SHA256sum: 00276b3c0c65caf9c059b92dc6a0bff8fcd801cd97f5cba49e73b91ac6128375
+Size: 616
+Filename: enigma2-plugin-skins-mynovumhd2black-dbg_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2black.bb
+Description: myNOVUM_HD2_Black by Nashu - Debugging files
+OE: enigma2-plugin-skins-mynovumhd2black
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2black-dev
+Version: 19.2+git1+600402d0+600402d73b-r0
+Recommends: enigma2-plugin-skincomponents-novum-dev, enigma2-plugin-skins-mynovumhd2black (= 19.2+git1+600402d0+600402d73b-r0), enigma2-plugin-systemplugins-weathercomponenthandler-dev
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 284d6868d6dbc14d5a7fefd717bc9b05
+SHA256sum: d53a340e77ba566aa70a3ee48271da4e7504bc6c5b098894be26ba4f43cea478
+Size: 690
+Filename: enigma2-plugin-skins-mynovumhd2black-dev_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2black.bb
+Description: myNOVUM_HD2_Black by Nashu - Development files
+OE: enigma2-plugin-skins-mynovumhd2black
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-mynovumhd2black
+Version: 19.2+git1+600402d0+600402d73b-r0
+Depends: enigma2-plugin-skincomponents-novum, enigma2-plugin-systemplugins-weathercomponenthandler
+Section: base
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 653a13ebdd6f5141909a0391b1f1f563
+SHA256sum: 3c63cd38fc7f0fa31bd9f32664612c5f807586dd977d80a695b71c203fa44f59
+Size: 5503126
+Filename: enigma2-plugin-skins-mynovumhd2black_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-mynovumhd2black.bb
+Description: myNOVUM_HD2_Black by Nashu
+OE: enigma2-plugin-skins-mynovumhd2black
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-fhd-light-dbg
+Version: 16.0+git1+600402d0+600402d73b-r0
+Section: devel
+Architecture: all
+Maintainer: Nashu
+MD5Sum: 079d4f16a7f04a5e0e638547c731395a
+SHA256sum: 0511cae1ebdfe8e04bbb6dea3cac4b4e89f317d27338f78df5dac6ddaf91f2c5
+Size: 610
+Filename: enigma2-plugin-skins-novum-fhd-light-dbg_16.0+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-fhd-light.bb
+Description: NOVUM_FHD_Light by Nashu - Debugging files
+OE: enigma2-plugin-skins-novum-fhd-light
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-fhd-light-dev
+Version: 16.0+git1+600402d0+600402d73b-r0
+Recommends: enigma2-plugin-skincomponents-novum-dev, enigma2-plugin-skins-novum-fhd-light (= 16.0+git1+600402d0+600402d73b-r0)
+Section: devel
+Architecture: all
+Maintainer: Nashu
+MD5Sum: 5bc9d22b3b035bb820e12f510b1e4507
+SHA256sum: 7dd2bc2caf63d1249a39531194909db5ddba4b631a69673ac6dd5f348a41775b
+Size: 660
+Filename: enigma2-plugin-skins-novum-fhd-light-dev_16.0+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-fhd-light.bb
+Description: NOVUM_FHD_Light by Nashu - Development files
+OE: enigma2-plugin-skins-novum-fhd-light
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-fhd-light
+Version: 16.0+git1+600402d0+600402d73b-r0
+Depends: enigma2-plugin-skincomponents-novum
+Section: base
+Architecture: all
+Maintainer: Nashu
+MD5Sum: 0a55c5e57ace1122a721d51d19023b0e
+SHA256sum: 3d06b1e38e2b420dc8525ebfb3929cf88b03dcf288003254fbabbf7b60d26cd4
+Size: 2054532
+Filename: enigma2-plugin-skins-novum-fhd-light_16.0+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-fhd-light.bb
+Description: NOVUM_FHD_Light by Nashu
+OE: enigma2-plugin-skins-novum-fhd-light
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-hd-slim-dbg
+Version: 19.2+git1+600402d0+600402d73b-r0
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: 902b5519c834931dd943c094159322be
+SHA256sum: bfa10dcf774253d8a224cbe68f42b2bb7598e8293c60e42eeded20223759c905
+Size: 614
+Filename: enigma2-plugin-skins-novum-hd-slim-dbg_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-hd-slim.bb
+Description: NOVUM_HD_Slim by Nashu - Debugging files
+OE: enigma2-plugin-skins-novum-hd-slim
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-hd-slim-dev
+Version: 19.2+git1+600402d0+600402d73b-r0
+Recommends: enigma2-plugin-skincomponents-novum-dev, enigma2-plugin-skins-novum-hd-slim (= 19.2+git1+600402d0+600402d73b-r0), enigma2-plugin-systemplugins-weathercomponenthandler-dev
+Section: devel
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: a8c03c48a9e16f19a62ad25d66e623c9
+SHA256sum: 26d019c279c9e651a9e41320d590602a22411f0b7e7d67412f277f5c8f6e2059
+Size: 684
+Filename: enigma2-plugin-skins-novum-hd-slim-dev_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-hd-slim.bb
+Description: NOVUM_HD_Slim by Nashu - Development files
+OE: enigma2-plugin-skins-novum-hd-slim
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-novum-hd-slim
+Version: 19.2+git1+600402d0+600402d73b-r0
+Depends: enigma2-plugin-skincomponents-novum, enigma2-plugin-systemplugins-weathercomponenthandler
+Section: base
+Architecture: all
+Maintainer: rossi2000
+MD5Sum: f3969d3e7dd81d1cd95d3a41f38b9d06
+SHA256sum: d813b99826f22f8303ac056a26c43e874e2032eb6b7b98f69247cd25b4e16440
+Size: 5442974
+Filename: enigma2-plugin-skins-novum-hd-slim_19.2+git1+600402d0+600402d73b-r0_all.ipk
+Source: enigma2-plugin-skins-novum-hd-slim.bb
+Description: NOVUM_HD_Slim by Nashu
+OE: enigma2-plugin-skins-novum-hd-slim
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: enigma2-plugin-skins-overlayhd-dbg
+Version: 0.0-git1+8ec646b0+8ec646b536-r0
+Section: devel
+Architecture: all
+Maintainer: IanSav
+MD5Sum: 5a4ad190d9bbbce3c20f6c317889b39e
+SHA256sum: 41439fd0472e89f2ee8187a2d9dd2fca0fde34b9b28902c67726380d88dd097b
+Size: 620
+Filename: enigma2-plugin-skins-overlayhd-dbg_0.0-git1+8ec646b0+8ec646b536-r0_all.ipk
+Source: enigma2-plugin-skins-overlayhd.bb
+Description: OverlayHD skin and management plugin for Enigma2 - Debugging files
+OE: enigma2-plugin-skins-overlayhd
+HomePage: https://github.com/IanSav/OverlayHD
+License: GPL-2.0-only
+Priority: optional
+
+Package: enigma2-plugin-skins-overlayhd-dev
+Version: 0.0-git1+8ec646b0+8ec646b536-r0
+Recommends: enigma2-plugin-skins-overlayhd (= 0.0-git1+8ec646b0+8ec646b536-r0)
+Section: devel
+Architecture: all
+Maintainer: IanSav
+MD5Sum: a0738055ee01edcfcdf26c759e0bcf86
+SHA256sum: 1a4fe10b3261f547dd58f299396f668d8f5906d6f838f51595ae551bc930ee83
+Size: 656
+Filename: enigma2-plugin-skins-overlayhd-dev_0.0-git1+8ec646b0+8ec646b536-r0_all.ipk
+Source: enigma2-plugin-skins-overlayhd.bb
+Description: OverlayHD skin and management plugin for Enigma2 - Development files
+OE: enigma2-plugin-skins-overlayhd
+HomePage: https://github.com/IanSav/OverlayHD
+License: GPL-2.0-only
+Priority: optional
+
+Package: enigma2-plugin-skins-overlayhd-src
+Version: 0.0-git1+8ec646b0+8ec646b536-r0
+Section: devel
+Architecture: all
+Maintainer: IanSav
+MD5Sum: d02df25469a533b49ac7326300605b41
+SHA256sum: 58f0f901b614b3bfc259824b1e56d4266e23bebec5df8b57c72cb5c2d1546730
+Size: 13294
+Filename: enigma2-plugin-skins-overlayhd-src_0.0-git1+8ec646b0+8ec646b536-r0_all.ipk
+Source: enigma2-plugin-skins-overlayhd.bb
+Description: OverlayHD skin and management plugin for Enigma2 - Source files
+OE: enigma2-plugin-skins-overlayhd
+HomePage: https://github.com/IanSav/OverlayHD
+License: GPL-2.0-only
+Priority: optional
+
+Package: enigma2-plugin-skins-overlayhd
+Version: 0.0-git1+8ec646b0+8ec646b536-r0
+Section: skins
+Architecture: all
+Maintainer: IanSav
+MD5Sum: fd3b5be6fb7b8ba9e9615d81c6f50052
+SHA256sum: 845be0e79926d5a20c3d84dbd8a593e53e20b3147169f0e21f9bce25f058d76b
+Size: 8356380
+Filename: enigma2-plugin-skins-overlayhd_0.0-git1+8ec646b0+8ec646b536-r0_all.ipk
+Source: enigma2-plugin-skins-overlayhd.bb
+Description: OverlayHD skin and management plugin for Enigma2
+OE: enigma2-plugin-skins-overlayhd
+HomePage: https://github.com/IanSav/OverlayHD
+License: GPL-2.0-only
+Priority: optional
+
+Package: enigma2-plugin-skins-pli-hd-fullnight-dbg
+Version: 0.1+git1+99adc650+99adc658e4-r0
+Section: devel
+Architecture: all
+Maintainer: littlesat
+MD5Sum: f35cbaedb81b5984b16941254ff271b6
+SHA256sum: 421e17f6bd611573ea47f8efbe79646c70171a55a17ee592d2c0f403fb357580
+Size: 610
+Filename: enigma2-plugin-skins-pli-hd-fullnight-dbg_0.1+git1+99adc650+99adc658e4-r0_all.ipk
+Source: enigma2-plugin-skins-pli-hd-fullnight.bb
+Description: PLi HD FullNight skin - Debugging files
+OE: enigma2-plugin-skins-pli-hd-fullnight
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: enigma2-plugin-skins-pli-hd-fullnight-dev
+Version: 0.1+git1+99adc650+99adc658e4-r0
+Recommends: enigma2-plugin-skins-pli-hd-fullnight (= 0.1+git1+99adc650+99adc658e4-r0)
+Section: devel
+Architecture: all
+Maintainer: littlesat
+MD5Sum: 9f96a0dcd34edf53494de1ec8760ac25
+SHA256sum: 3dadf459c67c636a628015e163115cc88354aba5ed9778bd8006689178f013b7
+Size: 642
+Filename: enigma2-plugin-skins-pli-hd-fullnight-dev_0.1+git1+99adc650+99adc658e4-r0_all.ipk
+Source: enigma2-plugin-skins-pli-hd-fullnight.bb
+Description: PLi HD FullNight skin - Development files
+OE: enigma2-plugin-skins-pli-hd-fullnight
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: enigma2-plugin-skins-pli-hd-fullnight
+Version: 0.1+git1+99adc650+99adc658e4-r0
+Section: base
+Architecture: all
+Maintainer: littlesat
+MD5Sum: d7e3b6f17e72c7f80449f0efe8bf6c25
+SHA256sum: 4b9ed981b3a3bb8b34736ea03048fba46d606e655819c5bd445d9eb042107ef5
+Size: 145934
+Filename: enigma2-plugin-skins-pli-hd-fullnight_0.1+git1+99adc650+99adc658e4-r0_all.ipk
+Source: enigma2-plugin-skins-pli-hd-fullnight.bb
+Description: PLi HD FullNight skin
+OE: enigma2-plugin-skins-pli-hd-fullnight
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: enigma2-plugin-systemplugins-m3uiptv-dbg
+Version: 1.0+git1+4f19f260+4f19f265bd-r0
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: 985eb0043a14943be03f927cd87df6f2
+SHA256sum: 5bb62957223a981312842fe738cb54bfce1380e33fd3c2518c8a9e45e1c084ad
+Size: 620
+Filename: enigma2-plugin-systemplugins-m3uiptv-dbg_1.0+git1+4f19f260+4f19f265bd-r0_all.ipk
+Source: enigma2-plugin-systemplugins-m3uiptv.bb
+Description: enigma2-plugin-systemplugins-m3uiptv version 1.0+git-r0 - Debugging files
+OE: enigma2-plugin-systemplugins-m3uiptv
+HomePage: https://github.com/DimitarCC
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-systemplugins-m3uiptv-dev
+Version: 1.0+git1+4f19f260+4f19f265bd-r0
+Recommends: enigma2-plugin-systemplugins-m3uiptv (= 1.0+git1+4f19f260+4f19f265bd-r0), python3-multiprocessing-dev, python3-requests-dev, python3-zoneinfo-dev
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: 2c1399d8c65e75f257493e0fac20756a
+SHA256sum: b9304bf864bbc8f72f4b3c4371b7c8205f4d97a5bd3977fb4d44cce90fe42054
+Size: 690
+Filename: enigma2-plugin-systemplugins-m3uiptv-dev_1.0+git1+4f19f260+4f19f265bd-r0_all.ipk
+Source: enigma2-plugin-systemplugins-m3uiptv.bb
+Description: enigma2-plugin-systemplugins-m3uiptv version 1.0+git-r0 - Development files
+OE: enigma2-plugin-systemplugins-m3uiptv
+HomePage: https://github.com/DimitarCC
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-systemplugins-m3uiptv-src
+Version: 1.0+git1+4f19f260+4f19f265bd-r0
+Section: devel
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: b040524e7b8ddcd11bc23c0e2023bed6
+SHA256sum: 4fc45383bd681ab04c2a7fe3e88c314b50bfaefd222aea0d28bd670cc1302a1d
+Size: 79550
+Filename: enigma2-plugin-systemplugins-m3uiptv-src_1.0+git1+4f19f260+4f19f265bd-r0_all.ipk
+Source: enigma2-plugin-systemplugins-m3uiptv.bb
+Description: enigma2-plugin-systemplugins-m3uiptv version 1.0+git-r0 - Source files
+OE: enigma2-plugin-systemplugins-m3uiptv
+HomePage: https://github.com/DimitarCC
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-plugin-systemplugins-m3uiptv
+Version: 1.0+git1+4f19f260+4f19f265bd-r0
+Depends: python3-multiprocessing, python3-requests, python3-zoneinfo
+Section: base
+Architecture: all
+Maintainer: DimitarCC
+MD5Sum: 2ec13abf774c9a8428aae53d4d74c6e6
+SHA256sum: a3176389b115e6d1028074d6ffead585043df77822809cda68ba752c71774a22
+Size: 298326
+Filename: enigma2-plugin-systemplugins-m3uiptv_1.0+git1+4f19f260+4f19f265bd-r0_all.ipk
+Source: enigma2-plugin-systemplugins-m3uiptv.bb
+Description: enigma2-plugin-systemplugins-m3uiptv version 1.0+git-r0
+OE: enigma2-plugin-systemplugins-m3uiptv
+HomePage: https://github.com/DimitarCC
+License: GPL-3.0-only
+Priority: optional
+
+Package: enigma2-skindefault
+Version: 1.0+git1+72785ee0+72785ee5a0-r3
+Depends: font-roboto-enigma
+Section: base
+Architecture: all
+Maintainer: OE-Alliance
+MD5Sum: 06e577b65757b6c1cf4246186306804e
+SHA256sum: f0e4a0c68ff6e97bac5feb16166eb0b2d6dc1ca573bfc4dcdcbed3c281b608d0
+Size: 1059200
+Filename: enigma2-skindefault_1.0+git1+72785ee0+72785ee5a0-r3_all.ipk
+Source: enigma2-skindefault-master.bb
+Description: A default skin for Enigma2.
+OE: enigma2-skindefault-master
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: epgimport-sources-dbg
+Version: 0.0-git1+4eaaa700+4eaaa70fca-r0
+Section: devel
+Architecture: all
+Maintainer: oe-alliance
+MD5Sum: d54ab346eee52507e4a0f85a7d8813bb
+SHA256sum: a2283c853775b21ad1ffe659d8b9fdd5467401198770c6da42b2351a88ea6664
+Size: 602
+Filename: epgimport-sources-dbg_0.0-git1+4eaaa700+4eaaa70fca-r0_all.ipk
+Source: epgimport-sources.bb
+Description: enigma2 sources and channels for the EPG importer - Debugging files
+OE: epgimport-sources
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: epgimport-sources-dev
+Version: 0.0-git1+4eaaa700+4eaaa70fca-r0
+Recommends: epgimport-sources (= 0.0-git1+4eaaa700+4eaaa70fca-r0)
+Section: devel
+Architecture: all
+Maintainer: oe-alliance
+MD5Sum: 79a0f1b1dbb2045131243291f5990e7d
+SHA256sum: 6d53fbd592e59e06734041dbb6ad41688a2a975962d6591625bd49014f732c88
+Size: 640
+Filename: epgimport-sources-dev_0.0-git1+4eaaa700+4eaaa70fca-r0_all.ipk
+Source: epgimport-sources.bb
+Description: enigma2 sources and channels for the EPG importer - Development files
+OE: epgimport-sources
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: epgimport-sources
+Version: 0.0-git1+4eaaa700+4eaaa70fca-r0
+Provides: epgimport-rytec
+Replaces: epgimport-rytec
+Conflicts: epgimport-rytec
+Section: base
+Architecture: all
+Maintainer: oe-alliance
+MD5Sum: 7c791f4102b201aa1e08bdf62b60cba9
+SHA256sum: 90130762ac5ab210d0ba258f3dd5154d437c0fc44c61e4a2431c3195de5df3b1
+Size: 4216
+Filename: epgimport-sources_0.0-git1+4eaaa700+4eaaa70fca-r0_all.ipk
+Source: epgimport-sources.bb
+Description: enigma2 sources and channels for the EPG importer
+OE: epgimport-sources
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: font-roboto-enigma
+Version: 1.0+git1+72785ee0+72785ee5a0-r3
+Section: base
+Architecture: all
+Maintainer: OE-Alliance
+MD5Sum: bbd6608cf6324306ce7046dc05f33f0e
+SHA256sum: 4d440f28194e8e50957ef19dda4366ddf972c2fd0b1e3c399c9028b7217c5f8f
+Size: 191170
+Filename: font-roboto-enigma_1.0+git1+72785ee0+72785ee5a0-r3_all.ipk
+Source: enigma2-skindefault-master.bb
+Description: A default skin for Enigma2.
+OE: enigma2-skindefault-master
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: font-valis-enigma-dbg
+Version: 2009.11.12-r0
+Section: devel
+Architecture: all
+Maintainer: valis
+MD5Sum: 5b8dbaf12c1603c8181119d278b1b8fc
+SHA256sum: 9a274c5f3d24e4c154495cea7e4913de7306dc851350503abfb9d7228280b6ac
+Size: 564
+Filename: font-valis-enigma-dbg_2009.11.12-r0_all.ipk
+Source: font-valis-enigma.bb
+Description: font-valis-enigma - Debugging files
+OE: font-valis-enigma
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: font-valis-enigma-dev
+Version: 2009.11.12-r0
+Recommends: font-valis-enigma (= 2009.11.12-r0)
+Section: devel
+Architecture: all
+Maintainer: valis
+MD5Sum: 18c9feb50cb245d9c0af6bb3293642be
+SHA256sum: 738c3024c1c7df934d58e8f8888e4eec6ccc5ff36c7a646827451fb0a3ee32bc
+Size: 602
+Filename: font-valis-enigma-dev_2009.11.12-r0_all.ipk
+Source: font-valis-enigma.bb
+Description: font-valis-enigma - Development files
+OE: font-valis-enigma
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: font-valis-enigma
+Version: 2009.11.12-r0
+Section: base
+Architecture: all
+Maintainer: valis
+MD5Sum: 6dd0ef627bcf6b4fa10f377af630a9c3
+SHA256sum: dce2dd8a27759c7e2aad373c61adda0bba00d4cda9ff4725a30c8b7d9d82f57b
+Size: 37370
+Filename: font-valis-enigma_2009.11.12-r0_all.ipk
+Source: font-valis-enigma.bb
+Description: font-valis-enigma
+OE: font-valis-enigma
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: fstrim-cron-dbg
+Version: 1.0-r0
+Section: devel
+Architecture: all
+Maintainer: OpenATV Team
+MD5Sum: 17e7574dd7bb330c95e3ff8509a3f83e
+SHA256sum: 284b64856f998987d512ba074922d8503e73637eba2b2ae58982ab2bbc0b5a0a
+Size: 566
+Filename: fstrim-cron-dbg_1.0-r0_all.ipk
+Source: fstrim-cron.bb
+Description: fstrim cron job - Debugging files
+OE: fstrim-cron
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: fstrim-cron-dev
+Version: 1.0-r0
+Recommends: fstrim-cron (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: OpenATV Team
+MD5Sum: 40aefc6289b07793a605d03c096e527f
+SHA256sum: 5a6faa344e4633e59f4f5dcc63186885fb80ea2005b045213ebcc47eaa82fcde
+Size: 602
+Filename: fstrim-cron-dev_1.0-r0_all.ipk
+Source: fstrim-cron.bb
+Description: fstrim cron job - Development files
+OE: fstrim-cron
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: fstrim-cron
+Version: 1.0-r0
+Section: base
+Architecture: all
+Maintainer: OpenATV Team
+MD5Sum: 1c67dee47430e76c0bf501835d66077c
+SHA256sum: 1941d7740efd20cc98834ed3719a69e49a9aad0974c13ff0631bb9bb174d5fe3
+Size: 1520
+Filename: fstrim-cron_1.0-r0_all.ipk
+Source: fstrim-cron.bb
+Description: fstrim cron job
+OE: fstrim-cron
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: iso-codes-dbg
+Version: 4.20.1-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: ad0bf277dd9e5711c27ff77186a6010e
+SHA256sum: 55a016995a3d87f8d6db375ba6e65d974c106acfe8419cdddf01ad69258d1b75
+Size: 710
+Filename: iso-codes-dbg_4.20.1-r0_all.ipk
+Source: iso-codes_4.20.1.bb
+Description: ISO language, territory, currency, script codes and their translations - Debugging files
+OE: iso-codes
+HomePage: https://salsa.debian.org/iso-codes-team/iso-codes
+License: LGPL-2.1-or-later
+Priority: optional
+
+Package: iso-codes-dev
+Version: 4.20.1-r0
+Recommends: iso-codes (= 4.20.1-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: cb4590026e237867f3c6eeab3a9096d4
+SHA256sum: e74bd20325d579b14c96d0ba454e1a2b728cf755b2a2a7ae539c0bb7a50cc5c8
+Size: 1174
+Filename: iso-codes-dev_4.20.1-r0_all.ipk
+Source: iso-codes_4.20.1.bb
+Description: ISO language, territory, currency, script codes and their translations - Development files
+OE: iso-codes
+HomePage: https://salsa.debian.org/iso-codes-team/iso-codes
+License: LGPL-2.1-or-later
+Priority: optional
+
+Package: iso-codes-locale
+Version: 4.20.1-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: f237b11070d3d264a4ffa776f299e56f
+SHA256sum: 6e2d21b39c23e7bbe5c31002169408230e0e658f34f3d58d87623f4ffc974484
+Size: 6073624
+Filename: iso-codes-locale_4.20.1-r0_all.ipk
+Source: iso-codes_4.20.1.bb
+Description: ISO language, territory, currency, script codes and their translations
+OE: iso-codes
+HomePage: https://salsa.debian.org/iso-codes-team/iso-codes
+License: LGPL-2.1-or-later
+Priority: optional
+
+Package: iso-codes
+Version: 4.20.1-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3f57df2f868f7acd6bbd844238c6ab87
+SHA256sum: 47ffb425f232b01eeaa9770dc96916e9b66e903fc1603ff5cff83ffde3cbf4b5
+Size: 368450
+Filename: iso-codes_4.20.1-r0_all.ipk
+Source: iso-codes_4.20.1.bb
+Description: ISO language, territory, currency, script codes and their translations
+OE: iso-codes
+HomePage: https://salsa.debian.org/iso-codes-team/iso-codes
+License: LGPL-2.1-or-later
+Priority: optional
+
+Package: livestreamersrv-dbg
+Version: 0.4-r0
+Section: devel
+Architecture: all
+Maintainer: SatDreamGR
+MD5Sum: da7f5796f028cdf16d3b55947de8153d
+SHA256sum: 7f0bd119b43079189d9f2be36f423115fafaf5136f3dfbf8681a7011f7210250
+Size: 580
+Filename: livestreamersrv-dbg_0.4-r0_all.ipk
+Source: livestreamersrv_0.4.bb
+Description: livestreamersrv version 0.4-r0 - Debugging files
+OE: livestreamersrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: livestreamersrv-dev
+Version: 0.4-r0
+Recommends: livestreamersrv (= 0.4-r0), python3-core-dev, streamlink-dev
+Section: devel
+Architecture: all
+Maintainer: SatDreamGR
+MD5Sum: f7d534f773ccb74c99832616ce831b94
+SHA256sum: cecffeb069c07dfed194b4435ea7aa89af23dc673e232946a6d8c9c3d006377d
+Size: 636
+Filename: livestreamersrv-dev_0.4-r0_all.ipk
+Source: livestreamersrv_0.4.bb
+Description: livestreamersrv version 0.4-r0 - Development files
+OE: livestreamersrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: livestreamersrv
+Version: 0.4-r0
+Depends: python3-core, streamlink
+Section: devel/python
+Architecture: all
+Maintainer: SatDreamGR
+MD5Sum: 8ad2c2304f2b344c73b9461967b4bc72
+SHA256sum: f8fe97347e1ca0b17616264a6f986098e886699200993cb496025111131ad63a
+Size: 77076
+Filename: livestreamersrv_0.4-r0_all.ipk
+Source: livestreamersrv_0.4.bb
+Description: livestreamersrv version 0.4-r0
+OE: livestreamersrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: mm-common-dbg
+Version: 1.0.8-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 4ccea786107e0f2eddfa97c5fbf188c4
+SHA256sum: 844203ba273701bdad8683c05be83bce8edb9ad502a21ecd0bd2ea4c56818e63
+Size: 582
+Filename: mm-common-dbg_1.0.8-r0_all.ipk
+Source: mm-common_1.0.8.bb
+Description: Common GNOME build files for C++ bindings - Debugging files
+OE: mm-common
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: mm-common-dev
+Version: 1.0.8-r0
+Recommends: mm-common (= 1.0.8-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: b86f8e987b0f6855b5b8181f9c9a5dee
+SHA256sum: dc11f5bba19d79676695ef4de129792bda61b9377d47e662f5b8cb241c77311a
+Size: 355358
+Filename: mm-common-dev_1.0.8-r0_all.ipk
+Source: mm-common_1.0.8.bb
+Description: Common GNOME build files for C++ bindings - Development files
+OE: mm-common
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: mm-common-doc
+Version: 1.0.8-r0
+Section: doc
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3119ff997e0636fadf05a4b9ed1a4874
+SHA256sum: 3f6dc6f1b075d3a7fe5186c91bd80d8b56cdf09ae6884a1fa072a7354ee5d33f
+Size: 33168
+Filename: mm-common-doc_1.0.8-r0_all.ipk
+Source: mm-common_1.0.8.bb
+Description: Common GNOME build files for C++ bindings - Documentation files
+OE: mm-common
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: netbase-dbg
+Version: 1:6.6-r0.3
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 5d638221af0324e9fe3bfe7c46efc95c
+SHA256sum: b14524b29af4d2cc8d3c9654ee8f3e81cdd33e86583d239a6795a531fffbb395
+Size: 618
+Filename: netbase-dbg_6.6-r0.3_all.ipk
+Source: netbase_6.6.bb
+Description: Basic TCP/IP networking support - Debugging files
+OE: netbase
+HomePage: http://packages.debian.org/netbase
+License: GPL-2.0-only
+Priority: optional
+
+Package: netbase-dev
+Version: 1:6.6-r0.3
+Recommends: netbase (= 1:6.6-r0.3)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 04b7d00ff28360617802efed2f42ceee
+SHA256sum: 3f5957e2386a9d4595e45aae78c095591d16c7684708eacd90e9f124c7bf6dc9
+Size: 648
+Filename: netbase-dev_6.6-r0.3_all.ipk
+Source: netbase_6.6.bb
+Description: Basic TCP/IP networking support - Development files
+OE: netbase
+HomePage: http://packages.debian.org/netbase
+License: GPL-2.0-only
+Priority: optional
+
+Package: netbase
+Version: 1:6.6-r0.3
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 94093a30e943f6e071a215aedd03b23f
+SHA256sum: 6b224b807b2b8a677afe2d008e5f2cd768e03c3a6649af99f191cd5964f3ed06
+Size: 10098
+Filename: netbase_6.6-r0.3_all.ipk
+Source: netbase_6.6.bb
+Description: Basic TCP/IP networking support
+OE: netbase
+HomePage: http://packages.debian.org/netbase
+License: GPL-2.0-only
+Priority: optional
+
+Package: oe-alliance-3rdparty-feed
+Version: 1.0-r0
+Replaces: enigma2-3rdparty-plugins
+Conflicts: enigma2-3rdparty-plugins
+Section: base
+Architecture: all
+Maintainer: oe-alliance team
+MD5Sum: 082d0a04058f2d785f81351a1c6e8503
+SHA256sum: ff640dde764ed474ad55b36d830f5e51f0ee3cf5619ecf8c9ea31987bf45de88
+Size: 764
+Filename: oe-alliance-3rdparty-feed_1.0-r0_all.ipk
+Source: oe-alliance-3rdparty-feed.bb
+Description: oe-alliance 3rdparty feed opkg conf
+OE: oe-alliance-3rdparty-feed
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: required
+
+Package: oe-alliance-picon-feed
+Version: 1.0-r0
+Replaces: openvix-picon-feed-opkg-conf
+Conflicts: openvix-picon-feed-opkg-conf
+Section: base
+Architecture: all
+Maintainer: oe-alliance team
+MD5Sum: 440516c9ce8748a00160aa16e1b4f9a6
+SHA256sum: 45f1bb6a00057fd1aaccf8de02ad3e7a94198eaad6fe38b6edc76c13cbb1167f
+Size: 748
+Filename: oe-alliance-picon-feed_1.0-r0_all.ipk
+Source: oe-alliance-picon-feed.bb
+Description: oe-alliance picon feed opkg conf
+OE: oe-alliance-picon-feed
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: required
+
+Package: openatv-skinparts-meta
+Version: 0.0+git1+672fb190+672fb19a8e-r1
+Section: base
+Architecture: all
+Maintainer: www.opena.tv Fischreiher
+MD5Sum: 2bbcebdb4ede84ad233c20d83ad0b0be
+SHA256sum: a171c5ce083a5f824b5051ed6218b84a5e59fe567e76ea05b297653da79e0fa0
+Size: 1112
+Filename: openatv-skinparts-meta_0.0+git1+672fb190+672fb19a8e-r1_all.ipk
+Source: openatv-skinparts.bb
+Description: Skinparts
+OE: openatv-skinparts
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: openatv-skinparts
+Version: 0.0+git1+672fb190+672fb19a8e-r1
+Section: base
+Architecture: all
+Maintainer: www.opena.tv Fischreiher
+MD5Sum: fb94d19bd283cd92d43cd5fc05d6c272
+SHA256sum: 1a33fc0b273f09af50743bbdb7efad960247ce517be77ebe2344e37ccf22f7dc
+Size: 518
+Filename: openatv-skinparts_0.0+git1+672fb190+672fb19a8e-r1_all.ipk
+Source: openatv-skinparts.bb
+Description: Skinparts
+OE: openatv-skinparts
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: openatv-spinner-dbg
+Version: 1.0-r10
+Section: devel
+Architecture: all
+Maintainer: ATV Team
+MD5Sum: 679d7a874ea5471619505a4259f12388
+SHA256sum: b1fa01e65cfd8f46ab1aa81b0eb3b52bad1784e661b951498e69d2f6c0f568e5
+Size: 560
+Filename: openatv-spinner-dbg_1.0-r10_all.ipk
+Source: openatv-spinner.bb
+Description: openatv-spinner - Debugging files
+OE: openatv-spinner
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: openatv-spinner-dev
+Version: 1.0-r10
+Recommends: openatv-spinner (= 1.0-r10)
+Section: devel
+Architecture: all
+Maintainer: ATV Team
+MD5Sum: b100d57da9cb460625c570268069967d
+SHA256sum: 36c8c7a1c1a9d8fbf775d3b7b959d6fc01bb5f89760adaf351e692358e9441e5
+Size: 594
+Filename: openatv-spinner-dev_1.0-r10_all.ipk
+Source: openatv-spinner.bb
+Description: openatv-spinner - Development files
+OE: openatv-spinner
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: openatv-spinner
+Version: 1.0-r10
+Section: base
+Architecture: all
+Maintainer: ATV Team
+MD5Sum: d372580da48dade50d14d04ef757cdc5
+SHA256sum: 7ad985d0d2424d14fff9a7f734516cd5cc524bafcfea53f38201891aa03b3110
+Size: 17616
+Filename: openatv-spinner_1.0-r10_all.ipk
+Source: openatv-spinner.bb
+Description: openatv-spinner
+OE: openatv-spinner
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: openresolv-dbg
+Version: 3.13.2+git1+9b3691b0+9b3691b545-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 7520997caa57372bdf5f3315008648c2
+SHA256sum: 87cb3befe543a619b15a86bb8301db422d0fd22c3ebd24ba1b4a59da4aab81af
+Size: 614
+Filename: openresolv-dbg_3.13.2+git1+9b3691b0+9b3691b545-r0_all.ipk
+Source: openresolv_git.bb
+Description: management framework for resolv.conf - Debugging files
+OE: openresolv
+HomePage: https://github.com/NetworkConfiguration/openresolv
+License: BSD-2-Clause
+Priority: optional
+
+Package: openresolv-dev
+Version: 3.13.2+git1+9b3691b0+9b3691b545-r0
+Recommends: openresolv (= 3.13.2+git1+9b3691b0+9b3691b545-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 54f319faa60cc18eef6b022360ebda51
+SHA256sum: ed6b2e64814ea3b1b4b29521310d2fadd1b7a94960852368b1080336063afc01
+Size: 644
+Filename: openresolv-dev_3.13.2+git1+9b3691b0+9b3691b545-r0_all.ipk
+Source: openresolv_git.bb
+Description: management framework for resolv.conf - Development files
+OE: openresolv
+HomePage: https://github.com/NetworkConfiguration/openresolv
+License: BSD-2-Clause
+Priority: optional
+
+Package: openresolv-doc
+Version: 3.13.2+git1+9b3691b0+9b3691b545-r0
+Section: doc
+Architecture: all
+Maintainer: openATV
+MD5Sum: 77a78db7ab02d313628b554603d19ba4
+SHA256sum: 8a5109495f18ee2dcf6b944b574192b3b085da57f60056677e61ecf9d5792ff9
+Size: 8822
+Filename: openresolv-doc_3.13.2+git1+9b3691b0+9b3691b545-r0_all.ipk
+Source: openresolv_git.bb
+Description: management framework for resolv.conf - Documentation files
+OE: openresolv
+HomePage: https://github.com/NetworkConfiguration/openresolv
+License: BSD-2-Clause
+Priority: optional
+
+Package: openresolv
+Version: 3.13.2+git1+9b3691b0+9b3691b545-r0
+Provides: resolvconf
+Conflicts: resolvconf
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 9cfa805a454105341725cdc94a1ff0b6
+SHA256sum: 10b0ec19861265ebdb38c00791f866a5984231e43639c22ae52d76e9b6e97b1d
+Size: 19438
+Filename: openresolv_3.13.2+git1+9b3691b0+9b3691b545-r0_all.ipk
+Source: openresolv_git.bb
+Description: management framework for resolv.conf
+OE: openresolv
+HomePage: https://github.com/NetworkConfiguration/openresolv
+License: BSD-2-Clause
+Priority: optional
+
+Package: packagegroup-oea-multimedia-dbg
+Version: 1.0-r0
+Recommends: ffmpeg-dbg, gstreamer1.0-plugin-subsink-dbg, gstreamer1.0-plugins-bad-autoconvert-dbg, gstreamer1.0-plugins-bad-dash-dbg, gstreamer1.0-plugins-bad-faad-dbg, gstreamer1.0-plugins-bad-hls-dbg, gstreamer1.0-plugins-bad-mpegpsdemux-dbg, gstreamer1.0-plugins-bad-mpegtsdemux-dbg, gstreamer1.0-plugins-bad-rtmp-dbg, gstreamer1.0-plugins-bad-smoothstreaming-dbg, gstreamer1.0-plugins-bad-videoparsersbad-dbg, gstreamer1.0-plugins-base-alsa-dbg, gstreamer1.0-plugins-base-app-dbg, gstreamer1.0-plugins-base-audioconvert-dbg, gstreamer1.0-plugins-base-audiorate-dbg, gstreamer1.0-plugins-base-audioresample-dbg, gstreamer1.0-plugins-base-ivorbisdec-dbg, gstreamer1.0-plugins-base-ogg-dbg, gstreamer1.0-plugins-base-playback-dbg, gstreamer1.0-plugins-base-rawparse-dbg, gstreamer1.0-plugins-base-subparse-dbg, gstreamer1.0-plugins-base-typefindfunctions-dbg, gstreamer1.0-plugins-base-videoconvertscale-dbg, gstreamer1.0-plugins-base-vorbis-dbg, gstreamer1.0-plugins-good-amrnb-dbg, gstreamer1.0-plugins-good-amrwbdec-dbg, gstreamer1.0-plugins-good-apetag-dbg, gstreamer1.0-plugins-good-audioparsers-dbg, gstreamer1.0-plugins-good-autodetect-dbg, gstreamer1.0-plugins-good-avi-dbg, gstreamer1.0-plugins-good-flac-dbg, gstreamer1.0-plugins-good-flv-dbg, gstreamer1.0-plugins-good-icydemux-dbg, gstreamer1.0-plugins-good-id3demux-dbg, gstreamer1.0-plugins-good-isomp4-dbg, gstreamer1.0-plugins-good-matroska-dbg, gstreamer1.0-plugins-good-rtp-dbg, gstreamer1.0-plugins-good-rtpmanager-dbg, gstreamer1.0-plugins-good-rtsp-dbg, gstreamer1.0-plugins-good-soup-dbg, gstreamer1.0-plugins-good-udp-dbg, gstreamer1.0-plugins-good-wavpack-dbg, gstreamer1.0-plugins-good-wavparse-dbg, gstreamer1.0-plugins-ugly-asf-dbg, gstreamer1.0-plugins-ugly-cdio-dbg, gstreamer1.0-plugins-ugly-dvdsub-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 4050b3d0ff83975ea89014607ae7b49c
+SHA256sum: 1f1483cd823cef39ed646ae42fca01c29f8823f2cc0aa4a6df9e5960a7522eca
+Size: 888
+Filename: packagegroup-oea-multimedia-dbg_1.0-r0_all.ipk
+Source: packagegroup-oea-multimedia.bb
+Description: OE-Alliance Multimedia - GStreamer, codecs, and media players - Debugging files
+OE: packagegroup-oea-multimedia
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-multimedia-dev
+Version: 1.0-r0
+Recommends: ffmpeg-dev, gstreamer1.0-plugin-subsink-dev, gstreamer1.0-plugins-bad-autoconvert-dev, gstreamer1.0-plugins-bad-dash-dev, gstreamer1.0-plugins-bad-faad-dev, gstreamer1.0-plugins-bad-hls-dev, gstreamer1.0-plugins-bad-mpegpsdemux-dev, gstreamer1.0-plugins-bad-mpegtsdemux-dev, gstreamer1.0-plugins-bad-rtmp-dev, gstreamer1.0-plugins-bad-smoothstreaming-dev, gstreamer1.0-plugins-bad-videoparsersbad-dev, gstreamer1.0-plugins-base-alsa-dev, gstreamer1.0-plugins-base-app-dev, gstreamer1.0-plugins-base-audioconvert-dev, gstreamer1.0-plugins-base-audiorate-dev, gstreamer1.0-plugins-base-audioresample-dev, gstreamer1.0-plugins-base-ivorbisdec-dev, gstreamer1.0-plugins-base-ogg-dev, gstreamer1.0-plugins-base-playback-dev, gstreamer1.0-plugins-base-rawparse-dev, gstreamer1.0-plugins-base-subparse-dev, gstreamer1.0-plugins-base-typefindfunctions-dev, gstreamer1.0-plugins-base-videoconvertscale-dev, gstreamer1.0-plugins-base-vorbis-dev, gstreamer1.0-plugins-good-amrnb-dev, gstreamer1.0-plugins-good-amrwbdec-dev, gstreamer1.0-plugins-good-apetag-dev, gstreamer1.0-plugins-good-audioparsers-dev, gstreamer1.0-plugins-good-autodetect-dev, gstreamer1.0-plugins-good-avi-dev, gstreamer1.0-plugins-good-flac-dev, gstreamer1.0-plugins-good-flv-dev, gstreamer1.0-plugins-good-icydemux-dev, gstreamer1.0-plugins-good-id3demux-dev, gstreamer1.0-plugins-good-isomp4-dev, gstreamer1.0-plugins-good-matroska-dev, gstreamer1.0-plugins-good-rtp-dev, gstreamer1.0-plugins-good-rtpmanager-dev, gstreamer1.0-plugins-good-rtsp-dev, gstreamer1.0-plugins-good-soup-dev, gstreamer1.0-plugins-good-udp-dev, gstreamer1.0-plugins-good-wavpack-dev, gstreamer1.0-plugins-good-wavparse-dev, gstreamer1.0-plugins-ugly-asf-dev, gstreamer1.0-plugins-ugly-cdio-dev, gstreamer1.0-plugins-ugly-dvdsub-dev, packagegroup-oea-multimedia (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 26cdffafd382a0672815daa846e2d393
+SHA256sum: c4f9d4d1a4ea85420eba207c2045211faad6dfa43e24c94cdffa001cd50d5059
+Size: 912
+Filename: packagegroup-oea-multimedia-dev_1.0-r0_all.ipk
+Source: packagegroup-oea-multimedia.bb
+Description: OE-Alliance Multimedia - GStreamer, codecs, and media players - Development files
+OE: packagegroup-oea-multimedia
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-multimedia
+Version: 1.0-r0
+Depends: ffmpeg, gstreamer1.0-plugin-subsink, gstreamer1.0-plugins-bad-autoconvert, gstreamer1.0-plugins-bad-dash, gstreamer1.0-plugins-bad-faad, gstreamer1.0-plugins-bad-hls, gstreamer1.0-plugins-bad-mpegpsdemux, gstreamer1.0-plugins-bad-mpegtsdemux, gstreamer1.0-plugins-bad-rtmp, gstreamer1.0-plugins-bad-smoothstreaming, gstreamer1.0-plugins-bad-videoparsersbad, gstreamer1.0-plugins-base-alsa, gstreamer1.0-plugins-base-app, gstreamer1.0-plugins-base-audioconvert, gstreamer1.0-plugins-base-audiorate, gstreamer1.0-plugins-base-audioresample, gstreamer1.0-plugins-base-ivorbisdec, gstreamer1.0-plugins-base-ogg, gstreamer1.0-plugins-base-playback, gstreamer1.0-plugins-base-rawparse, gstreamer1.0-plugins-base-subparse, gstreamer1.0-plugins-base-typefindfunctions, gstreamer1.0-plugins-base-videoconvertscale, gstreamer1.0-plugins-base-vorbis, gstreamer1.0-plugins-good-amrnb, gstreamer1.0-plugins-good-amrwbdec, gstreamer1.0-plugins-good-apetag, gstreamer1.0-plugins-good-audioparsers, gstreamer1.0-plugins-good-autodetect, gstreamer1.0-plugins-good-avi, gstreamer1.0-plugins-good-flac, gstreamer1.0-plugins-good-flv, gstreamer1.0-plugins-good-icydemux, gstreamer1.0-plugins-good-id3demux, gstreamer1.0-plugins-good-isomp4, gstreamer1.0-plugins-good-matroska, gstreamer1.0-plugins-good-rtp, gstreamer1.0-plugins-good-rtpmanager, gstreamer1.0-plugins-good-rtsp, gstreamer1.0-plugins-good-soup, gstreamer1.0-plugins-good-udp, gstreamer1.0-plugins-good-wavpack, gstreamer1.0-plugins-good-wavparse, gstreamer1.0-plugins-ugly-asf, gstreamer1.0-plugins-ugly-cdio, gstreamer1.0-plugins-ugly-dvdsub
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 1c494c7e0d1dee8f4f71c1eb82821e95
+SHA256sum: 02960865dc56b3f7e9232043476cf6f2df1766e6c70938e2ff75ad75d2a3d636
+Size: 818
+Filename: packagegroup-oea-multimedia_1.0-r0_all.ipk
+Source: packagegroup-oea-multimedia.bb
+Description: OE-Alliance Multimedia - GStreamer, codecs, and media players
+OE: packagegroup-oea-multimedia
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-core-dbg
+Version: 1.0-r0
+Recommends: avahi-daemon-dbg, ca-certificates-dbg, iproute2-dbg, libcrypto-compat-0.9.7-dbg, libcrypto-compat-1.0.0-dbg, libxcrypt-compat-dbg, llmnrd-dbg, packagegroup-oea-network-ssh-dbg, vsftpd-dbg, wget-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 726219e572c040ec9b84a64fd193892b
+SHA256sum: 87059c25b8a822d6e52bf1407535ed57c7eda896e2aab84c73023360077405a3
+Size: 676
+Filename: packagegroup-oea-network-core-dbg_1.0-r0_all.ipk
+Source: packagegroup-oea-network-core.bb
+Description: OE-Alliance Network Core - basic networking - Debugging files
+OE: packagegroup-oea-network-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-core-dev
+Version: 1.0-r0
+Recommends: avahi-daemon-dev, ca-certificates-dev, iproute2-dev, libcrypto-compat-0.9.7-dev, libcrypto-compat-1.0.0-dev, libxcrypt-compat-dev, llmnrd-dev, packagegroup-oea-network-core (= 1.0-r0), packagegroup-oea-network-ssh-dev, vsftpd-dev, wget-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 0fefe5e5d5bef45f252e5a03954e9758
+SHA256sum: aaadcc146cd1623e851f776709bcc486199da4383dda17d5fec891c306e81b36
+Size: 700
+Filename: packagegroup-oea-network-core-dev_1.0-r0_all.ipk
+Source: packagegroup-oea-network-core.bb
+Description: OE-Alliance Network Core - basic networking - Development files
+OE: packagegroup-oea-network-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-core
+Version: 1.0-r0
+Depends: avahi-daemon, ca-certificates, iproute2, libcrypto-compat-0.9.7, libcrypto-compat-1.0.0, libxcrypt-compat, llmnrd, packagegroup-oea-network-ssh, vsftpd, wget
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 22da002f7b488c36f3e236870ea29ac2
+SHA256sum: b473e098079882393dd7b2993ab6ce694a701be4d7b20d3868f8f764e11608ac
+Size: 600
+Filename: packagegroup-oea-network-core_1.0-r0_all.ipk
+Source: packagegroup-oea-network-core.bb
+Description: OE-Alliance Network Core - basic networking
+OE: packagegroup-oea-network-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-server-dbg
+Version: 1.0-r0
+Recommends: packagegroup-base-nfs-dbg, packagegroup-base-smbfs-client-dbg, packagegroup-base-smbfs-server-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 2863724519985f346395f2596cc10cb1
+SHA256sum: abdcaed1ea6947c6207f99fffd92ca803b01eb540e74e8045ee3da662475d5a2
+Size: 622
+Filename: packagegroup-oea-network-server-dbg_1.0-r0_all.ipk
+Source: packagegroup-oea-network-server.bb
+Description: OE-Alliance Network Server - server services and file sharing - Debugging files
+OE: packagegroup-oea-network-server
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-server-dev
+Version: 1.0-r0
+Recommends: packagegroup-base-nfs-dev, packagegroup-base-smbfs-client-dev, packagegroup-base-smbfs-server-dev, packagegroup-oea-network-server (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 1dece8e2458c745a1d0f2f6ae5274f2b
+SHA256sum: ed10c1d123e2d1014fd18b83e2b813c84df413f8a8f7f083bdd6e3745edd4a96
+Size: 652
+Filename: packagegroup-oea-network-server-dev_1.0-r0_all.ipk
+Source: packagegroup-oea-network-server.bb
+Description: OE-Alliance Network Server - server services and file sharing - Development files
+OE: packagegroup-oea-network-server
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-server
+Version: 1.0-r0
+Depends: packagegroup-base-nfs, packagegroup-base-smbfs-client, packagegroup-base-smbfs-server
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 54bec26f0a9f62cf757226f057a33052
+SHA256sum: 3a80f91ff3f49f9b5eb764780cd0da504cd42e35da8a15b3935bbd0c291b8210
+Size: 554
+Filename: packagegroup-oea-network-server_1.0-r0_all.ipk
+Source: packagegroup-oea-network-server.bb
+Description: OE-Alliance Network Server - server services and file sharing
+OE: packagegroup-oea-network-server
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-ssh-dbg
+Version: 1.0-r0
+Recommends: dropbear-dbg, openssh-sftp-server-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3e10b2237dc0445bca6ea26d5e8a285f
+SHA256sum: b6b5a94c8d5567e2185a30b39a176c4160aa9c57531df57b991f941d6706ad65
+Size: 640
+Filename: packagegroup-oea-network-ssh-dbg_1.0-r0_all.ipk
+Source: packagegroup-oea-network-ssh.bb
+Description: OE-Alliance SSH and SFTP services - Debugging files
+OE: packagegroup-oea-network-ssh
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-ssh-dev
+Version: 1.0-r0
+Recommends: dropbear-dev, openssh-sftp-server-dev, packagegroup-oea-network-ssh (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: baabd3ffb29be8a8d7a53acf93f06b8d
+SHA256sum: bcd358817b353c43ffc67d2884b8ea47cac53a3dfc0c475ae0aad7f1f7089126
+Size: 670
+Filename: packagegroup-oea-network-ssh-dev_1.0-r0_all.ipk
+Source: packagegroup-oea-network-ssh.bb
+Description: OE-Alliance SSH and SFTP services - Development files
+OE: packagegroup-oea-network-ssh
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-network-ssh
+Version: 1.0-r0
+Depends: dropbear, openssh-sftp-server
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 4d0e7a8958643969776314807abd79be
+SHA256sum: 2297176a74a233395a4d537269081c926b68170e256174474ee8a8f71313b34f
+Size: 574
+Filename: packagegroup-oea-network-ssh_1.0-r0_all.ipk
+Source: packagegroup-oea-network-ssh.bb
+Description: OE-Alliance SSH and SFTP services
+OE: packagegroup-oea-network-ssh
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-python-core-dbg
+Version: 1.0-r0
+Recommends: python3-compat2-dbg, python3-compression-dbg, python3-future-dbg, python3-numbers-dbg, python3-pexpect-dbg, python3-pillow-dbg, python3-process-dbg, python3-puremagic-dbg, python3-requests-dbg, python3-service-identity-dbg, python3-six-dbg, python3-trio-dbg, python3-twisted-protocols-dbg
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 1ae0ed9a37102a06c721d91073b19001
+SHA256sum: 46c76b6fc3809008e56b54be1f13898d7a9c2c23be6885fc4a7634090980b15c
+Size: 696
+Filename: packagegroup-oea-python-core-dbg_1.0-r0_all.ipk
+Source: packagegroup-oea-python-core.bb
+Description: OE-Alliance Python Core - Python3 base modules for enigma2 - Debugging files
+OE: packagegroup-oea-python-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-python-core-dev
+Version: 1.0-r0
+Recommends: packagegroup-oea-python-core (= 1.0-r0), python3-compat2-dev, python3-compression-dev, python3-future-dev, python3-numbers-dev, python3-pexpect-dev, python3-pillow-dev, python3-process-dev, python3-puremagic-dev, python3-requests-dev, python3-service-identity-dev, python3-six-dev, python3-trio-dev, python3-twisted-protocols-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 2102e97d59d0af1db5e8ff2d46175163
+SHA256sum: e72494361a6632f476b7d58784e98d146d0aa0ae059af8f1422ca97bf3a371cc
+Size: 724
+Filename: packagegroup-oea-python-core-dev_1.0-r0_all.ipk
+Source: packagegroup-oea-python-core.bb
+Description: OE-Alliance Python Core - Python3 base modules for enigma2 - Development files
+OE: packagegroup-oea-python-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: packagegroup-oea-python-core
+Version: 1.0-r0
+Depends: python3-compat2, python3-compression, python3-future, python3-numbers, python3-pexpect, python3-pillow, python3-process, python3-puremagic, python3-requests, python3-service-identity, python3-six, python3-trio, python3-twisted-protocols
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: d1aa36a00d2142b7507e733b363850d6
+SHA256sum: 2a49b5ce1821ebe8f2d870a0c8c9f42d2bf935a2e591ef1204ae69a3c45392af
+Size: 628
+Filename: packagegroup-oea-python-core_1.0-r0_all.ipk
+Source: packagegroup-oea-python-core.bb
+Description: OE-Alliance Python Core - Python3 base modules for enigma2
+OE: packagegroup-oea-python-core
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: picons-enigma2-meta-dbg
+Version: 1.0-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 46415bc67645c08ed4d3860fc385b757
+SHA256sum: f6378e584b888394c282bcea18b52436cb8e164dca6978d38ee214de83197884
+Size: 568
+Filename: picons-enigma2-meta-dbg_1.0-r0_all.ipk
+Source: picons-enigma2-meta.bb
+Description: picons-enigma2-meta version 1.0-r0 - Debugging files
+OE: picons-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: picons-enigma2-meta-dev
+Version: 1.0-r0
+Recommends: enigma2-plugin-picons-tv-australia-dev, picons-enigma2-meta (= 1.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: f342b1b55e1aac08a54410311a431ee7
+SHA256sum: 729dc2838986f3acaaf3ba246be15064020229efa61e81e232f8737ae37d1410
+Size: 626
+Filename: picons-enigma2-meta-dev_1.0-r0_all.ipk
+Source: picons-enigma2-meta.bb
+Description: picons-enigma2-meta version 1.0-r0 - Development files
+OE: picons-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: picons-enigma2-meta
+Version: 1.0-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: ed93b67a7e0ac9efb86e6511b61fdcbe
+SHA256sum: 2315b683279fff505d1e4b4ee68114b266d0963dc06e93bd7e44058f7209a53e
+Size: 502
+Filename: picons-enigma2-meta_1.0-r0_all.ipk
+Source: picons-enigma2-meta.bb
+Description: picons-enigma2-meta version 1.0-r0
+OE: picons-enigma2-meta
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: python3-yt-dlp-ejs-dbg
+Version: 0.8.0-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: ec14830f256c4d5050d9127c67af368c
+SHA256sum: cf676ec8d7fe998302adc25f909fd5872c7a9e8e229e2833fe4843e84149bdfa
+Size: 820
+Filename: python3-yt-dlp-ejs-dbg_0.8.0-r0_all.ipk
+Source: python3-yt-dlp-ejs.bb
+Description: JavaScript challenge solver for yt-dlp - Debugging files
+OE: python3-yt-dlp-ejs
+HomePage: https://github.com/yt-dlp/ejs
+License: ISC AND MIT AND Unlicense
+Priority: optional
+
+Package: python3-yt-dlp-ejs-dev
+Version: 0.8.0-r0
+Recommends: python3-core-dev, python3-yt-dlp-ejs (= 0.8.0-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 86ffe81bee6329b9be4a53bf1e5bd05a
+SHA256sum: 9075cc4d188393c730418b0e3af79ea2a424a3c8e5aa506d9fd6bbe36b4c164d
+Size: 864
+Filename: python3-yt-dlp-ejs-dev_0.8.0-r0_all.ipk
+Source: python3-yt-dlp-ejs.bb
+Description: JavaScript challenge solver for yt-dlp - Development files
+OE: python3-yt-dlp-ejs
+HomePage: https://github.com/yt-dlp/ejs
+License: ISC AND MIT AND Unlicense
+Priority: optional
+
+Package: python3-yt-dlp-ejs-src
+Version: 0.8.0-r0
+Depends: python3-yt-dlp-ejs
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 03c46e89502ba2f8265241c98c915d00
+SHA256sum: 7ea0ec6183c661f660b15914ce066b462810ac49006d215bfb73d9e0bfbf1b7f
+Size: 1612
+Filename: python3-yt-dlp-ejs-src_0.8.0-r0_all.ipk
+Source: python3-yt-dlp-ejs.bb
+Description: JavaScript challenge solver for yt-dlp - Source files
+OE: python3-yt-dlp-ejs
+HomePage: https://github.com/yt-dlp/ejs
+License: ISC AND MIT AND Unlicense
+Priority: optional
+
+Package: python3-yt-dlp-ejs
+Version: 0.8.0-r0
+Depends: python3-core
+Section: devel/python
+Architecture: all
+Maintainer: openATV
+MD5Sum: dc48340b62096a6dd31c5065a9afa9ca
+SHA256sum: 1e8259637eae4e1d558dd7b5e8a2d4193ca0171f7fdb2e4a8e030b7974856f2d
+Size: 56078
+Filename: python3-yt-dlp-ejs_0.8.0-r0_all.ipk
+Source: python3-yt-dlp-ejs.bb
+Description: JavaScript challenge solver for yt-dlp
+OE: python3-yt-dlp-ejs
+HomePage: https://github.com/yt-dlp/ejs
+License: ISC AND MIT AND Unlicense
+Priority: optional
+
+Package: run-postinsts-dbg
+Version: 1.0-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3fee1d3855750c6451278f07402f5808
+SHA256sum: ab4a8f859852174ea48173b9d9207f98560ae7fbc43d34fa75b524c5b438c4c7
+Size: 584
+Filename: run-postinsts-dbg_1.0-r0_all.ipk
+Source: run-postinsts_1.0.bb
+Description: Runs postinstall scripts on first boot of the target device - Debugging files
+OE: run-postinsts
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: run-postinsts-dev
+Version: 1.0-r0
+Recommends: initscripts-dev, run-postinsts (= 1.0-r0), update-rc.d-dev, util-linux-flock-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 77bde69bfc85517d423dcfc6408a3cda
+SHA256sum: 93416a15834b3bf0889421df75464411a95f519ca7bbf8c353df5dcd66d3ea69
+Size: 654
+Filename: run-postinsts-dev_1.0-r0_all.ipk
+Source: run-postinsts_1.0.bb
+Description: Runs postinstall scripts on first boot of the target device - Development files
+OE: run-postinsts
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: run-postinsts
+Version: 1.0-r0
+Depends: util-linux-flock
+Recommends: update-rc.d
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 2ef79d024060cf5b14d49ba516fd2520
+SHA256sum: a70dec117b39f09ffccb52d2b8afd93f8ebab5a947b311d7ba43e07088badac8
+Size: 1968
+Filename: run-postinsts_1.0-r0_all.ipk
+Source: run-postinsts_1.0.bb
+Description: Runs postinstall scripts on first boot of the target device
+OE: run-postinsts
+HomePage: https://www.opena.tv
+License: MIT
+Priority: optional
+
+Package: streamlinksrv-dbg
+Version: 1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0
+Section: devel
+Architecture: all
+Maintainer: SatDreamGR Billy2011
+MD5Sum: 03fedaf1b7a6e374882a291f6a1b5a3e
+SHA256sum: 9242c0a8faf1ba040721ba0bc2c9e436c4f4cb6bc9635574e9961260e7f63cea
+Size: 606
+Filename: streamlinksrv-dbg_1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0_all.ipk
+Source: streamlinksrv.bb
+Description: streamlinksrv version 1.8.4+git-r0 - Debugging files
+OE: streamlinksrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: streamlinksrv-dev
+Version: 1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0
+Recommends: python3-core-dev, streamlink-dev, streamlinksrv (= 1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0)
+Section: devel
+Architecture: all
+Maintainer: SatDreamGR Billy2011
+MD5Sum: 090c1209d290ac5189b6bfb584bb0dcb
+SHA256sum: 33097bd5e751f4bf4090ad381c3793be6cc3cfc347fabee852887935a382d45f
+Size: 656
+Filename: streamlinksrv-dev_1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0_all.ipk
+Source: streamlinksrv.bb
+Description: streamlinksrv version 1.8.4+git-r0 - Development files
+OE: streamlinksrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: streamlinksrv
+Version: 1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0
+Depends: python3-core, streamlink
+Section: devel/python
+Architecture: all
+Maintainer: SatDreamGR Billy2011
+MD5Sum: 46e8a2993d22501679bd43e61761f043
+SHA256sum: edc9acb087a6e945c32d894863c9cbd36a16d67bb1762ad482ca1284c3897d70
+Size: 85882
+Filename: streamlinksrv_1.8.4+git1+c7ae8ab0+c7ae8ab3f8-r0_all.ipk
+Source: streamlinksrv.bb
+Description: streamlinksrv version 1.8.4+git-r0
+OE: streamlinksrv
+HomePage: www.satdreamgr.com
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: tuxbox-common-dbg
+Version: 1.0+git1+8153ef90+8153ef9c8d-r0
+Section: devel
+Architecture: all
+Maintainer: OE-Alliance team
+MD5Sum: 04f7f034dfca5d30bbb0795aa60062f4
+SHA256sum: 4ff45213fbbf355caffb4481fd64bed3037664b79d749a59bedbbbb3316e81ce
+Size: 598
+Filename: tuxbox-common-dbg_1.0+git1+8153ef90+8153ef9c8d-r0_all.ipk
+Source: tuxbox-common_0.1.1.bb
+Description: Tuxbox common files - Debugging files
+OE: tuxbox-common
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: tuxbox-common-dev
+Version: 1.0+git1+8153ef90+8153ef9c8d-r0
+Recommends: tuxbox-common (= 1.0+git1+8153ef90+8153ef9c8d-r0)
+Section: devel
+Architecture: all
+Maintainer: OE-Alliance team
+MD5Sum: 262c3b04aa621d76a1bc81d106d2895e
+SHA256sum: bdf4aad2b8042586f7c215ee1a1fb677cab80cef93b4ce3f1697060c82cac121
+Size: 630
+Filename: tuxbox-common-dev_1.0+git1+8153ef90+8153ef9c8d-r0_all.ipk
+Source: tuxbox-common_0.1.1.bb
+Description: Tuxbox common files - Development files
+OE: tuxbox-common
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: tuxbox-common
+Version: 1.0+git1+8153ef90+8153ef9c8d-r0
+Section: base
+Architecture: all
+Maintainer: OE-Alliance team
+MD5Sum: 44c669b60848cff784edc76a297498f0
+SHA256sum: ad902350651ce7cb541858d86e31f4663fe5876a70f184fba58980f7a4df2b9b
+Size: 76642
+Filename: tuxbox-common_1.0+git1+8153ef90+8153ef9c8d-r0_all.ipk
+Source: tuxbox-common_0.1.1.bb
+Description: Tuxbox common files
+OE: tuxbox-common
+HomePage: https://www.opena.tv
+License: LicenseRef-Proprietary
+Priority: optional
+
+Package: tzdata-africa
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 05df57dfc800a2aa833e42d2fa671cb8
+SHA256sum: 64727da83356da50594e6c194f006c7422401ab6d50128d4bd431f638f52efb0
+Size: 3926
+Filename: tzdata-africa_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-americas
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 7b0401b93c1f6fbe572862e303034544
+SHA256sum: 22d0f73ad98a088862fd7b4a14b3ebb599b56fc88eb9ab97f6fc313f7fdb709a
+Size: 22044
+Filename: tzdata-americas_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-antarctica
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 97cf57d709aa6f90a32381f5f9bba866
+SHA256sum: 4bf9b11340d8c2b303931b08abf52d27102d72d5801342a908dc2720480d7ede
+Size: 2808
+Filename: tzdata-antarctica_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-arctic
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 438c6320c927d08316ffb6f2abaa72a3
+SHA256sum: 1f8b0a00daa2899c66e2f901b50a9a1ad111e15f6bb862a1d87f31f72d853146
+Size: 1120
+Filename: tzdata-arctic_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-asia
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 972a2535b59c261098dfe903840eeaf3
+SHA256sum: 68d386733a25ec3223b2e379fbc309c7aeb799ffc3225739f3aa42b5c0696986
+Size: 14020
+Filename: tzdata-asia_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-atlantic
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 156dece0c8d9fa4aefca60c076e0110a
+SHA256sum: f8b5d600e4086742674954b34543e6eb1b5612a2c73d9601380a8c0b9bcf3c65
+Size: 3532
+Filename: tzdata-atlantic_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-australia
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 5de2b7f5b7b4b05235add8f05e61c2a8
+SHA256sum: c208953de48944b325f1b17183f3ab19607c1da29554cb1467aaa5f286f2ed5a
+Size: 2678
+Filename: tzdata-australia_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-core
+Version: 2026e-r1
+Depends: tzdata-europe
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 1e218d4e6ad7d9ed3cdc693b96220c04
+SHA256sum: a967f631dd7534b9bce84c328b5cc18133818972d4a8bdac10eb90d99ee4e9c3
+Size: 57580
+Filename: tzdata-core_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-europe
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 0ff739cc07cc3b9cd664c017ec5676d3
+SHA256sum: 21b163e56abe2931086ed63541c6776f57f64ff522271bb79301c58c23fc7cb1
+Size: 8532
+Filename: tzdata-europe_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-misc
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 3f78a24166637b940fa33d41bc3b03f3
+SHA256sum: 84f6898770b4f1197c1ebe24d4a1f1d5b71983f48df5965dcc167db74b9eace3
+Size: 6866
+Filename: tzdata-misc_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-pacific
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 432410f3b1c2696dd96b9b6ff21d44cb
+SHA256sum: bb8d1b2392558b600914ffb7d710bc8bc3893e728fa77aa6df8720147e581a04
+Size: 4654
+Filename: tzdata-pacific_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-posix
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 67524254dc021da7d25078b832c3099c
+SHA256sum: 1730691db3a977832cf9cecf8b6f47770eba927be42c37a0ca8c19a863522394
+Size: 56938
+Filename: tzdata-posix_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata-right
+Version: 2026e-r1
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 016909c7eb56d8f1b7a010cc82811602
+SHA256sum: d831bdeed196aa00298f6278471b26544e0e3330c89c1c21569a7d13a374fe59
+Size: 58414
+Filename: tzdata-right_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: tzdata
+Version: 2026e-r1
+Depends: tzdata-africa, tzdata-americas, tzdata-antarctica, tzdata-arctic, tzdata-asia, tzdata-atlantic, tzdata-australia, tzdata-core, tzdata-europe, tzdata-misc, tzdata-pacific
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: 38c350ddd04b1f2e53a5e2b89753de45
+SHA256sum: 71395de0e2fd3cf57c421843ebdf118f44bf8855a38af733f6eeeb7a8be0342f
+Size: 942
+Filename: tzdata_2026e-r1_all.ipk
+Source: tzdata.bb
+Description: Timezone data
+OE: tzdata
+HomePage: http://www.iana.org/time-zones
+License: BSD-3-Clause AND LicenseRef-PD
+Priority: optional
+
+Package: update-rc.d-dbg
+Version: 0.8+git0+b8f9501050-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: a374c5145bc643a4ed6083b31ac9f24a
+SHA256sum: ce510b7ae514ae0f58dfb2812e30715f05741321d6013ef5cd9c58c01e3b8d71
+Size: 652
+Filename: update-rc.d-dbg_0.8+git0+b8f9501050-r0_all.ipk
+Source: update-rc.d_0.8.bb
+Description: manage symlinks in /etc/rcN.d - Debugging files
+OE: update-rc.d
+HomePage: http://github.com/philb/update-rc.d/
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: update-rc.d-dev
+Version: 0.8+git0+b8f9501050-r0
+Recommends: update-rc.d (= 0.8+git0+b8f9501050-r0)
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 8f29b18e6541c764856bc8f1e91ba656
+SHA256sum: bfe7214d16f4005e632cab82cf43a737b4137410d7412d9d25d53d347fe1dbdb
+Size: 684
+Filename: update-rc.d-dev_0.8+git0+b8f9501050-r0_all.ipk
+Source: update-rc.d_0.8.bb
+Description: manage symlinks in /etc/rcN.d - Development files
+OE: update-rc.d
+HomePage: http://github.com/philb/update-rc.d/
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: update-rc.d
+Version: 0.8+git0+b8f9501050-r0
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: dbcdcdd194b39cded5c30ee671eb6a85
+SHA256sum: d819016da38408b20fa4e5fe1d1ee863caacc71ef61df9b63a5e3d81802af3f0
+Size: 3142
+Filename: update-rc.d_0.8+git0+b8f9501050-r0_all.ipk
+Source: update-rc.d_0.8.bb
+Description: manage symlinks in /etc/rcN.d
+OE: update-rc.d
+HomePage: http://github.com/philb/update-rc.d/
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: usb-modeswitch-data-dbg
+Version: 20251207-r0
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 4291f875377fba4d920461bc6c87896a
+SHA256sum: 7f01862d0ae692f24caf4865ced9bdbbe27b8fdc324bbcb70afe3881542ea073
+Size: 576
+Filename: usb-modeswitch-data-dbg_20251207-r0_all.ipk
+Source: usb-modeswitch-data_20251207.bb
+Description: Data files for usbmodeswitch - Debugging files
+OE: usb-modeswitch-data
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: usb-modeswitch-data-dev
+Version: 20251207-r0
+Recommends: usb-modeswitch-data (= 20251207-r0), usb-modeswitch-dev
+Section: devel
+Architecture: all
+Maintainer: openATV
+MD5Sum: 59b90968e572327b10c84e78aafb4116
+SHA256sum: 550d8fee09da268f51972522396674f51800e504b96d8cc32a2c8dc766c56092
+Size: 618
+Filename: usb-modeswitch-data-dev_20251207-r0_all.ipk
+Source: usb-modeswitch-data_20251207.bb
+Description: Data files for usbmodeswitch - Development files
+OE: usb-modeswitch-data
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: usb-modeswitch-data
+Version: 20251207-r0
+Depends: usb-modeswitch (>= 2.4.0)
+Section: base
+Architecture: all
+Maintainer: openATV
+MD5Sum: bd06db305d1e83b221d7647d8645804c
+SHA256sum: 8f71f7268c5909e46218b769b0cf42c5f1965b26ea1cbed819e7cc34f41ae1c0
+Size: 21124
+Filename: usb-modeswitch-data_20251207-r0_all.ipk
+Source: usb-modeswitch-data_20251207.bb
+Description: Data files for usbmodeswitch
+OE: usb-modeswitch-data
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
+
+Package: volatile-media
+Version: 2.0-r0
+Section: base
+Architecture: all
+Maintainer: PLi team
+MD5Sum: 623a940c3dfa3ccfe93daa6c29880d36
+SHA256sum: 7c4a5d146f0f80768fc5fcd36553cea5b25c08fc53de529ee17349ec80ffa4b4
+Size: 872
+Filename: volatile-media_2.0-r0_all.ipk
+Source: volatile-media.bb
+Description: Mounts and populates a tmpfs over /media
+OE: volatile-media
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
+
+Package: wireless-regdb-static
+Version: 2026.09.03-r0
+Section: net
+Architecture: all
+Maintainer: openATV
+MD5Sum: e2c77b53c122fec90d0e87b274471fff
+SHA256sum: d455d64be0c361e9c23c2184c6eed2489cc3aca5b376506510790d21d195b3fc
+Size: 4448
+Filename: wireless-regdb-static_2026.09.03-r0_all.ipk
+Source: wireless-regdb_2026.09.03.bb
+Description: Wireless Central Regulatory Domain Database
+OE: wireless-regdb
+HomePage: https://wireless.wiki.kernel.org/en/developers/regulatory/crda
+License: ISC
+Priority: optional
+
+Package: wireless-regdb
+Version: 2026.09.03-r0
+Conflicts: wireless-regdb-static
+Suggests: crda
+Section: net
+Architecture: all
+Maintainer: openATV
+MD5Sum: 29d3173cd4155b6abf65d6fb6bec7454
+SHA256sum: 4e0945bb6e5ba62a1683e6302a575e50b91b98ebba30887dd33957236f1d8720
+Size: 4666
+Filename: wireless-regdb_2026.09.03-r0_all.ipk
+Source: wireless-regdb_2026.09.03.bb
+Description: Wireless Central Regulatory Domain Database
+OE: wireless-regdb
+HomePage: https://wireless.wiki.kernel.org/en/developers/regulatory/crda
+License: ISC
+Priority: optional
+
