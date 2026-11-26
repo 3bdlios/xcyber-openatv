@@ -1,9 +1,9 @@
 {
   "status": "published-and-device-verified",
   "repository": "https://github.com/3bdlios/xcyber-openatv",
-  "normal_packages": 7648,
+  "normal_packages": 7649,
   "release_debug_packages": 2,
-  "total_packages": 7650,
+  "total_packages": 7651,
   "verification": [
     "all normal package SHA256 and sizes matched build indexes",
     "GitHub release asset digests matched local SHA256",
@@ -34,5 +34,15 @@
     "actual_receiver_password_unchanged": true,
     "samba_recipe_validation": "PR r2.xc1; samba-common depends on xc-password-pam-fix",
     "verified_at": "2026-11-26T13:18:08.543292+00:00"
+  },
+  "image_name_fix": {
+    "package": "xc-image-name",
+    "version": "1.0-r0",
+    "delivered_from_github": true,
+    "installed_on_current_slot": 2,
+    "display_name": "OpenATV 8.0.1",
+    "other_slots_unchanged": true,
+    "selected_slot_unchanged": true,
+    "verified_at": "2026-11-26T13:27:12.139378+00:00"
   }
 }
