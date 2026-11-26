@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+"""Use current frame transfer characteristics, never cached output HDR type."""
+from pathlib import Path
+import fcntl,signal,time
+lock=open('/run/xc-hdr-auto.lock','w');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+base=Path('/sys/class/amhdmitx/amhdmitx0');policy=Path('/sys/module/aml_media/parameters/hdr_policy')
+running=True
+def stop(*args):
+ global running
+ running=False
+signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
+last=None
+while running:
+ try:
+  signal_type=int(Path('/sys/module/aml_media/parameters/cur_signal_type').read_text().split(',')[0].strip())
+  primaries=(signal_type >> 16) & 255
+  transfer=(signal_type >> 8) & 255
+  source=5 if primaries==9 and transfer==18 else 1 if primaries==9 and transfer in (16,48) else 6
+  cap=(base/'hdr_cap').read_text();off=(base/'hdr_priority_mode').read_text().strip()=='2'
+  supported=(source==5 and 'Hybrid Log-Gamma: 1' in cap) or (source in (1,2) and 'SMPTE ST 2084: 1' in cap)
+  wanted='0' if supported and not off else '1'
+  if policy.read_text().strip()!=wanted:policy.write_text(wanted)
+  state=(source,wanted,off)
+  if state!=last:print('XC HDR source=%d policy=%s disabled=%s'%state,flush=True);last=state
+ except (OSError,ValueError):pass
+ time.sleep(1)

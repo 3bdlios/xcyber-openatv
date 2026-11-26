@@ -120778,16 +120778,16 @@ License: CLOSED
 Priority: optional
 
 Package: xc-video-route
-Version: 0.1-r5
+Version: 0.1-r6
 Depends: python3-core, python3-ctypes, python3-fcntl
 Recommends: update-rc.d
 Section: base
 Architecture: cortexa55
 Maintainer: openATV
-MD5Sum: e5e66dc5749bac9d9dc4a2c00849ec39
-SHA256sum: 3dfed29a1a529d0bddf698cb60b1ada3101dd7b76e493451ea00d8302576ae69
-Size: 6644
-Filename: xc-video-route_0.1-r5_cortexa55.ipk
+MD5Sum: 08ee6d7bc96f12bec09875d918dcaf62
+SHA256sum: b3b793edf0c103a6fb700dc44f2f9837af8792c3330a38945bfbf18ceb4098d0
+Size: 7218
+Filename: xc-video-route_0.1-r6_cortexa55.ipk
 Source: xc-video-route_0.1.bb
 Description: XC deinterlaced video route and HDMI/OSD binding
 OE: xc-video-route

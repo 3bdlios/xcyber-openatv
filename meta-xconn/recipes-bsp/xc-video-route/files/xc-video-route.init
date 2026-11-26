@@ -1,10 +1,17 @@
 #!/bin/sh
 case "$1" in
  start|restart)
+  # Follow programme metadata; negotiate HDR10/HLG with the connected display.
+  [ ! -w /sys/module/aml_media/parameters/hdr_mode ] || echo 2 > /sys/module/aml_media/parameters/hdr_mode
+  [ ! -w /sys/module/aml_media/parameters/hdr_policy ] || echo 1 > /sys/module/aml_media/parameters/hdr_policy
   /usr/sbin/xc-video-route
   # Bind/scale the OSD once DRM and Enigma2 have settled (detaches, retries ~90 s).
   /usr/sbin/xc-display-fix --boot
+  start-stop-daemon -S -b -m -p /run/xc-hdr-auto.pid -x /usr/sbin/xc-hdr-auto
   ;;
- stop) : ;;
+ stop)
+  start-stop-daemon -K -p /run/xc-hdr-auto.pid 2>/dev/null || true
+  rm -f /run/xc-hdr-auto.pid
+  ;;
  *) exit 1 ;;
 esac
