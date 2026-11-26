@@ -1,0 +1,21 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          xc-storage-hdd
+# Required-Start:    mountall
+# Default-Start:     S
+# Short-Description: Use the STORAGE partition as /media/hdd
+### END INIT INFO
+# The XC flash layout keeps the large STORAGE partition at /storage, while Enigma2
+# records, keeps timeshift and lists "HDD" at /media/hdd (otherwise a 64 KiB tmpfs
+# directory). Bind /storage there so it is the box's hard disk; skipped when /storage
+# is not a mounted partition or something (a USB disk) already owns /media/hdd.
+case "$1" in
+ start|"")
+  mountpoint -q /storage || exit 0
+  mountpoint -q /media/hdd && exit 0
+  mkdir -p /media/hdd /storage/movie /storage/timeshift
+  mount --bind /storage /media/hdd
+  ;;
+ stop|restart) : ;;
+esac
+exit 0

@@ -1,0 +1,10 @@
+<setupxml>
+	<setup key="xcvideoenhancement" title="Video enhancement setup">
+		<item level="0" text="Brightness" description="This option sets the picture brightness. 0 is the receiver's own setting.">config.plugins.XCVideoEnhancement.brightness</item>
+		<item level="0" text="Contrast" description="This option sets the picture contrast. 0 is the receiver's own setting.">config.plugins.XCVideoEnhancement.contrast</item>
+		<item level="0" text="Hue" description="This option sets the picture hue. 0 is the receiver's own setting.">config.plugins.XCVideoEnhancement.hue</item>
+		<item level="0" text="Sharpness" description="This option sets the picture sharpness. 0 is the receiver's own setting, -100 is off.">config.plugins.XCVideoEnhancement.sharpness</item>
+		<item level="0" text="Saturation" description="This option sets the picture saturation. 0 is the receiver's own setting.">config.plugins.XCVideoEnhancement.saturation</item>
+		<item level="0" text="Colour space" description="This option sets the HDMI colour space. auto picks the best one for each resolution; 2160p 50/60 Hz always uses YCbCr 4:2:0.">config.plugins.XCVideoEnhancement.colorspace</item>
+	</setup>
+</setupxml>

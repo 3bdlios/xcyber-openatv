@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+"""Mirror the Enigma2 volume/mute (AUDIO_SET_MIXER/AUDIO_SET_MUTE on XC audio0, visible in
+/proc/xc_audio) to the ALSA softvol control "XC Master", so IPTV/GStreamer and any other
+ALSA client follow the remote's volume keys. Enigma2 is built without ALSA mixer support."""
+import math, subprocess, time
+
+PROC = '/proc/xc_audio'      # gen demux pid codec play source mute left right channel
+CONTROL = 'XC Master'
+last = None
+while True:
+    try:
+        f = open(PROC).read().split()
+        mute, left, right = int(f[6]), int(f[7]), int(f[8])
+        att = min(63, max(0, (left + right) // 2))      # Enigma2: 63 - volume * 63 / 100
+        # Loudness curve, as in xc-audiod: gain = level^2 (50% -12 dB, 10% -40 dB);
+        # the softvol control is 0..63 = -63..0 dB.
+        level = (63 - att) / 63
+        raw = 0 if mute or level <= 0 else max(0, min(63, round(63 + 40 * math.log10(level))))
+        if raw != last:
+            r = subprocess.run(['amixer', '-c', '0', '-q', 'sset', CONTROL, str(raw)], capture_output=True)
+            if r.returncode == 0:
+                last = raw
+            # control appears only after the first client opened the softvol pcm; retry later
+    except (OSError, ValueError, IndexError):
+        pass
+    time.sleep(0.15)

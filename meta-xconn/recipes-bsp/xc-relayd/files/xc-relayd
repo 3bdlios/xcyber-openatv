@@ -1,0 +1,276 @@
+#!/usr/bin/python3
+"""XC stream relay proxy: lines the picture up with its sound before Enigma2 gets the stream.
+
+Enigma2 plays an OSCam/NCam stream relay channel from http://127.0.0.1:<port>/<service>. Some relay
+streams carry the sound a second or more behind the picture (the audio PES of a moment arrive that
+much later than its video). Enigma2 hands the stream to the hardware as it arrives, the picture is
+the clock there, so the sound can never catch up.
+
+This proxy sits between Enigma2 and the softcam: Enigma2 connects here, the proxy connects to the
+softcam's relay port, passes the HTTP request and answer through unchanged, and in the TS body holds
+the video packets back by the measured lag (picture PTS minus sound PTS of what arrives at the same
+moment). Sound and everything else go straight through. Nothing in the softcam changes.
+
+  xc-relayd [--listen PORT] [--upstream HOST:PORT]
+Defaults: listen 17998, upstream 127.0.0.1:17999. Log: /tmp/xc-relayd.log
+"""
+import collections
+import os
+import select
+import socket
+import sys
+import threading
+import time
+
+LISTEN = 17998
+UPSTREAM = ('127.0.0.1', 17999)
+LOG = '/tmp/xc-relayd.log'
+TS = 188
+MAX_DELAY = 3.0          # s: never hold the picture longer than this
+MEASURE = 1.5            # s: at a channel start the picture waits at most this long for the first lag
+MARGIN = 0.05            # s: hold a little less than the lag (the decoder buffers too)
+SCREEN_OK = 0.08         # s: picture/sound difference on screen that needs no correction
+STEP_EVERY = 1.0         # s between corrections from the screen
+TSYNC = '/sys/class/tsync/'
+VIDEO_IDS = range(0xE0, 0xF0)
+AUDIO_IDS = list(range(0xC0, 0xE0)) + [0xBD]   # MPEG audio, and private stream 1 (AC3, E-AC3, AAC-LATM...)
+
+
+def log(*a):
+    try:
+        with open(LOG, 'a') as f:
+            f.write(time.strftime('%H:%M:%S ') + ' '.join(str(x) for x in a) + '\n')
+    except OSError:
+        pass
+
+
+def pes_pts(pkt):
+    """(stream_id, pts) of a packet that starts a PES, else None."""
+    if not pkt[1] & 0x40:
+        return None
+    at = 4
+    afc = (pkt[3] >> 4) & 3
+    if afc & 2:
+        at += 1 + pkt[4]
+    if not afc & 1 or at + 14 > TS:
+        return None
+    p = pkt[at:]
+    if p[0] or p[1] or p[2] != 1:
+        return None
+    sid = p[3]
+    if not p[7] & 0x80:
+        return sid, None
+    b = p[9:14]
+    pts = ((b[0] & 0x0E) << 29) | (b[1] << 22) | ((b[2] & 0xFE) << 14) | (b[3] << 7) | (b[4] >> 1)
+    return sid, pts
+
+
+def screen_offset():
+    """Picture minus sound on screen in s (positive: the sound is behind), None when not playing."""
+    try:
+        v = int(open(TSYNC + 'pts_video').read().split()[0], 16)
+        a = int(open(TSYNC + 'pts_audio').read().split()[0], 16)
+    except (OSError, ValueError, IndexError):
+        return None
+    if not v or not a:
+        return None
+    d = ((v - a + (1 << 31)) & 0xFFFFFFFF) - (1 << 31)
+    return d / 90000.0 if abs(d) < 10 * 90000 else None
+
+
+class Aligner:
+    """Classifies PIDs, measures the sound lag and decides when each packet may leave."""
+
+    def __init__(self):
+        self.kind = {}            # pid -> 'v' / 'a'
+        self.last_v = self.last_a = None
+        self.lags = collections.deque(maxlen=15)
+        self.delay = None         # s; None until the first lag is known
+        self.start = time.monotonic()
+
+    def feed(self, pkt):
+        pid = ((pkt[1] & 0x1F) << 8) | pkt[2]
+        pp = pes_pts(pkt)
+        if pp:
+            sid, pts = pp
+            if pid not in self.kind:
+                if sid in VIDEO_IDS:
+                    self.kind[pid] = 'v'
+                elif sid in AUDIO_IDS:
+                    self.kind[pid] = 'a'
+            k = self.kind.get(pid)
+            if pts is not None and k:
+                if k == 'v':
+                    self.last_v = pts
+                elif self.last_a is None or pid == self.audio_pid:
+                    self.audio_pid = pid
+                    self.last_a = pts
+                if self.last_v is not None and self.last_a is not None and k == 'a':
+                    lag = ((self.last_v - self.last_a) & 0x1FFFFFFFF) / 90000.0
+                    if lag > 4:                 # wrapped the other way: the sound is ahead
+                        lag -= 0x1FFFFFFFF / 90000.0
+                    self.lags.append(lag)
+                    self.update()
+        return self.kind.get(pid)
+
+    audio_pid = None
+
+    def update(self):
+        lags = sorted(self.lags)
+        self.lag = lags[len(lags) // 2]     # how far the sound trails the picture in the stream
+        if self.delay is None:
+            # the decoders absorb part of the stream lag by themselves: start with no hold and let
+            # the screen tell how much is still missing (see correct())
+            self.delay = 0.0
+            self.next_step = time.monotonic() + 2.0
+            log('stream lag %.2f s' % self.lag)
+
+    lag = 0.0
+    next_step = 0.0
+
+    def correct(self):
+        """Closed loop: nudge the hold by what the screen still shows, never past the stream lag."""
+        now = time.monotonic()
+        if self.delay is None or now < self.next_step:
+            return
+        self.next_step = now + STEP_EVERY
+        off = screen_offset()
+        if off is None or abs(off) <= SCREEN_OK:
+            return
+        limit = min(MAX_DELAY, max(0.0, self.lag))
+        want = min(limit, max(0.0, self.delay + off * 0.8))
+        if abs(want - self.delay) >= 0.02:
+            log('screen %+.0f ms: picture hold %.2f -> %.2f s (stream lag %.2f)' % (off * 1000, self.delay, want, self.lag))
+            self.delay = want
+            self.next_step = now + 2.5        # let the change reach the screen before the next look
+
+    def video_hold(self):
+        if self.delay is None:
+            return 0.0
+        return self.delay
+
+
+def serve(client):
+    up = None
+    try:
+        client.settimeout(10)
+        req = b''
+        while b'\r\n\r\n' not in req and len(req) < 8192:
+            chunk = client.recv(4096)
+            if not chunk:
+                return
+            req += chunk
+        up = socket.create_connection(UPSTREAM, timeout=10)
+        up.sendall(req)
+        # the softcam's answer goes back unchanged: an HTTP header (CRLF or LF line ends) or,
+        # as OSCam's relay does, the TS straight away
+        head = up.recv(65536)
+        if not head:
+            return
+        end = 0
+        if head[0] != 0x47:
+            while True:
+                for sep in (b'\r\n\r\n', b'\n\n'):
+                    i = head.find(sep)
+                    if i >= 0:
+                        end = i + len(sep)
+                        break
+                if end or len(head) > 8192:
+                    break
+                chunk = up.recv(4096)
+                if not chunk:
+                    return
+                head += chunk
+            if not end:
+                end = max(head.find(b'\x47'), 0)   # no header end found: start at the first sync byte
+        if end:
+            client.sendall(head[:end])
+        rest = head[end:]
+        log('relay', req.split(b'\r\n', 1)[0].decode(errors='replace')[:90])
+        pump(up, client, rest)
+    except (OSError, ValueError) as e:
+        log('connection', e)
+    finally:
+        for s in (up, client):
+            if s:
+                try:
+                    s.close()
+                except OSError:
+                    pass
+
+
+def pump(up, client, rest):
+    al = Aligner()
+    held = collections.deque()          # (release time, packet) of video, in arrival order
+    out = bytearray()
+    buf = bytearray(rest)
+    up.setblocking(False)
+    client.setblocking(False)
+    synced = False
+    while True:
+        now = time.monotonic()
+        al.correct()
+        hold = al.video_hold()
+        while held and held[0][0] + hold <= now:
+            out += held.popleft()[1]
+        wait = 0.02 if held else 0.5
+        r, w, _ = select.select([up], [client] if out else [], [], wait)
+        if r:
+            data = up.recv(65536)
+            if not data:
+                return
+            buf += data
+            # keep packet sync: drop bytes until the 0x47 sync byte
+            if not synced or buf[0] != 0x47:
+                i = buf.find(b'\x47')
+                if i < 0:
+                    buf.clear()
+                    continue
+                del buf[:i]
+                synced = True
+            n = len(buf) // TS * TS
+            t = time.monotonic()
+            used = 0
+            for i in range(0, n, TS):
+                pkt = bytes(buf[i:i + TS])
+                if pkt[0] != 0x47:
+                    synced = False
+                    break
+                if al.feed(pkt) == 'v':
+                    held.append((t, pkt))
+                else:
+                    out += pkt
+                used = i + TS
+            del buf[:used]
+            if len(held) > 200000:        # ~37 MB: something is wrong, never grow without limit
+                log('hold queue overflow, flushing')
+                while held:
+                    out += held.popleft()[1]
+        if w and out:
+            try:
+                sent = client.send(out)
+                del out[:sent]
+            except BlockingIOError:
+                pass
+
+
+def main():
+    global LISTEN, UPSTREAM
+    args = sys.argv[1:]
+    if '--listen' in args:
+        LISTEN = int(args[args.index('--listen') + 1])
+    if '--upstream' in args:
+        h, p = args[args.index('--upstream') + 1].rsplit(':', 1)
+        UPSTREAM = (h, int(p))
+    srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    srv.bind(('127.0.0.1', LISTEN))
+    srv.listen(8)
+    log('listening on 127.0.0.1:%d, softcam relay %s:%d' % ((LISTEN,) + UPSTREAM))
+    while True:
+        client, _ = srv.accept()
+        threading.Thread(target=serve, args=(client,), daemon=True).start()
+
+
+if __name__ == '__main__':
+    main()

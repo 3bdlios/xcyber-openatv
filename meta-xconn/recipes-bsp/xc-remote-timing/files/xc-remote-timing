@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+"""Set held-key repeat for the XC IR receiver, independent of event numbering."""
+import fcntl
+import os
+import struct
+from pathlib import Path
+
+for dev in sorted(Path('/dev/input').glob('event*')):
+    fd = os.open(dev, os.O_RDWR | os.O_NONBLOCK)
+    try:
+        name = fcntl.ioctl(fd, 0x81004506, bytes(256)).split(b'\0', 1)[0]
+        if name != b'XC remote control':
+            continue
+        before = struct.unpack('II', fcntl.ioctl(fd, 0x80084503, bytes(8)))
+        fcntl.ioctl(fd, 0x40084503, struct.pack('II', 250, 50))
+        after = struct.unpack('II', fcntl.ioctl(fd, 0x80084503, bytes(8)))
+        print('%s XC repeat delay/period: %s -> %s ms' % (dev, before, after))
+    finally:
+        os.close(fd)
+# Keep the IR receiver off CPU0, which also serves the video decoder IRQs:
+# raw pulse timing then stays exact enough for held-key repeats (as OpenATV).
+for line in Path('/proc/interrupts').read_text().splitlines():
+    if 'meson-ir' in line:
+        irq = line.split(':')[0].strip()
+        mask = '8' if os.cpu_count() >= 4 else '1'
+        try:
+            Path('/proc/irq/%s/smp_affinity' % irq).write_text(mask + '\n')
+            print('meson-ir IRQ %s affinity -> %s' % (irq, Path('/proc/irq/%s/effective_affinity' % irq).read_text().strip()))
+        except OSError as e:
+            print('meson-ir IRQ %s affinity: %s' % (irq, e))

@@ -1,0 +1,155 @@
+#!/usr/bin/python3
+"""XC provenance stamp for kernel modules (and any file).
+
+stamp   : adds an ELF note section ".note.xc.provenance" (JSON: owner, project, module,
+          original sha256, stamp id/date) and visible modinfo lines (xc_owner=..., xc_stamp=...),
+          then appends an Ed25519 signature trailer:  <elf> <sig 64B> <len 4B BE> "~XC-SIG~".
+          The kernel (CONFIG_MODULE_SIG off) ignores note sections and trailing bytes.
+verify  : checks trailer signature with the public key and reports the embedded provenance.
+          Any byte changed inside the module => signature INVALID (tampered).
+keygen  : creates the Ed25519 key pair (private key stays with the owner).
+
+Works with python3 + openssl (host or receiver). objcopy is needed only for stamp.
+"""
+import argparse, hashlib, json, os, struct, subprocess, sys, tempfile, time, uuid
+from pathlib import Path
+
+MAGIC = b'~XC-SIG~'
+NOTE_SECTION = '.note.xc.provenance'
+DEFAULT_PUB = '/etc/xc/provenance.pub'
+DEFAULT_KEY = os.path.expanduser('~/.xc-keys/xc-provenance.key')
+OWNER = {'owner': 'XC project (XCONN X-CYBER / GT Combo Enigma2 port)', 'contact': '3bdlios@gmail.com',
+         'project': 'XC', 'notice': 'Original work: XC kernel/userspace integration. Modified copies must keep this notice.'}
+
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def run(cmd, **kw):
+    return subprocess.run(cmd, check=True, capture_output=True, **kw)
+
+
+def split_trailer(data):
+    """Return (payload, signature) or (data, None)."""
+    if not data.endswith(MAGIC):
+        return data, None
+    n = struct.unpack('>I', data[-len(MAGIC) - 4:-len(MAGIC)])[0]
+    sig = data[-len(MAGIC) - 4 - n:-len(MAGIC) - 4]
+    return data[:-len(MAGIC) - 4 - n], sig
+
+
+def objcopy_bin(explicit):
+    for c in ([explicit] if explicit else []) + ['aarch64-linux-gnu-objcopy', 'llvm-objcopy-14', 'llvm-objcopy', 'objcopy']:
+        if c and (os.path.isfile(c) or subprocess.run(['which', c], capture_output=True).returncode == 0):
+            return c
+    sys.exit('objcopy not found')
+
+
+def read_modinfo(path, oc, env):
+    with tempfile.NamedTemporaryFile(suffix='.modinfo', delete=False) as t:
+        name = t.name
+    try:
+        run([oc, '--dump-section', '.modinfo=' + name, path, '/dev/null'] if oc.endswith('llvm-objcopy') else
+            [oc, '--dump-section', '.modinfo=' + name, path], env=env)
+        return Path(name).read_bytes()
+    finally:
+        try: os.unlink(name)
+        except OSError: pass
+
+
+def stamp(args):
+    oc = objcopy_bin(args.objcopy)
+    env = dict(os.environ)
+    if args.objcopy_libs:
+        env['LD_LIBRARY_PATH'] = args.objcopy_libs
+    key = args.key
+    for src in args.files:
+        src = Path(src)
+        data = src.read_bytes()
+        payload, old_sig = split_trailer(data)
+        if old_sig is not None:
+            print('%s: already stamped, skipping' % src); continue
+        stamp_id = str(uuid.uuid4())
+        note = dict(OWNER, module=src.name, original_sha256=sha256(payload),
+                    stamp_id=stamp_id, stamped=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / src.name
+            work.write_bytes(payload)
+            notef = Path(td) / 'note.json'; notef.write_bytes(json.dumps(note, ensure_ascii=False).encode() + b'\0')
+            cmd = [oc, '--add-section', '%s=%s' % (NOTE_SECTION, notef), '--set-section-flags', '%s=noload,readonly' % NOTE_SECTION]
+            # visible lines for `modinfo`
+            try:
+                mi = read_modinfo(str(work), oc, env)
+                extra = ('xc_owner=%s\0xc_contact=%s\0xc_stamp=%s\0xc_original_sha256=%s\0' % (
+                    OWNER['owner'], OWNER['contact'], stamp_id, note['original_sha256'])).encode()
+                mif = Path(td) / 'modinfo.bin'; mif.write_bytes(mi + extra)
+                cmd += ['--update-section', '.modinfo=%s' % mif]
+            except subprocess.CalledProcessError:
+                print('%s: no .modinfo section, note only' % src)
+            out = Path(td) / (src.name + '.stamped')
+            run(cmd + [str(work), str(out)], env=env)
+            elf = out.read_bytes()
+            sigf = Path(td) / 'sig'
+            run(['openssl', 'pkeyutl', '-sign', '-inkey', key, '-rawin', '-in', str(out), '-out', str(sigf)])
+            sig = sigf.read_bytes()
+        final = elf + sig + struct.pack('>I', len(sig)) + MAGIC
+        if not args.in_place:
+            dst = Path(args.out or src.parent) / src.name if args.out else src.with_suffix(src.suffix + '.stamped')
+        else:
+            dst = src
+            if not args.no_backup:
+                Path(str(src) + '.before-stamp').write_bytes(data)
+        dst.write_bytes(final)
+        print('%s -> %s  stamp=%s  sha256=%s' % (src, dst, stamp_id, sha256(final)))
+
+
+def verify(args):
+    bad = 0
+    for p in args.files:
+        data = Path(p).read_bytes()
+        payload, sig = split_trailer(data)
+        name = os.path.basename(p)
+        if sig is None:
+            print('%-28s UNSIGNED (no XC trailer)' % name); bad += 1; continue
+        with tempfile.TemporaryDirectory() as td:
+            pf = Path(td) / 'payload'; pf.write_bytes(payload)
+            sf = Path(td) / 'sig'; sf.write_bytes(sig)
+            r = subprocess.run(['openssl', 'pkeyutl', '-verify', '-pubin', '-inkey', args.pub, '-rawin', '-in', str(pf), '-sigfile', str(sf)],
+                               capture_output=True, text=True)
+        ok = r.returncode == 0 and 'Success' in r.stdout
+        info = ''
+        i = payload.find(b'"stamp_id"')
+        if i >= 0:
+            j = payload.rfind(b'{', 0, i); k = payload.find(b'}', i)
+            try:
+                n = json.loads(payload[j:k + 1]); info = ' stamp=%s original=%s… stamped=%s' % (n['stamp_id'], n['original_sha256'][:12], n['stamped'])
+            except Exception:
+                info = ' (note unreadable)'
+        print('%-28s %s%s' % (name, 'OK  signature valid' if ok else 'TAMPERED  signature INVALID', info))
+        bad += 0 if ok else 1
+    sys.exit(1 if bad else 0)
+
+
+def keygen(args):
+    key = Path(args.key); key.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if key.exists() and not args.force:
+        sys.exit('%s exists; use --force to overwrite' % key)
+    run(['openssl', 'genpkey', '-algorithm', 'ed25519', '-out', str(key)]); key.chmod(0o600)
+    pub = Path(args.pub_out); pub.parent.mkdir(parents=True, exist_ok=True)
+    run(['openssl', 'pkey', '-in', str(key), '-pubout', '-out', str(pub)])
+    print('private key:', key, '(keep secret)'); print('public key :', pub)
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sp = ap.add_subparsers(dest='cmd', required=True)
+    k = sp.add_parser('keygen'); k.add_argument('--key', default=DEFAULT_KEY); k.add_argument('--pub-out', required=True); k.add_argument('--force', action='store_true'); k.set_defaults(fn=keygen)
+    s = sp.add_parser('stamp'); s.add_argument('files', nargs='+'); s.add_argument('--key', default=DEFAULT_KEY); s.add_argument('--out'); s.add_argument('--in-place', action='store_true')
+    s.add_argument('--no-backup', action='store_true'); s.add_argument('--objcopy'); s.add_argument('--objcopy-libs'); s.set_defaults(fn=stamp)
+    v = sp.add_parser('verify'); v.add_argument('files', nargs='+'); v.add_argument('--pub', default=DEFAULT_PUB); v.set_defaults(fn=verify)
+    a = ap.parse_args(); a.fn(a)
+
+
+if __name__ == '__main__':
+    main()

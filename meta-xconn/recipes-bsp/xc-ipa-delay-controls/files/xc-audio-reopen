@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+"""Reopen the native XC PCM after an external player releases HDMI."""
+import fcntl,os,subprocess,time
+lock=open('/run/xc-audio-reopen.lock','w')
+try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+except BlockingIOError:raise SystemExit(0)
+try:
+    state=open('/proc/xc_audio').read().split()
+    if len(state)<6 or int(state[4])==0 or int(state[5])!=0:raise SystemExit(0)
+    old=int(open('/run/xc-audiod.pid').read())
+except (OSError,ValueError):raise SystemExit(1)
+subprocess.run(['/etc/init.d/xc-audiod','stop'],check=True)
+for _ in range(40):
+    try:os.kill(old,0)
+    except ProcessLookupError:break
+    time.sleep(0.05)
+else:raise SystemExit('old XC audio worker did not exit')
+subprocess.run(['/etc/init.d/xc-audiod','start'],check=True)

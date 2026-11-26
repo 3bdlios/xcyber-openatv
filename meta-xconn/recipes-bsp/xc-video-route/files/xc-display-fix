@@ -1,0 +1,297 @@
+#!/usr/bin/python3
+"""Keep the HDMI output and the 1080p OSD framebuffer correctly bound after boot.
+
+1. Some S905X3 boxes (e.g. Mecool K5) boot with the VPP-0 CRTC inactive and the
+   HDMI connector unbound: the screen stays black. Then the current display mode
+   is set on the CRTC with one atomic modeset.
+2. The DRM fbdev helper leaves the osd0 plane source at the mode size (3840x2160
+   in 4K), so the 1920x1080 framebuffer is read with the wrong extent: the menu
+   shows twice side by side and stale memory fills the rest. The plane source is
+   set to the framebuffer size and its destination to the full mode.
+3. GTMedia GT Combo reports an active CRTC after boot but HDMI stays dark until a
+   real modeset, so --boot does one forced modeset there.
+4. HDR needs a 10-bit link: with 8 bits the colour manager turns HLG/HDR10 into SDR.
+   Every modeset asks for 10 bits when the TV takes them in the current colour format
+   (e.g. 420,10bit for 2160p50/60), and an 8-bit boot output is moved to 10 bits once.
+   hdr_policy 1 (follow the programme) makes the driver keep the previous depth, so it
+   is set to 0 just for that commit.
+5. The colour format can be chosen in Video enhancement (/etc/xc/colorspace: rgb or 444, empty or
+   missing = auto). 2160p50/60 stays 4:2:0 whatever is chosen, and a format the TV does not take in
+   8 bits falls back to auto.
+usage: xc-display-fix [--test] [--boot] [--force]
+   (--boot: retry for the first 150 s, detached; --force: one modeset now, e.g. after a colour change)
+"""
+import ctypes as C
+import fcntl
+import os
+import re
+import struct
+import sys
+import time
+from pathlib import Path
+
+U32, U64, U16 = C.c_uint32, C.c_uint64, C.c_uint16
+
+
+def S(name, fields):
+    return type(name, (C.Structure,), {'_fields_': fields})
+
+
+Mode = S('Mode', [('clock', U32)] + [(x, U16) for x in ('hdisplay', 'hsync_start', 'hsync_end', 'htotal', 'hskew', 'vdisplay', 'vsync_start', 'vsync_end', 'vtotal', 'vscan')] + [(x, U32) for x in ('vrefresh', 'flags', 'type')] + [('name', C.c_char * 32)])
+Connector = S('Connector', [(x, U64) for x in ('encoders_ptr', 'modes_ptr', 'props_ptr', 'prop_values_ptr')] + [(x, U32) for x in ('count_modes', 'count_props', 'count_encoders', 'encoder_id', 'connector_id', 'connector_type', 'connector_type_id', 'connection', 'mm_width', 'mm_height', 'subpixel', 'pad')])
+Props = S('Props', [(x, U64) for x in ('props_ptr', 'prop_values_ptr')] + [(x, U32) for x in ('count_props', 'obj_id', 'obj_type')])
+Property = S('Property', [('values_ptr', U64), ('enum_blob_ptr', U64), ('prop_id', U32), ('flags', U32), ('name', C.c_char * 32), ('count_values', U32), ('count_enum_blobs', U32)])
+Blob = S('Blob', [('data', U64), ('length', U32), ('blob_id', U32)])
+Atomic = S('Atomic', [('flags', U32), ('count_objs', U32)] + [(x, U64) for x in ('objs_ptr', 'count_props_ptr', 'props_ptr', 'prop_values_ptr', 'reserved', 'user_data')])
+Cap = S('Cap', [('capability', U64), ('value', U64)])
+lib = C.CDLL(None, use_errno=True)
+lib.ioctl.argtypes = [C.c_int, C.c_ulong, C.c_void_p]
+lib.ioctl.restype = C.c_int
+STATE = Path('/sys/kernel/debug/dri/0/state')
+TEST_ONLY, ALLOW_MODESET = 0x100, 0x400
+HDR_POLICY = Path('/sys/module/aml_media/parameters/hdr_policy')
+DC_CAP = Path('/sys/class/amhdmitx/amhdmitx0/dc_cap')
+TX_CONFIG = Path('/sys/class/amhdmitx/amhdmitx0/config')
+COLOR_SPACES = {0: 'rgb', 1: '422', 2: '444', 3: '420'}
+upgraded = False  # the 8 -> 10-bit move is tried once per process
+gui_since = None  # when the 1080p GUI framebuffer was first seen
+GUI_SETTLE = 20   # s: a modeset while Enigma2 brings up its compositor crashes it (gFBDC::xcPresent)
+SIZES = {'2160': (3840, 2160), '1080': (1920, 1080), '720': (1280, 720), '576': (720, 576), '480': (720, 480)}
+
+
+def io(fd, n, data, direction=3):
+    request = (direction << 30) | (C.sizeof(data) << 16) | (ord('d') << 8) | n
+    if lib.ioctl(fd, request, C.byref(data)) < 0:
+        raise OSError(C.get_errno(), os.strerror(C.get_errno()))
+
+
+def properties(fd, obj, kind):
+    q = Props(obj_id=obj, obj_type=kind)
+    io(fd, 0xb9, q)
+    ids, vals = (U32 * q.count_props)(), (U64 * q.count_props)()
+    q.props_ptr, q.prop_values_ptr = C.addressof(ids), C.addressof(vals)
+    io(fd, 0xb9, q)
+    out = {}
+    for i, pid in enumerate(ids):
+        p = Property(prop_id=pid)
+        io(fd, 0xaa, p)
+        out[p.name.decode()] = (pid, vals[i])
+    return out
+
+
+def modes(fd, connector):
+    q = Connector(connector_id=connector)
+    io(fd, 0xa7, q)
+    arr, enc = (Mode * q.count_modes)(), (U32 * q.count_encoders)()
+    props, vals = (U32 * q.count_props)(), (U64 * q.count_props)()
+    q.modes_ptr, q.encoders_ptr = C.addressof(arr), C.addressof(enc)
+    q.props_ptr, q.prop_values_ptr = C.addressof(props), C.addressof(vals)
+    io(fd, 0xa7, q)
+    return q.connection, {m.name.decode(): m for m in arr}
+
+
+def fb_size():
+    fb = os.open('/dev/fb0', os.O_RDONLY)
+    try:
+        geometry = bytearray(160)
+        fcntl.ioctl(fb, 0x4600, geometry, True)  # FBIOGET_VSCREENINFO
+        return struct.unpack_from('II', geometry)
+    finally:
+        os.close(fb)
+
+
+def wanted_mode():
+    """The mode the boot scripts selected (resolution.ini -> vout), else the active one."""
+    for source in (Path('/boot/resolution.ini'),):
+        try:
+            m = re.search(r'kernel_hdmimode=(\S+)', source.read_text())
+            if m:
+                return m.group(1)
+        except OSError:
+            pass
+    return Path('/sys/class/display/mode').read_text().strip()
+
+
+def ten_bit_ok(color_space):
+    try:
+        return '%s,10bit' % COLOR_SPACES.get(color_space, '?') in DC_CAP.read_text().split()
+    except OSError:
+        return False
+
+
+# HDMI 2.0 carries 4K at 50/60 Hz only as YCbCr 4:2:0; every other mode should leave it.
+# A live modeset keeps the connector's colour space, so 4K60 -> 1080p stayed 4:2:0 (a
+# format most TVs do not show at 1080p: garbled picture). Pick it per mode instead.
+YUV420_ONLY = ('2160p50hz', '2160p60hz', 'smpte50hz', 'smpte60hz')
+
+
+COLOR_CHOICE = Path('/etc/xc/colorspace')
+CHOICE_CODES = {'rgb': 0, '444': 2}
+
+
+def color_space_for(name):
+    try:
+        caps = DC_CAP.read_text().split()
+    except OSError:
+        caps = []
+    if name in YUV420_ONLY:
+        return 3
+    try:
+        choice = COLOR_CHOICE.read_text().strip()
+    except OSError:
+        choice = ''
+    if choice in CHOICE_CODES and '%s,8bit' % choice in caps:
+        return CHOICE_CODES[choice]
+    return 2 if any(c.startswith('444,') for c in caps) else 0
+
+
+def output_depth():
+    m = re.search(r'Colour depth: (\d+)-bit', TX_CONFIG.read_text()) if TX_CONFIG.exists() else None
+    return int(m.group(1)) if m else 0
+
+
+def commit(fd, q, deep):
+    """Atomic commit; with deep colour, hdr_policy 0 for the commit so the depth is taken."""
+    policy = None
+    if deep:
+        try:
+            policy = HDR_POLICY.read_text().strip()
+            if policy != '0':
+                HDR_POLICY.write_text('0')
+        except OSError:
+            policy = None
+    try:
+        io(fd, 0xbc, q)
+    finally:
+        if policy not in (None, '0'):
+            HDR_POLICY.write_text(policy)
+
+
+def needs_boot_modeset():
+    """GT Combo: the CRTC reads active after boot but HDMI stays dark until a real modeset."""
+    try:
+        return 'GT Combo' in Path('/proc/device-tree/model').read_text(errors='replace')
+    except OSError:
+        return False
+
+
+def fix(test=False, force=False):
+    global upgraded, gui_since
+    if not STATE.exists():
+        os.system('mount -t debugfs none /sys/kernel/debug 2>/dev/null')
+    state = STATE.read_text()
+    plane = int(re.search(r'plane\[(\d+)\]: osd0', state).group(1))
+    crtc = int(re.search(r'crtc\[(\d+)\]: VPP-0', state).group(1))
+    connector = int(re.search(r'connector\[(\d+)\]: HDMI-A-1', state).group(1))
+    src_w, src_h = fb_size()
+    if not (320 <= src_w <= 3840 and 240 <= src_h <= 2160):
+        return 'unexpected framebuffer %dx%d' % (src_w, src_h)
+    fd = os.open('/dev/dri/card0', os.O_RDWR | os.O_CLOEXEC)
+    blob = None
+    try:
+        io(fd, 0x0d, Cap(2, 1), 1)  # universal planes
+        io(fd, 0x0d, Cap(3, 1), 1)  # atomic
+        pp = properties(fd, plane, 0xeeeeeeee)
+        cp = properties(fd, crtc, 0xcccccccc)
+        hp = properties(fd, connector, 0xc0c0c0c0)
+        connection, available = modes(fd, connector)
+        if connection != 1:
+            return 'HDMI not connected'
+        objects = []
+        flags = 0
+        deep = 'color_depth' in hp and ten_bit_ok(hp['color_space'][1])
+        if src_w >= 1280 and gui_since is None:
+            gui_since = time.monotonic()
+        settled = gui_since is not None and time.monotonic() - gui_since >= GUI_SETTLE
+        upgrade = deep and not upgraded and settled and output_depth() == 8
+        if force or upgrade or not cp['ACTIVE'][1] or hp['CRTC_ID'][1] != crtc:
+            name = wanted_mode() if force or not upgrade else Path('/sys/class/display/mode').read_text().strip()
+            if name not in available:
+                name = next((m for m in ('1080p60hz', '1080p50hz', '720p60hz') if m in available), None)
+            if name is None:
+                return 'no usable HDMI mode'
+            mode = available[name]
+            blob = Blob(C.addressof(mode), C.sizeof(mode), 0)
+            io(fd, 0xbd, blob)  # CREATEPROPBLOB
+            conn = {'CRTC_ID': crtc}
+            if 'color_space' in hp:
+                conn['color_space'] = color_space_for(name)
+                deep = 'color_depth' in hp and ten_bit_ok(conn['color_space'])
+            if deep:
+                conn['color_depth'] = 10
+            objects += [(crtc, cp, {'MODE_ID': blob.blob_id, 'ACTIVE': 1}), (connector, hp, conn)]
+            width, height, flags, action = mode.hdisplay, mode.vdisplay, ALLOW_MODESET, 'modeset ' + name
+        else:
+            name = Path('/sys/class/display/mode').read_text().strip()
+            explicit = re.match(r'(\d+)x(\d+)', name)
+            width, height = (int(explicit.group(1)), int(explicit.group(2))) if explicit else SIZES.get(re.match(r'\d*', name).group(0), (0, 0))
+            if width < 320:
+                return 'unknown display mode %s' % name
+            if src_w < 1280:
+                # Still the boot console framebuffer: Enigma2 is about to resize it
+                # (fb_set_par); touching the plane now races its compositor start.
+                return None
+            action = 'scale'
+        plane_props = {'CRTC_ID': crtc, 'FB_ID': pp['FB_ID'][1], 'SRC_X': 0, 'SRC_Y': 0,
+                       'SRC_W': src_w << 16, 'SRC_H': src_h << 16,
+                       'CRTC_X': 0, 'CRTC_Y': 0, 'CRTC_W': width, 'CRTC_H': height}
+        if not objects and all(pp[k][1] == v for k, v in plane_props.items()):
+            return None
+        if not pp['FB_ID'][1]:
+            return 'osd0 has no framebuffer yet'
+        objects.append((plane, pp, plane_props))
+        objs = (U32 * len(objects))(*(o[0] for o in objects))
+        counts = (U32 * len(objects))(*(len(o[2]) for o in objects))
+        pairs = [(props[k][0], v) for _, props, values in objects for k, v in values.items()]
+        ids = (U32 * len(pairs))(*(p[0] for p in pairs))
+        vals = (U64 * len(pairs))(*(p[1] for p in pairs))
+        q = Atomic(flags | TEST_ONLY, len(objects), C.addressof(objs), C.addressof(counts), C.addressof(ids), C.addressof(vals), 0, 0)
+        io(fd, 0xbc, q)
+        if not test:
+            q.flags = flags
+            commit(fd, q, deep and bool(flags))
+            upgraded = upgraded or (upgrade and bool(flags))
+            if flags:
+                os.system('echo 1 > /sys/class/graphics/fb0/blank; echo 0 > /sys/class/graphics/fb0/blank')
+        return '%s%s: osd %dx%d -> %dx%d%s' % ('test ' if test else '', action, src_w, src_h, width, height, ', 10-bit' if deep and flags else '')
+    finally:
+        if blob is not None and blob.blob_id:
+            io(fd, 0xbe, U32(blob.blob_id))  # DESTROYPROPBLOB
+        os.close(fd)
+
+
+def log(text):
+    print('xc-display-fix: ' + text)
+    try:
+        with open('/tmp/xc-display-fix.log', 'a') as f:
+            f.write(time.strftime('%H:%M:%S ') + text + '\n')
+    except OSError:
+        pass
+
+
+def main():
+    test = '--test' in sys.argv
+    if '--boot' not in sys.argv:
+        result = fix(test, '--force' in sys.argv)
+        log(result or 'already correct')
+        return 0
+    if os.fork():
+        return 0
+    os.setsid()
+    end = time.monotonic() + 150  # the GUI settles ~45 s into the boot; see GUI_SETTLE
+    force = needs_boot_modeset()
+    while time.monotonic() < end:
+        try:
+            result = fix(test, force)
+            if force and result and result.startswith(('modeset', 'test modeset')):
+                force = False  # one real modeset per boot is enough
+            if result:
+                log(result)
+        except Exception as e:
+            log('retry: %s' % e)
+        time.sleep(3)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

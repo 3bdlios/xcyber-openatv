@@ -1,0 +1,79 @@
+#!/usr/bin/python3
+"""Route XCONN HDMI to the most recently started physical SPDIF PCM.
+No audio decoding, buffering, clock changes, or plugin hooks.
+"""
+import ctypes as C
+import fcntl
+import os
+import signal
+import time
+
+lock = open('/run/xc-hdmi-route.lock', 'w')
+fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+a = C.CDLL('libasound.so.2')
+ptr = C.c_void_p
+for name, args in {
+    'snd_ctl_open': [C.POINTER(ptr), C.c_char_p, C.c_int],
+    'snd_ctl_close': [ptr],
+    'snd_ctl_elem_value_malloc': [C.POINTER(ptr)],
+    'snd_ctl_elem_value_free': [ptr],
+    'snd_ctl_elem_value_set_interface': [ptr, C.c_int],
+    'snd_ctl_elem_value_set_name': [ptr, C.c_char_p],
+    'snd_ctl_elem_read': [ptr, ptr],
+    'snd_ctl_elem_write': [ptr, ptr],
+    'snd_ctl_elem_value_set_enumerated': [ptr, C.c_uint, C.c_uint],
+    'snd_ctl_elem_value_get_enumerated': [ptr, C.c_uint],
+}.items():
+    getattr(a, name).argtypes = args
+ctl, val = ptr(), ptr()
+if a.snd_ctl_open(C.byref(ctl), b'hw:0', 0) < 0:
+    raise SystemExit('cannot open ALSA control')
+if a.snd_ctl_elem_value_malloc(C.byref(val)) < 0:
+    raise SystemExit('cannot allocate ALSA control value')
+a.snd_ctl_elem_value_set_interface(val, 2)  # SND_CTL_ELEM_IFACE_MIXER
+a.snd_ctl_elem_value_set_name(val, b'HDMITX Audio Source Select')
+if a.snd_ctl_elem_read(ctl, val) < 0:
+    raise SystemExit('HDMI source selector unavailable')
+
+running = True
+def stop(*unused):
+    global running
+    running = False
+signal.signal(signal.SIGTERM, stop)
+signal.signal(signal.SIGINT, stop)
+
+def active(device):
+    try:
+        with open('/proc/asound/card0/pcm%dp/sub0/status' % device) as f:
+            return f.readline().strip() == 'state: RUNNING'
+    except OSError:
+        return False
+
+previous = {0: False, 2: False}
+last_started = {0: 0, 2: 0}
+last_route = None
+try:
+    while running:
+        now = time.monotonic_ns()
+        states = {d: active(d) for d in previous}
+        for d in states:
+            if states[d] and not previous[d]:
+                last_started[d] = now
+        candidates = [d for d in states if states[d]]
+        # At simultaneous startup prefer normal XC HDMI PCM2.
+        target = max(candidates, key=lambda d: (last_started[d], d)) if candidates else None
+        if target is not None:
+            route = 1 if target == 0 else 0  # Spdif_b / Spdif
+            if a.snd_ctl_elem_read(ctl, val) >= 0:
+                current = a.snd_ctl_elem_value_get_enumerated(val, 0)
+                if current != route:
+                    a.snd_ctl_elem_value_set_enumerated(val, 0, route)
+                    if a.snd_ctl_elem_write(ctl, val) < 0:
+                        print('HDMI route write failed', flush=True)
+                    else:
+                        print('HDMI source -> PCM%d (%s)' % (target, 'Spdif_b' if route else 'Spdif'), flush=True)
+        previous = states
+        time.sleep(0.15)
+finally:
+    a.snd_ctl_elem_value_free(val)
+    a.snd_ctl_close(ctl)

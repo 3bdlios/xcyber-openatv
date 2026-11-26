@@ -1,0 +1,21 @@
+#!/bin/sh
+# XC native DVB audio backend. Starts early (rcS) before /tmp exists; it logs nowhere by
+# default. For debugging: touch /etc/xc-audiod.debug to log to /run/xc-audiod.log.
+PID=/run/xc-audiod.pid
+LOG=/dev/null
+[ -f /etc/xc-audiod.debug ] && LOG=/run/xc-audiod.log
+case "$1" in
+ start)
+  [ -r /proc/xc_audio ] || exit 1
+  if [ -f "$PID" ] && kill -0 "$(cat "$PID")" 2>/dev/null; then exit 0; fi
+  /usr/sbin/xc-audiod >>"$LOG" 2>&1 &
+  echo $! >"$PID"
+ ;;
+ stop)
+  [ ! -f "$PID" ] || kill "$(cat "$PID")" 2>/dev/null
+  rm -f "$PID"
+ ;;
+ restart) $0 stop; sleep 0.2; $0 start ;;
+ *) exit 1;;
+esac
+exit 0

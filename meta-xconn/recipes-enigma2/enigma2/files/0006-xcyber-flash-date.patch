@@ -1,0 +1,16 @@
+Subject: [PATCH] Correct XC hardware compatibility
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Components/SystemInfo.py
++++ b/lib/python/Components/SystemInfo.py
+@@ -305,6 +305,9 @@
+ 		return version.split(" ", 4)[2].split("-", 2)[0] if version else _("Unknown")
+ 
+ 	def getFlashDateString(self):
++		if self.getItem("machinebuild") == "xconn":
++			# A prebuilt EXT4 preserves reproducible /home timestamps, not install time.
++			return _("Unknown")
+ 		try:
+ 			localTime = localtime(stat("/home").st_ctime)
+ 			result = strftime(_("%Y-%m-%d"), localTime) if localTime.tm_year >= 2011 else _("Unknown")

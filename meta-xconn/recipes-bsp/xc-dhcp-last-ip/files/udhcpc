@@ -1,0 +1,16 @@
+#!/bin/sh
+# XC: ask the DHCP server for the address this box had last time (udhcpc -r), like
+# other clients do, so routers that forget expired leases still hand the same one back.
+# A refused request falls back to a normal discover. The address is kept by
+# /etc/udhcpc.d/60xc-last-ip.
+iface=
+prev=
+for a in "$@"; do
+	[ "$prev" = "-i" ] && iface=$a
+	prev=$a
+done
+last=$(cat "/etc/udhcpc.last.$iface" 2>/dev/null)
+case "$last" in
+	*[!0-9.]* | "") exec /sbin/udhcpc "$@" ;;
+	*) exec /sbin/udhcpc -r "$last" "$@" ;;
+esac

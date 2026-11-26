@@ -1,0 +1,27 @@
+#!/bin/sh
+# Front panel display: boot counter from early userspace, then GUI text.
+DAEMON=/usr/sbin/xc-fpd
+PIDFILE=/run/xc-fpd.pid
+LOG=/tmp/xc-fpd.log
+case "$1" in
+ start)
+  # Early rcS: /tmp does not exist yet; the daemon attaches its own log later.
+  $DAEMON >/dev/null 2>&1 &
+  echo $! > $PIDFILE 2>/dev/null || true
+  ;;
+ stop)
+  # Runlevel 0: xc-power-handoff blanks the panel and lights the red LED. Runlevel 6: counter.
+  case "$(runlevel 2>/dev/null | cut -d' ' -f2)" in
+   0) : ;;
+   *) $DAEMON send BOOT ;;
+  esac
+  ;;
+ restart)
+  [ -f $PIDFILE ] && kill "$(cat $PIDFILE)" 2>/dev/null
+  pkill -f "^/usr/bin/python3 $DAEMON\$" 2>/dev/null
+  sleep 0.3; $0 start
+  ;;
+ status) $DAEMON check ;;
+ *) echo "Usage: $0 {start|stop|restart|status}"; exit 1 ;;
+esac
+exit 0

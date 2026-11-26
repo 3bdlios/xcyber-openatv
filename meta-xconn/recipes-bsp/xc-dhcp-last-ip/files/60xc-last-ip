@@ -1,0 +1,9 @@
+#!/bin/sh
+# XC: remember the leased address for the next boot (see /usr/local/sbin/udhcpc).
+case "$1" in
+	renew|bound)
+		f=/etc/udhcpc.last.$interface
+		[ -n "$ip" ] && [ "$(cat "$f" 2>/dev/null)" != "$ip" ] && echo "$ip" > "$f.tmp" && mv "$f.tmp" "$f"
+		;;
+esac
+exit 0

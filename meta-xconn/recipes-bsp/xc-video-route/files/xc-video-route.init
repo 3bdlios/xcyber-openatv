@@ -1,0 +1,10 @@
+#!/bin/sh
+case "$1" in
+ start|restart)
+  /usr/sbin/xc-video-route
+  # Bind/scale the OSD once DRM and Enigma2 have settled (detaches, retries ~90 s).
+  /usr/sbin/xc-display-fix --boot
+  ;;
+ stop) : ;;
+ *) exit 1 ;;
+esac

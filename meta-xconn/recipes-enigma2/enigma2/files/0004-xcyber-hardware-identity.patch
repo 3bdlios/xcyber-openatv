@@ -1,0 +1,24 @@
+Subject: [PATCH] Report XC S905X3 and Cortex-A55 hardware identity
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Components/SystemInfo.py
++++ b/lib/python/Components/SystemInfo.py
+@@ -146,7 +146,7 @@
+ 		cpuCount = 0
+ 		cpuSpeedStr = "-"
+ 		cpuSpeedMhz = self.getCPUSpeedMhz()
+-		processor = ""
++		processor = "ARM Cortex-A55" if self.getItem("machinebuild") == "xconn" else ""
+ 		for line in fileReadLines("/proc/cpuinfo", default=[], source=MODULE_NAME):
+ 			line = [x.strip() for x in line.strip().split(":", 1)]
+ 			if not processor and line[0] in ("system type", "model name", "Processor"):
+@@ -432,6 +432,8 @@
+ 
+ 
+ def getChipsetString():
++	if MODEL == "xconn":
++		return "Amlogic S905X3"
+ 	if MODEL in ("dm7080", "dm820"):
+ 		chipset = "7435"
+ 	elif MODEL in ("dm520", "dm525"):

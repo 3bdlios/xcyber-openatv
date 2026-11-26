@@ -1,0 +1,12 @@
+{
+  "version": "# OpenATV version configuration\nDISTRO_VERSION = \"8.0.1\"\n",
+  "enigma2": "b4ac3bd50a0717ff420b7e9c7015170bc5d510cc",
+  "layers": {
+    ".": "b4c0421a46dbc6ccf6d6b7a2310980b1e24b4c0a",
+    "meta-oe-alliance": "2729e0aa4cec39d80daa3c8ea9ebb75754287276",
+    "openembedded-core": "ae5cafacec8e99c5a27fa5b3b378eefc595910ef",
+    "meta-openembedded": "533d0a63ac2a38e77746e32458e09461f12737b6",
+    "bitbake": "1763256342ae4d7f8028e8222400c6fc8c24d4a3",
+    "meta-qt5.15": "1da7e2dd0b88ad95e4e3bab84d765d4f7efdb6e9"
+  }
+}

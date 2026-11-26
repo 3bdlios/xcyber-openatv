@@ -1,0 +1,80 @@
+#!/usr/bin/python3
+"""Faster held-key repeat for the Add Remote 0.3.3 plugin (third party).
+
+apply:   replace keyflow only when it is the known original 0.3.3 version
+restore: put the original back
+Any other plugin version is left untouched.
+"""
+import hashlib
+import os
+import shutil
+import sys
+
+PLUGIN = '/usr/lib/enigma2/python/Plugins/Extensions/AddRemote'
+SHARE = '/usr/share/xc-addremote-repeat'
+BACKUP = SHARE + '/backup'
+ORIGINAL = '17d7ff3de1a40a9f82171701aec5b0d02dc4d7fc88148127167e8f00e12f9906'
+
+
+def sha(path):
+    with open(path, 'rb') as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+
+def drop_cache():
+    for path in (PLUGIN + '/keyflow.pyc',):
+        if os.path.exists(path):
+            os.unlink(path)
+    cache = PLUGIN + '/__pycache__'
+    if os.path.isdir(cache):
+        for name in os.listdir(cache):
+            if name.startswith('keyflow.'):
+                os.unlink(os.path.join(cache, name))
+
+
+def apply():
+    if not os.path.isdir(PLUGIN):
+        return 'Add Remote not installed'
+    new = SHARE + '/keyflow.py'
+    src, pyc = PLUGIN + '/keyflow.py', PLUGIN + '/keyflow.pyc'
+    if os.path.exists(src):
+        current = sha(src)
+        if current == sha(new):
+            return 'already applied'
+        if current != ORIGINAL:
+            return 'unknown Add Remote version, not changed'
+        os.makedirs(BACKUP, exist_ok=True)
+        shutil.copy2(src, BACKUP + '/keyflow.py')
+    elif os.path.exists(pyc):
+        with open(pyc, 'rb') as f:
+            data = f.read()
+        if b'hold_gap' in data:
+            return 'already applied'
+        if b'long_delay' not in data:
+            return 'unknown Add Remote version, not changed'
+        os.makedirs(BACKUP, exist_ok=True)
+        shutil.copy2(pyc, BACKUP + '/keyflow.pyc')
+    else:
+        return 'keyflow not found, not changed'
+    drop_cache()
+    shutil.copy2(new, src)
+    return 'applied (restart the GUI to load it)'
+
+
+def restore():
+    if not os.path.isdir(PLUGIN) or not os.path.isdir(BACKUP):
+        return 'nothing to restore'
+    src = PLUGIN + '/keyflow.py'
+    if os.path.exists(src) and sha(src) == sha(SHARE + '/keyflow.py'):
+        os.unlink(src)
+        drop_cache()
+        for name in ('keyflow.py', 'keyflow.pyc'):
+            if os.path.exists(BACKUP + '/' + name):
+                shutil.copy2(BACKUP + '/' + name, PLUGIN + '/' + name)
+    shutil.rmtree(BACKUP, ignore_errors=True)
+    return 'restored'
+
+
+if __name__ == '__main__':
+    action = sys.argv[1] if len(sys.argv) > 1 else 'apply'
+    print('xc-addremote-repeat: ' + (restore() if action == 'restore' else apply()))

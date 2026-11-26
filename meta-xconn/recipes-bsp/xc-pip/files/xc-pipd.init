@@ -1,0 +1,23 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          xc-pipd
+# Default-Start:     S
+# Short-Description: XC picture in picture daemon (video1)
+### END INIT INFO
+# Runs only where the XC demux driver offers video1 (/proc/xc_pip).
+PID=/run/xc-pipd.pid
+case "$1" in
+ start)
+  [ -r /proc/xc_pip ] || exit 0
+  if [ -f "$PID" ] && kill -0 "$(cat "$PID")" 2>/dev/null; then exit 0; fi
+  /usr/bin/xc-pipd </dev/null >/dev/null 2>&1 &
+  echo $! >"$PID"
+  ;;
+ stop)
+  [ ! -f "$PID" ] || kill "$(cat "$PID")" 2>/dev/null
+  rm -f "$PID"
+  ;;
+ restart) $0 stop; sleep 0.5; $0 start ;;
+ *) echo "Usage: $0 {start|stop|restart}"; exit 1 ;;
+esac
+exit 0

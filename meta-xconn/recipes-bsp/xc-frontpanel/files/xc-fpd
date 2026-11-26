@@ -1,0 +1,370 @@
+#!/usr/bin/python3
+"""XC front panel daemon: 4-digit 7-segment display (FD650 on XCONN, TM1637 on GT Combo).
+
+Owns the panel GPIO lines for the whole uptime. Replaces the bootloader text
+with a boot counter, then shows whatever Enigma2 sends over /run/xc-fp.sock.
+
+Commands (UTF-8 datagrams, one per message):
+  BOOT              seconds since daemon start, until the GUI sends text
+  TEXT <s>          static text (first 4 displayable characters)
+  SCROLL <s>        text; scrolls when longer than 4 characters
+  WORDS <s>         text; one word at a time (first 4 characters of each)
+  CLOCK             local time HHMM
+  OFF               blank display
+  BRIGHT <1-7>      brightness
+  DOTS <mask>       extra dot/colon bits per digit (hex), e.g. DOTS 2
+  SCROLLMODE once|loop
+
+Client: xc-fpd send TEXT MBC1 ; poweroff: xc-fpd standby
+"""
+import fcntl, os, select, socket, struct, sys, time
+from pathlib import Path
+
+SOCK = '/run/xc-fp.sock'
+CONF = '/etc/xc-frontpanel.conf'
+
+# Standard 7-segment glyphs, bit0=a .. bit6=g, bit7=dp.
+FONT = {
+ '0':0x3f,'1':0x06,'2':0x5b,'3':0x4f,'4':0x66,'5':0x6d,'6':0x7d,'7':0x07,'8':0x7f,'9':0x6f,
+ # Legible 7-segment alphabet; letters with no clean shape borrow the closest one (K->H, M/N->N, V/W->U, X->H).
+ 'A':0x77,'B':0x7c,'C':0x39,'D':0x5e,'E':0x79,'F':0x71,'G':0x3d,'H':0x76,'I':0x06,'J':0x1e,
+ 'K':0x76,'L':0x38,'M':0x37,'N':0x37,'O':0x3f,'P':0x73,'Q':0x67,'R':0x50,'S':0x6d,'T':0x78,
+ 'U':0x3e,'V':0x3e,'W':0x3e,'X':0x76,'Y':0x6e,'Z':0x5b,
+ ' ':0x00,'-':0x40,'_':0x08,'=':0x48,'°':0x63,'"':0x22,"'":0x20,'(':0x39,')':0x0f,'[':0x39,']':0x0f,
+ '?':0x53,'!':0x82,'.':0x80,',':0x80,':':0x09,'/':0x52,'\\':0x64,'|':0x06,'+':0x46,'*':0x63,'^':0x23,'~':0x01,
+}
+
+def ioctl_num(n, size, direction=3):
+    return (direction << 30) | (size << 16) | (0xb4 << 8) | n
+
+def chip_info(fd):
+    info = bytearray(68); fcntl.ioctl(fd, ioctl_num(1, 68, 2), info, True)
+    name, label, lines = struct.unpack('32s32sI', info)
+    return name.rstrip(b'\0'), label.rstrip(b'\0'), lines
+
+def line_info(fd, offset):
+    info = bytearray(256); struct.pack_into('I', info, 64, offset); fcntl.ioctl(fd, ioctl_num(5, 256), info, True)
+    name = bytes(info[:32]).rstrip(b'\0'); consumer = bytes(info[32:64]).rstrip(b'\0')
+    flags = struct.unpack_from('Q', info, 72)[0]
+    return name, consumer, flags
+
+def pinmux_unclaimed(controller, offset, name):
+    try:
+        text = Path('/sys/kernel/debug/pinctrl/%s/pinmux-pins' % controller).read_text()
+    except OSError:
+        return False
+    return ('pin %d (%s): UNCLAIMED' % (offset, name)) in text
+
+class Panel:
+    """GPIO bit-bang base. Subclasses define chip label, line offsets and protocol."""
+    LABEL = b''; LINES = 0; CLK = 0; DIO = 0; NAMES = (b'', b''); PINCTRL = ''; CONSUMER = b'xc-frontpanel'
+    MSB_FIRST = True; ACK_MASK = 2
+
+    def __init__(self, delay=0.00008):
+        self.fd = None; self.delay = delay; self.values = bytearray((1, 1))
+        for path in sorted(Path('/dev').glob('gpiochip*')):
+            chip = os.open(path, os.O_RDONLY | os.O_CLOEXEC)
+            try:
+                _, label, lines = chip_info(chip)
+                if label != self.LABEL:
+                    continue
+                if lines != self.LINES:
+                    raise RuntimeError('%s: unexpected line count %d' % (label.decode(), lines))
+                for offset, expected in ((self.CLK, self.NAMES[0]), (self.DIO, self.NAMES[1])):
+                    actual, consumer, flags = line_info(chip, offset)
+                    if actual and actual != expected:
+                        raise RuntimeError('GPIO %d is %s, expected %s' % (offset, actual.decode(), expected.decode()))
+                    if not actual and not pinmux_unclaimed(self.PINCTRL, offset, expected.decode()):
+                        raise RuntimeError('GPIO %d identity unverified' % offset)
+                    if consumer or flags & 1:
+                        raise RuntimeError('GPIO %d already owned by %s' % (offset, consumer.decode() or '?'))
+                req = bytearray(592); struct.pack_into('II', req, 0, self.CLK, self.DIO)
+                req[256:256 + len(self.CONSUMER)] = self.CONSUMER
+                struct.pack_into('Q', req, 288, (1 << 3) | (1 << 6) | (1 << 8))   # output, open-drain, pull-up
+                struct.pack_into('I', req, 296, 1)
+                struct.pack_into('IIQQ', req, 320, 2, 0, 3, 3)                   # both lines released (high)
+                struct.pack_into('I', req, 560, 2)
+                fcntl.ioctl(chip, ioctl_num(7, 592), req, True)
+                self.fd = struct.unpack_from('i', req, 588)[0]
+                if self.fd < 0:
+                    raise RuntimeError('invalid GPIO handle')
+                return
+            finally:
+                os.close(chip)
+        raise RuntimeError('GPIO chip %s missing' % self.LABEL.decode())
+
+    def set(self, clk=None, data=None):
+        if clk is not None: self.values[0] = int(bool(clk))
+        if data is not None: self.values[1] = int(bool(data))
+        fcntl.ioctl(self.fd, ioctl_num(15, 16), struct.pack('QQ', self.values[0] | (self.values[1] << 1), 3))
+        time.sleep(self.delay)
+
+    def start(self): self.set(clk=1, data=1); self.set(data=0)
+    def stop(self): self.set(clk=0, data=0); self.set(clk=1); self.set(data=1)
+
+    def byte(self, value):
+        order = range(7, -1, -1) if self.MSB_FIRST else range(8)
+        for n in order:
+            self.set(clk=0); self.set(data=(value >> n) & 1); self.set(clk=1)
+        self.set(clk=0, data=1); self.set(clk=1)
+        result = bytearray(struct.pack('QQ', 0, self.ACK_MASK)); fcntl.ioctl(self.fd, ioctl_num(14, 16), result, True)
+        ack = (struct.unpack_from('Q', result)[0] & self.ACK_MASK) == 0; self.set(clk=0)
+        if not ack:
+            raise RuntimeError('%s: no ACK for 0x%02x' % (type(self).__name__, value))
+
+    def transaction(self, values):
+        self.start()
+        try:
+            for value in values: self.byte(value)
+        finally:
+            self.stop()
+
+    def close(self):
+        if self.fd is not None:
+            try: self.set(clk=1, data=1)
+            finally: os.close(self.fd); self.fd = None
+
+    def glyph(self, std):
+        return std
+
+    def show(self, segments, brightness):
+        raise NotImplementedError
+
+class FD650(Panel):
+    """XCONN: FD650 on GPIOA_15 (CLK) / GPIOA_14 (DIO), from Android cfg_fp.ini (475/474)."""
+    LABEL = b'periphs-banks'; LINES = 86; CLK = 65; DIO = 64; NAMES = (b'GPIOA_15', b'GPIOA_14')
+    PINCTRL = 'pinctrl@ff634480-pinctrl-meson'; MSB_FIRST = True
+
+    def show(self, segments, brightness):
+        self.transaction([0x48, (max(1, min(7, brightness)) << 4) | 0x01])
+        for i, value in enumerate(segments[:4]):
+            self.transaction([0x68 | (i << 1), value & 0xff])
+
+    def blank(self):
+        self.transaction([0x48, 0x00])
+
+class TM1637(Panel):
+    """GT Combo: TM1637 on GPIOAO_2 (CLK) / GPIOAO_3 (DIO). Segment bits: a0 b7 c1 d2 e3 f4 g5 dp6."""
+    LABEL = b'aobus-banks'; LINES = 16; CLK = 2; DIO = 3; NAMES = (b'GPIOAO_2', b'GPIOAO_3')
+    PINCTRL = 'pinctrl@ff800014-pinctrl-meson'; MSB_FIRST = False
+    MAP = (0, 7, 1, 2, 3, 4, 5, 6)
+
+    def glyph(self, std):
+        out = 0
+        for bit, target in enumerate(self.MAP):
+            if std >> bit & 1: out |= 1 << target
+        return out
+
+    def show(self, segments, brightness):
+        data = [self.glyph(v) for v in segments[:4]]
+        self.transaction([0x40]); self.transaction([0xc0, 0] + list(reversed(data)) + [0])
+        self.transaction([0x88 | (max(1, min(7, brightness)) - 1 & 7)])
+
+    def blank(self):
+        self.transaction([0x80])
+
+def open_panel(kind):
+    errors = []
+    kinds = {'fd650': FD650, 'tm1637': TM1637}
+    order = [kinds[kind]] if kind in kinds else [FD650, TM1637]
+    for cls in order:
+        try:
+            panel = cls()
+            try:
+                panel.show([0, 0, 0, 0], 2)   # ACK proves the chip is really there
+            except Exception:
+                panel.close(); raise
+            return panel
+        except Exception as error:
+            errors.append('%s: %s' % (cls.__name__, error))
+    raise RuntimeError('; '.join(errors))
+
+def read_conf():
+    conf = {'panel': 'auto', 'brightness': '4', 'scroll_step': '0.5', 'word_hold': '0.9', 'scroll_hold': '1.0', 'scroll_mode': 'once', 'clock_colon': '0'}
+    try:
+        for line in Path(CONF).read_text().splitlines():
+            line = line.split('#', 1)[0].strip()
+            if '=' in line:
+                k, v = line.split('=', 1); conf[k.strip()] = v.strip()
+    except OSError:
+        pass
+    return conf
+
+def render(text):
+    """Text to a list of standard glyphs; characters without a glyph are dropped."""
+    out = []
+    for ch in text:
+        up = ch.upper()
+        if ch == '.' and out:
+            out[-1] |= 0x80; continue
+        if up in FONT:
+            out.append(FONT[up])
+    return out
+
+class Daemon:
+    def __init__(self):
+        self.conf = read_conf()
+        self.panel = open_panel(self.conf.get('panel', 'auto'))
+        self.brightness = int(self.conf.get('brightness', 2))
+        self.step = float(self.conf.get('scroll_step', 0.5)); self.hold = float(self.conf.get('scroll_hold', 1.0))
+        self.word_hold = float(self.conf.get('word_hold', 0.9)); self.words = []
+        self.loop = self.conf.get('scroll_mode', 'once') == 'loop'
+        self.colon = int(self.conf.get('clock_colon', 0), 0)
+        self.dots = 0
+        self.mode = 'BOOT'; self.t0 = time.monotonic(); self.glyphs = []; self.pos = 0; self.next = 0.0
+        self.last = None; self.sock = None; self.sock_retry = 0.0; self.logged = False
+        print('xc-fpd: panel %s' % type(self.panel).__name__, flush=True)
+
+    def bind(self):
+        now = time.monotonic()
+        if self.sock is not None or now < self.sock_retry:
+            return
+        self.sock_retry = now + 1.0
+        try:
+            Path(SOCK).parent.mkdir(parents=True, exist_ok=True)
+            try: os.unlink(SOCK)
+            except FileNotFoundError: pass
+            s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM); s.bind(SOCK); os.chmod(SOCK, 0o666)
+            self.sock = s
+            print('xc-fpd: listening on %s' % SOCK, flush=True)
+        except OSError as error:
+            print('xc-fpd: socket not ready (%s), retrying' % error, flush=True)
+
+    def command(self, line):
+        parts = line.strip().split(None, 1)
+        if not parts: return
+        cmd = parts[0].upper(); arg = parts[1] if len(parts) > 1 else ''
+        print('xc-fpd: %s %s' % (cmd, arg), flush=True)
+        if cmd == 'BOOT':
+            self.mode = 'BOOT'; self.t0 = time.monotonic()
+        elif cmd in ('TEXT', 'SCROLL'):
+            self.glyphs = render(arg); self.mode = cmd; self.pos = 0; self.next = time.monotonic() + self.hold
+            if cmd == 'TEXT' or len(self.glyphs) <= 4: self.mode = 'TEXT'
+        elif cmd == 'WORDS':
+            self.words = [render(w)[:4] for w in arg.split()]
+            self.words = [w for w in self.words if w]
+            if len(self.words) <= 1:
+                self.glyphs = self.words[0] if self.words else []; self.mode = 'TEXT'
+            else:
+                self.mode = 'WORDS'; self.pos = 0; self.next = time.monotonic() + self.word_hold
+        elif cmd == 'CLOCK':
+            self.mode = 'CLOCK'
+        elif cmd == 'OFF':
+            self.mode = 'OFF'
+        elif cmd == 'BRIGHT':
+            try: self.brightness = max(1, min(7, int(arg)))
+            except ValueError: pass
+            self.last = None
+        elif cmd == 'SCROLLMODE':
+            self.loop = arg.strip().lower() == 'loop'
+        elif cmd == 'DOTS':
+            try: self.dots = int(arg, 16) & 0xf
+            except ValueError: self.dots = 0
+            self.last = None
+        else:
+            print('xc-fpd: unknown command %r' % line, flush=True)
+
+    def frame(self):
+        now = time.monotonic()
+        if self.mode == 'BOOT':
+            seconds = min(9999, int(now - self.t0))
+            return render('%4d' % seconds)
+        if self.mode == 'CLOCK':
+            g = render(time.strftime('%H%M'))
+            if self.colon and int(now) % 2 == 0 and len(g) >= 2:
+                g[1] |= 0x80
+            return g
+        if self.mode == 'OFF':
+            return [0, 0, 0, 0]
+        if self.mode == 'WORDS':
+            if now >= self.next:
+                if self.pos < len(self.words) - 1:
+                    self.pos += 1; self.next = now + self.word_hold
+                elif self.loop:
+                    self.pos = 0; self.next = now + self.word_hold
+                else:
+                    self.glyphs = self.words[0]; self.mode = 'TEXT'   # rest on the first word
+            return (self.words[self.pos] + [0, 0, 0, 0])[:4]
+        g = self.glyphs
+        if self.mode == 'TEXT' or len(g) <= 4:
+            return (g + [0, 0, 0, 0])[:4]
+        if now >= self.next:
+            self.next = now + self.step
+            if self.pos < len(g) - 4:
+                self.pos += 1
+            elif self.loop:
+                self.pos = 0; self.next = now + self.hold
+            else:
+                self.pos = 0; self.mode = 'TEXT'   # scrolled once: rest on the first four
+                return (g + [0, 0, 0, 0])[:4]
+            if self.pos == len(g) - 4:
+                self.next = now + self.hold * 1.5
+        return g[self.pos:self.pos + 4]
+
+    def logfile(self):
+        """/tmp appears only at S37 (populate-volatile); attach the log once it exists."""
+        if self.logged or not os.path.isdir('/var/volatile/tmp'):
+            return
+        try:
+            fd = os.open('/tmp/xc-fpd.log', os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+            os.dup2(fd, 1); os.dup2(fd, 2); os.close(fd); self.logged = True
+            print('xc-fpd: panel %s, log attached' % type(self.panel).__name__, flush=True)
+        except OSError:
+            pass
+
+    def run(self):
+        while True:
+            self.logfile()
+            self.bind()
+            if self.sock is not None:
+                r, _, _ = select.select([self.sock], [], [], 0.1)
+                if r:
+                    try: data, _ = self.sock.recvfrom(4096); self.command(data.decode('utf-8', 'replace'))
+                    except OSError: pass
+            else:
+                time.sleep(0.1)
+            frame = (self.frame() + [0, 0, 0, 0])[:4]
+            for i in range(4):
+                if self.dots >> i & 1: frame[i] |= 0x80
+            key = (tuple(frame), self.brightness)
+            if key != self.last:
+                try:
+                    self.panel.show(frame, self.brightness); self.last = key
+                except Exception as error:
+                    print('xc-fpd: display write failed: %s' % error, flush=True); time.sleep(0.5)
+
+def send(args):
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        s.sendto(' '.join(args).encode('utf-8'), SOCK)
+    finally:
+        s.close()
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] == 'send':
+        return send(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == 'standby':
+        # Poweroff: digits blank, red standby LED (FD650 DIG2 bit 0x80) on. Via the daemon when it
+        # runs, otherwise directly on the chip.
+        if os.path.exists(SOCK):
+            try:
+                send(['OFF']); send(['DOTS', '4']); time.sleep(0.5); return
+            except OSError:
+                pass
+        p = open_panel(read_conf().get('panel', 'auto'))
+        try: p.show([0, 0, 0x80, 0], 2)
+        finally: p.close()
+        return
+    if len(sys.argv) > 1 and sys.argv[1] == 'check':
+        p = open_panel(read_conf().get('panel', 'auto')); print('panel:', type(p).__name__); p.close(); return
+    daemon = Daemon()
+    try:
+        daemon.run()
+    finally:
+        daemon.panel.close()
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        print('xc-fpd: %s' % error, file=sys.stderr, flush=True); sys.exit(1)

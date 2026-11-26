@@ -1,0 +1,12 @@
+#!/bin/sh
+case "$1" in
+ start)
+  start-stop-daemon -S -b -m -p /run/xc-hdmi-route.pid -x /usr/sbin/xc-hdmi-route
+  ;;
+ stop)
+  start-stop-daemon -K -p /run/xc-hdmi-route.pid
+  rm -f /run/xc-hdmi-route.pid
+  ;;
+ restart) "$0" stop; "$0" start ;;
+ *) echo "Usage: $0 {start|stop|restart}"; exit 1 ;;
+esac

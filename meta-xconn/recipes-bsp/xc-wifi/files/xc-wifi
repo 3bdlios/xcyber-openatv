@@ -1,0 +1,26 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: xc-wifi
+# Required-Start: $local_fs
+# Default-Start: S
+# Default-Stop:
+### END INIT INFO
+[ "$1" = stop ] && exit 0
+[ "$(uname -r)" = 5.15.196 ] || exit 0
+[ -e /sys/class/net/wlan0 ] && exit 0
+# Power-up and driver load take ~1.5 s; run them in the background so boot does not wait.
+xc_wifi_up() {
+    if ! ls /sys/bus/sdio/devices/*/uevent >/dev/null 2>&1; then
+        [ -w /sys/class/aml_wifi/power ] || return 0
+        echo 1 > /sys/class/aml_wifi/power
+        sleep 1
+    fi
+    grep -q 'SDIO_ID=024C:C822' /sys/bus/sdio/devices/*/uevent 2>/dev/null || return 0
+    for module in rtw_core rtw_sdio rtw_8822c rtw_8822cs; do
+        [ -d /sys/module/$module ] && continue
+        /sbin/insmod /lib/modules/5.15.196/extra/$module.ko || return 1
+    done
+    return 0
+}
+xc_wifi_up </dev/null >/dev/null 2>&1 &
+exit 0

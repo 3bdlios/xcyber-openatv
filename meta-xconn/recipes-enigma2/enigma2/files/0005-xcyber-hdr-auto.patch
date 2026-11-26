@@ -1,0 +1,15 @@
+Subject: [PATCH] Correct XC hardware compatibility
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Components/AVSwitch.py
++++ b/lib/python/Components/AVSwitch.py
+@@ -459,7 +459,7 @@
+ 		config.av.sync_mode.addNotifier(setSyncMode)
+ 	else:
+ 		config.av.sync_mode = ConfigNothing()
+-	AMLHDRSupport = exists("/sys/class/amhdmitx/amhdmitx0/config")
++	AMLHDRSupport = MACHINEBUILD != "xconn" and exists("/sys/class/amhdmitx/amhdmitx0/config")
+ 	BoxInfo.setItem("haveamlhdrsupport", AMLHDRSupport)
+ 	if AMLHDRSupport:
+ 		def setAMLHDR10(configElement):

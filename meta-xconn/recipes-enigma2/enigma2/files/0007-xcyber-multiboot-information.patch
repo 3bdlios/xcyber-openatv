@@ -1,0 +1,15 @@
+Subject: [PATCH] Report XC recovery multiboot independently of STARTUP support
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Screens/Information.py
++++ b/lib/python/Screens/Information.py
+@@ -641,7 +641,7 @@
+ 			info.append(self.formatLine("P1", _("MultiBoot startup file"), MultiBoot.getStartupFile() or _("Unknown")))
+ 		if bootCode:
+ 			info.append(self.formatLine("P1", _("MultiBoot boot mode"), MultiBoot.getBootCodeDescription(bootCode)))
+-		info.append(self.formatLine("P1", _("Software MultiBoot"), _("Yes") if BoxInfo.getItem("multiboot", False) else _("No")))
++		info.append(self.formatLine("P1", _("Software MultiBoot"), (_("Yes") + " (XC recovery)") if BoxInfo.getItem("machinebuild") == "xconn" and isfile("/boot/xc/slots.json") else (_("Yes") if BoxInfo.getItem("multiboot", False) else _("No"))))
+ 		if BoxInfo.getItem("HasKexecMultiboot"):
+ 			info.append(self.formatLine("P1", _("Vu+ MultiBoot"), _("Yes")))
+ 		info.append(self.formatLine("P1", _("Flash type"), about.getFlashType()))

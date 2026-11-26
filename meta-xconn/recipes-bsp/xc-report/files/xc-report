@@ -1,0 +1,531 @@
+#!/usr/bin/python3
+"""XC support report: collect what is needed to diagnose a receiver, with secrets removed.
+
+  xc-report collect [--shot PNG] [--reason R]  -> writes /tmp/xc-report-<id>.tar.gz
+  xc-report upload  [--shot PNG] [--reason R]  -> collects and uploads it to the support
+                                                  repository; prints its path there
+  xc-report record start|boot|stop|status
+                                               -> problem recording: settings snapshots
+                                                  (start, every boot, end), tuner/DiSEqC
+                                                  driver trace, the Enigma2 debug logs and
+                                                  picture/sound timing every 10 s (also over
+                                                  stream relay); "stop" uploads it (reason recording)
+R: manual (default), screenshot, crash or recording.
+The upload target and token come from /etc/xc/report.conf (repo=owner/name, token=...).
+Passwords, CCcam/newcamd lines, reader logins, IPTV credentials, Wi-Fi keys and the like
+are replaced by <removed> before anything leaves the box.
+"""
+import base64
+import glob
+import hashlib
+import io
+import json
+import os
+import re
+import socket
+import subprocess
+import sys
+import tarfile
+import time
+import urllib.request
+
+CONF = '/etc/xc/report.conf'
+REC = '/etc/xc/report-rec'		# problem recording: state.json + settings snapshots
+REC_HOURS = 24				# a forgotten recording stops (and is sent) after this
+AVSYNC = REC + '/avsync.log'		# picture/sound timing samples during a recording
+AV_EVERY = 10				# s between timing samples
+AUDIOD_DEBUG = '/etc/xc-audiod.debug'	# xc-audiod logs to /run/xc-audiod.log while this exists
+AUDIOD_LOG = '/run/xc-audiod.log'
+RELAY_LIST = '/etc/enigma2/whitelist_streamrelay'
+DYNDBG = '/sys/kernel/debug/dynamic_debug/control'
+TRACE_FUNCS = ('m88rs6060_diseqc_send_master_cmd', 'm88rs6060_diseqc_send_burst',
+	'm88rs6060_set_tone', 'm88rs6060_set_voltage', 'm88rs6060_set_frontend')
+MAX_FILE = 2 * 1024 * 1024	# keep each text at most this big (the tail is kept)
+
+COMMANDS = {
+	'system/uname.txt': 'uname -a; cat /proc/version',
+	'system/uptime.txt': 'uptime; cat /proc/loadavg',
+	'system/memory.txt': 'free; cat /proc/meminfo',
+	'system/disks.txt': 'df -h; cat /proc/mounts; blkid',
+	'system/processes.txt': 'ps -ef 2>/dev/null || ps',
+	'system/top.txt': 'top -b -n1 | head -40',
+	'system/thermal.txt': 'for z in /sys/class/thermal/thermal_zone*; do echo "$z $(cat $z/type) $(cat $z/temp)"; done; for c in /sys/devices/system/cpu/cpu*/cpufreq; do echo "$c $(cat $c/scaling_governor) $(cat $c/scaling_cur_freq)"; done',
+	'system/modules.txt': 'lsmod',
+	'system/dmesg.txt': 'dmesg',
+	'system/packages.txt': 'opkg list-installed',
+	'system/feeds.txt': 'cat /etc/opkg/*.conf; opkg list-upgradable 2>&1 | head -50',
+	'system/init.txt': 'ls -la /etc/rcS.d /etc/rc3.d',
+	'network/ip.txt': 'ip addr; ip route; cat /etc/resolv.conf',
+	'network/interfaces.txt': 'cat /etc/network/interfaces',
+	'network/wifi.txt': 'iw dev 2>/dev/null; cat /proc/net/wireless 2>/dev/null',
+	'network/listen.txt': 'netstat -tlnp 2>/dev/null || netstat -tln',
+	'video/display.txt': 'cat /sys/class/display/mode; cat /sys/class/amhdmitx/amhdmitx0/disp_cap; cat /sys/class/amhdmitx/amhdmitx0/config; cat /sys/class/amhdmitx/amhdmitx0/hdmi_hdr_status; cat /sys/class/video/axis /sys/class/video/axis_pip; cat /boot/resolution.ini',
+	'video/decoders.txt': 'cat /sys/class/vdec/vdec_status; cat /sys/class/vfm/map',
+	'video/tsync.txt': 'cat /sys/class/tsync/pts_pcrscr /sys/class/tsync/pts_video /sys/class/tsync/mode 2>&1',
+	'dvb/proc.txt': 'cat /proc/bus/nim_sockets; echo; cat /proc/xc_audio; cat /proc/xc_pip; ls -la /dev/dvb/adapter0',
+	'dvb/demux.txt': 'for f in /sys/class/stb/*; do echo "$f: $(cat $f 2>&1 | head -3)"; done',
+	'dvb/frontend.txt': 'cat /sys/module/m88rs6060/parameters/* 2>/dev/null | head -40',
+	'enigma2/statusinfo.json': 'wget -qO- http://127.0.0.1/api/statusinfo',
+	'enigma2/signal.json': 'wget -qO- http://127.0.0.1/api/tunersignal',
+	'softcam/running.txt': 'ps -ef 2>/dev/null | grep -iE "oscam|ncam|cccam|softcam" | grep -v grep; ls -la /etc/init.d/softcam* /usr/softcams 2>&1',
+	'boot/files.txt': 'ls -la /boot /boot/xc; cat /boot/xc/slots.json 2>/dev/null',
+}
+FILES = [
+	'/etc/enigma2/settings', '/etc/image-version', '/etc/issue', '/etc/hostname',
+	'/boot/xc/bridge.log', '/boot/xc/manager-start.log', '/boot/xc/manager-handoff.log',
+	'/boot/xc/manager-error.log', '/boot/xc/last-boot-timing.jsonl', '/boot/xc/boot-update.log',
+	'/tmp/xc-display-fix.log', '/tmp/xc-pipd.log', '/run/xc-audiod.log',
+]
+GLOBS = [
+	('enigma2', '/home/root/logs/Enigma2_crash_*.log', 3),
+	('enigma2', '/home/root/logs/Enigma2_debug_*.log', 2),
+	('enigma2', '/media/hdd/logs/Enigma2_crash_*.log', 3),
+	('system', '/home/root/logs/messages', 1),
+	('softcam', '/tmp/oscam*.log', 2),
+	('softcam', '/var/log/oscam*.log', 2),
+	('softcam', '/etc/tuxbox/config/oscam*/oscam.conf', 3),
+	('softcam', '/etc/tuxbox/config/oscam*/oscam.server', 3),
+	('softcam', '/etc/tuxbox/config/oscam*/oscam.dvbapi', 3),
+	('softcam', '/etc/tuxbox/config/oscam.conf', 1),
+	('softcam', '/etc/tuxbox/config/oscam.server', 1),
+	('softcam', '/etc/tuxbox/config/oscam.dvbapi', 1),
+]
+
+REDACT = [
+	# key = value lines whose value is a secret (oscam, settings, wpa, cccam.cfg ...)
+	(re.compile(r'(?im)^(\s*(?:[\w.]*?(?:pass(?:word|wd)?|pwd|psk|user(?:name)?|account|key|token|secret|'
+		r'device|cccam|newcamd|caid_?key|boxkey|rsakey|deskey|nuid|cwpkkey|webif\w*))\s*[=:]\s*)(.+)$'), r'\1<removed>'),
+	# CCcam / newcamd / mgcamd lines: C: host port user pass, N: host port user pass key
+	(re.compile(r'(?im)^(\s*[CNL]:\s*)\S.*$'), r'\1<removed>'),
+	# URLs with credentials: scheme://user:pass@host, IPTV ?username=..&password=..
+	(re.compile(r'(?i)(\w+://)[^/\s:@]+:[^/\s@]+@'), r'\1<removed>@'),
+	(re.compile(r'(?i)([?&](?:username|user|password|pass|token|key)=)[^&\s"\']+'), r'\1<removed>'),
+	# Xtream style /live/<user>/<pass>/ and /<user>/<pass>/<id>.ts paths
+	(re.compile(r'(?i)(https?(?:%3a|:)(?://|%2f%2f)[^/\s"]+(?:/|%2f)(?:live|movie|series)?(?:/|%2f)?)[^/\s"%]+(?:/|%2f)[^/\s"%]+(?=(?:/|%2f)\d)'), r'\1<removed>/<removed>'),
+]
+
+
+def redact(text):
+	for pattern, repl in REDACT:
+		text = pattern.sub(repl, text)
+	return text
+
+
+def run(cmd):
+	try:
+		return subprocess.run(['/bin/sh', '-c', cmd], capture_output=True, text=True, timeout=20, errors='replace').stdout
+	except (subprocess.TimeoutExpired, OSError) as e:
+		return 'failed: %s\n' % e
+
+
+def read(path):
+	try:
+		with open(path, 'rb') as f:
+			f.seek(0, 2)
+			size = f.tell()
+			f.seek(max(0, size - MAX_FILE))
+			return f.read().decode('utf-8', 'replace')
+	except OSError as e:
+		return 'failed: %s\n' % e
+
+
+def box_identity():
+	model = read('/proc/device-tree/model').strip('\0\n ') or 'unknown'
+	try:
+		mac = open('/sys/class/net/eth0/address').read().strip()
+	except OSError:
+		mac = socket.gethostname()
+	box_id = hashlib.sha1(mac.encode()).hexdigest()[:8]	# stable, does not reveal the MAC
+	return re.sub(r'[^A-Za-z0-9_-]+', '-', model).strip('-'), socket.gethostname(), box_id
+
+
+SENT_LOGS = []	# crash and debug logs put into the report: removed once it is uploaded
+
+
+def collect(shot=None, reason='manual'):
+	model, host, box_id = box_identity()
+	stamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+	name = '%s_%s_%s_%s' % (stamp, re.sub(r'[^A-Za-z0-9_-]+', '-', host), box_id, reason)
+	buf = io.BytesIO()
+	texts = {}
+	with tarfile.open(fileobj=buf, mode='w:gz') as tar:
+		def add(arcname, text):
+			text = redact(text)
+			texts[arcname] = text
+			data = text.encode()
+			info = tarfile.TarInfo('%s/%s' % (name, arcname))
+			info.size, info.mtime = len(data), time.time()
+			tar.addfile(info, io.BytesIO(data))
+		add('report.json', json.dumps({'model': model, 'hostname': host, 'box_id': box_id,
+			'created': stamp, 'reason': reason, 'tool': 'xc-report 1'}, indent=1))
+		if shot and os.path.exists(shot):
+			tar.add(shot, '%s/screenshot.png' % name)
+		for arcname, cmd in COMMANDS.items():
+			add(arcname, run(cmd))
+		for path in FILES:
+			if os.path.exists(path):
+				add('files' + path, read(path))
+		if reason == 'recording':
+			for path in sorted(glob.glob(REC + '/settings-*')):
+				add('recording/' + os.path.basename(path), read(path))
+			add('recording/settings-end', read('/etc/enigma2/settings'))
+			add('recording/settings-changes.txt', settings_changes())
+			since = rec_state().get('start', 0)
+			for path in sorted(glob.glob('/home/root/logs/Enigma2_debug_*.log') + glob.glob('/media/hdd/logs/Enigma2_debug_*.log'), key=os.path.getmtime):
+				if os.path.getmtime(path) >= since:
+					add('recording/' + os.path.basename(path), read(path))
+					SENT_LOGS.append(path)
+			add('recording/state.json', json.dumps(rec_state(), indent=1))
+			add('recording/avsync.log', read(AVSYNC))
+		for folder, pattern, keep in GLOBS:
+			for path in sorted(glob.glob(pattern), key=os.path.getmtime)[-keep:]:
+				add('%s/%s' % (folder, path.strip('/').replace('/', '_')), read(path))
+				if 'Enigma2_crash_' in path or 'Enigma2_debug_' in path:
+					SENT_LOGS.append(path)
+	out = '/tmp/xc-report-%s.tar.gz' % name
+	with open(out, 'wb') as f:
+		f.write(buf.getvalue())
+	with open(out[:-7] + '.md', 'w') as f:
+		f.write(summary(texts, model, host, box_id, stamp, reason, bool(shot and os.path.exists(shot))))
+	return out, model, name
+
+
+def tail(text, n):
+	return '\n'.join(text.rstrip().splitlines()[-n:])
+
+
+def summary(t, model, host, box_id, stamp, reason, has_shot):
+	"""README.md shown by GitHub when the report folder is opened."""
+	get = lambda k: t.get(k, '').strip()
+	block = lambda title, text: '### %s\n```\n%s\n```\n' % (title, text.strip() or '-')
+	crash_name = sorted(k for k in t if k.startswith('enigma2/') and 'crash' in k)
+	crash = t[crash_name[-1]] if crash_name else ''
+	trace = ''
+	if crash:
+		lines = crash.splitlines()
+		idx = [i for i, l in enumerate(lines) if 'Traceback' in l or 'Backtrace' in l or 'FATAL' in l]
+		trace = '\n'.join(lines[max(0, idx[0] - 5):idx[0] + 30]) if idx else tail(crash, 30)
+	errors = '\n'.join(l for l in get('system/dmesg.txt').splitlines()
+		if any(w in l.lower() for w in ('error', 'oops', 'bug:', 'fail', 'panic', 'warn')))
+	xcpkgs = '\n'.join(l for l in get('system/packages.txt').splitlines()
+		if l.startswith(('xc-', 'enigma2 ', 'oe-alliance-branding', 'openbh')))
+	md = ['# %s — %s' % (model, reason), '',
+		'| | |', '|---|---|',
+		'| Box | %s (%s) |' % (host, box_id), '| Time | %s |' % stamp, '| Reason | %s |' % reason,
+		'| Image | %s |' % (t.get('files/etc/image-version', '').replace('\n', ' ')[:120] or '-'),
+		'| Kernel | %s |' % get('system/uname.txt').splitlines()[0][:120] if get('system/uname.txt') else '| Kernel | - |',
+		'| Uptime | %s |' % (get('system/uptime.txt').splitlines() or ['-'])[0], '']
+	if has_shot:
+		md += ['## Screenshot', '![screenshot](screenshot.png)', '']
+	if trace:
+		md += ['## Last crash (%s)' % crash_name[-1].split('/')[-1], '```', trace, '```', '']
+	if reason == 'recording':
+		debug = '\n'.join(v for k, v in sorted(t.items()) if k.startswith('recording/Enigma2_debug_'))
+		scan = '\n'.join(l for l in debug.splitlines() if 'eDVBScan' in l or 'ScanSetup' in l or 'NimManager' in l)
+		# Enigma2 logs every SEC step (DiSEqC bytes, voltage, tone, tune, lock) with debug logging on
+		diseqc = '\n'.join(l for l in debug.splitlines() if any(w in l for w in (
+			'sendDiseqc', 'sendToneburst', 'setVoltage', 'setTone', 'tuning to', 'locked step', 'IF_LOCK_TIMEOUT',
+			'RotorCmd', 'Unicable', 'JESS', 'eDVBSatelliteEquipmentControl', 'update current switch params')))
+		diseqc += '\n' + '\n'.join(l for l in (get('system/dmesg.txt') + '\n' + t.get('system/home_root_logs_messages', '')).splitlines()
+			if 'm88rs6060' in l and any(w in l for w in ('msg=', 'diseqc', 'tone', 'voltage', 'mini_cmd')))
+		diseqc = diseqc.strip()
+		md += [block('Picture/sound timing (video - audio)', avsync_summary(get('recording/avsync.log'))),
+			block('Settings changes during the recording', get('recording/settings-changes.txt')[:6000]),
+			block('Scan (last 120 lines)', tail(scan, 120)),
+			block('DiSEqC / tuner commands (last 150)', tail(diseqc, 150))]
+	md += [block('Channel', get('enigma2/statusinfo.json')[:1500]),
+		block('Signal', get('enigma2/signal.json')),
+		block('Video / HDMI', get('video/display.txt')[:2500]),
+		block('Temperature / CPU', get('system/thermal.txt')),
+		block('Softcam', get('softcam/running.txt')),
+		block('XC audio / PiP / tuner', get('dvb/proc.txt')),
+		block('Kernel errors (last 40)', tail(errors, 40)),
+		block('XC packages', xcpkgs),
+		'Full details: [full.tar.gz](full.tar.gz)']
+	return '\n'.join(md)
+
+
+def rec_state():
+	try:
+		return json.load(open(REC + '/state.json'))
+	except (OSError, ValueError):
+		return {}
+
+
+def driver_trace(on):
+	try:
+		with open(DYNDBG, 'w') as f:
+			for func in TRACE_FUNCS:
+				f.write('func %s %sp\n' % (func, '+' if on else '-'))
+	except OSError:
+		pass
+
+
+def snapshot(tag):
+	try:
+		data = open('/etc/enigma2/settings').read()
+	except OSError:
+		return
+	with open('%s/settings-%s-%s' % (REC, time.strftime('%Y%m%d-%H%M%S'), tag), 'w') as f:
+		f.write(data)
+
+
+def settings_changes():
+	"""Every key that differs between consecutive snapshots (start, boots, end)."""
+	snaps = sorted(glob.glob(REC + '/settings-*')) + ['/etc/enigma2/settings']
+	def load(path):
+		d = {}
+		for line in read(path).splitlines():
+			k, sep, v = line.partition('=')
+			if sep:
+				d[k] = v
+		return d
+	out = []
+	prev = load(snaps[0]) if snaps else {}
+	for path in snaps[1:]:
+		cur = load(path)
+		changes = ['  %s: %s -> %s' % (k, prev.get(k, '(default)'), cur.get(k, '(default)'))
+			for k in sorted(set(prev) | set(cur)) if prev.get(k) != cur.get(k)]
+		out.append('%s -> %s: %d change(s)' % (os.path.basename(snaps[snaps.index(path) - 1]), os.path.basename(path), len(changes)))
+		out += changes
+		prev = cur
+	return '\n'.join(out) or 'no snapshots'
+
+
+def av_offset():
+	"""Picture minus sound presentation time in ms, median of a few readings
+	(positive: the sound is behind the picture). None when nothing plays."""
+	values = []
+	for _ in range(5):
+		try:
+			video = int(read('/sys/class/tsync/pts_video').split()[0], 16)
+			audio = int(read('/sys/class/tsync/pts_audio').split()[0], 16)
+			if video and audio:
+				values.append((video - audio) / 90.0)
+		except (ValueError, IndexError):
+			pass
+		time.sleep(0.2)
+	values.sort()
+	return values[len(values) // 2] if values else None
+
+
+def playing_service():
+	try:
+		info = json.loads(urllib.request.urlopen('http://127.0.0.1/api/statusinfo', timeout=5).read())
+		return info.get('currservice_serviceref') or '', info.get('currservice_name') or ''
+	except Exception:
+		return '', ''
+
+
+def audiod_debug(on):
+	"""xc-audiod reads its debug flag when it starts: restart it on a change (a 0.3 s gap)."""
+	if on == os.path.exists(AUDIOD_DEBUG):
+		return
+	try:
+		if on:
+			open(AUDIOD_DEBUG, 'w').close()
+		else:
+			os.remove(AUDIOD_DEBUG)
+	except OSError:
+		return
+	run('/etc/init.d/xc-audiod restart')
+
+
+def watch():
+	"""Timing sampler of a recording: one line every AV_EVERY s until the recording ends."""
+	try:
+		with open(REC + '/watch.pid', 'w') as f:
+			f.write(str(os.getpid()))
+	except OSError:
+		return
+	while True:
+		st = rec_state()
+		if not st or time.time() > st.get('expires', 0):
+			return
+		offset = av_offset()
+		ref, name = playing_service()
+		relay = bool(ref) and ref.rstrip(':') + ':' in read(RELAY_LIST).split()
+		try:
+			with open(AVSYNC, 'a') as f:
+				f.write('%s %s %s %s %s\n' % (time.strftime('%H:%M:%S'), 'relay' if relay else 'dvb',
+					'-' if offset is None else '%+.0f' % offset, ref or '-', name))
+			# the decoder log is on RAM: keep only its end
+			if os.path.getsize(AUDIOD_LOG) > 2 * 1024 * 1024:
+				tail_text = read(AUDIOD_LOG)[-512 * 1024:]
+				with open(AUDIOD_LOG, 'w') as f:
+					f.write(tail_text)
+		except OSError:
+			pass
+		time.sleep(AV_EVERY)
+
+
+def start_watch():
+	try:
+		pid = int(read(REC + '/watch.pid').strip())
+		os.kill(pid, 0)
+		if 'record' in read('/proc/%d/cmdline' % pid):
+			return  # already sampling
+	except (ValueError, OSError):
+		pass
+	subprocess.Popen(['nice', '-n', '19', '/usr/bin/xc-report', 'record', 'watch'],
+		stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+
+def avsync_summary(text):
+	"""Per path (dvb / relay) median and range, and every jump of more than 80 ms."""
+	rows = []
+	for line in text.splitlines():
+		parts = line.split(' ', 4)
+		if len(parts) >= 4 and parts[2] != '-':
+			try:
+				rows.append((parts[0], parts[1], float(parts[2]), parts[4] if len(parts) > 4 else ''))
+			except ValueError:
+				pass
+	if not rows:
+		return 'no samples'
+	out = []
+	for kind in ('dvb', 'relay'):
+		values = sorted(r[2] for r in rows if r[1] == kind)
+		if values:
+			out.append('%-5s %4d samples  median %+5.0f ms  min %+5.0f  max %+5.0f' % (
+				kind, len(values), values[len(values) // 2], values[0], values[-1]))
+	out.append('(positive: the sound is behind the picture; plain DVB is usually between 0 and +60 ms)')
+	jumps = [(a, b) for a, b in zip(rows, rows[1:]) if a[1] == b[1] and a[3] == b[3] and abs(b[2] - a[2]) > 80]
+	if jumps:
+		out.append('jumps of more than 80 ms on the same channel:')
+		out += ['  %s %s %+.0f -> %+.0f ms  %s' % (b[0], b[1], a[2], b[2], b[3]) for a, b in jumps[:30]]
+	return '\n'.join(out)
+
+
+def record(action):
+	st = rec_state()
+	if action == 'start':
+		os.makedirs(REC, exist_ok=True)
+		for old in glob.glob(REC + '/settings-*'):
+			os.remove(old)
+		now = time.time()
+		with open(REC + '/state.json', 'w') as f:
+			json.dump({'start': now, 'expires': now + REC_HOURS * 3600}, f)
+		snapshot('start')
+		driver_trace(True)
+		audiod_debug(True)
+		start_watch()
+		return 'recording'
+	if action == 'boot':
+		if not st:
+			return 'off'
+		if time.time() > st.get('expires', 0):
+			return 'expired'
+		snapshot('boot')
+		driver_trace(True)
+		audiod_debug(True)
+		start_watch()
+		return 'recording'
+	if action == 'status':
+		return 'recording' if st else 'off'
+	if action == 'watch':
+		watch()
+		return 'done'
+	if action == 'stop':
+		driver_trace(False)
+		audiod_debug(False)
+		if not st:
+			return 'off'
+		path, model, name = collect(None, 'recording')
+		try:
+			dest = upload(path, model, name)
+		finally:
+			for f in (path, path[:-7] + '.md'):
+				if os.path.exists(f):
+					os.remove(f)
+		for f in glob.glob(REC + '/*'):
+			os.remove(f)
+		return dest
+	raise SystemExit(__doc__)
+
+
+def config():
+	conf = {}
+	try:
+		for line in open(CONF):
+			k, _sep, v = line.strip().partition('=')
+			if k and not k.startswith('#'):
+				conf[k.strip()] = v.strip()
+	except OSError:
+		pass
+	if 'blob' in conf and not conf.get('token'):
+		conf['token'] = unseal(conf['blob'])
+	return conf
+
+
+def keystream(n):
+	out, i = b'', 0
+	while len(out) < n:
+		out += hashlib.sha256(b'xc-report/upload/%d' % i).digest()
+		i += 1
+	return out[:n]
+
+
+def unseal(blob):
+	raw = base64.b64decode(blob)
+	return bytes(a ^ b for a, b in zip(raw, keystream(len(raw))))[::-1].decode()
+
+
+def put(conf, dest, data, message):
+	body = json.dumps({'message': message, 'content': base64.b64encode(data).decode()}).encode()
+	req = urllib.request.Request('https://api.github.com/repos/%s/contents/%s' % (conf['repo'], dest),
+		data=body, method='PUT', headers={'Authorization': 'Bearer ' + conf['token'],
+		'Accept': 'application/vnd.github+json', 'User-Agent': 'xc-report'})
+	with urllib.request.urlopen(req, timeout=60) as r:
+		if r.status not in (200, 201):
+			raise RuntimeError('upload failed: HTTP %d' % r.status)
+
+
+def upload(path, model, name, shot=None):
+	"""reports/<model>/<name>/: README.md (summary, GitHub shows it), screenshot.png, full.tar.gz"""
+	conf = config()
+	if not conf.get('repo') or not conf.get('token'):
+		raise RuntimeError('reporting is not configured (%s)' % CONF)
+	folder = 'reports/%s/%s' % (model, name)
+	message = 'report %s %s' % (model, name)
+	if shot and os.path.exists(shot):
+		put(conf, folder + '/screenshot.png', open(shot, 'rb').read(), message)
+	put(conf, folder + '/full.tar.gz', open(path, 'rb').read(), message)
+	put(conf, folder + '/README.md', open(path[:-7] + '.md', 'rb').read(), message)
+	# sent: drop those logs so the next report does not carry them again. The debug log
+	# Enigma2 is writing right now is kept (it is still open).
+	current = max(glob.glob('/home/root/logs/Enigma2_debug_*.log') or [''], key=lambda p: os.path.getmtime(p) if p else 0)
+	for log in set(SENT_LOGS):
+		if log != current:
+			try:
+				os.remove(log)
+			except OSError:
+				pass
+	return folder
+
+
+def main():
+	args = sys.argv[1:]
+	cmd = args.pop(0) if args else 'collect'
+	opts = dict(zip(args[::2], args[1::2]))
+	shot, reason = opts.get('--shot'), opts.get('--reason', 'manual')
+	if cmd == 'collect':
+		print(collect(shot, reason)[0])
+	elif cmd == 'upload':
+		path, model, name = collect(shot, reason)
+		try:
+			print(upload(path, model, name, shot))
+		finally:
+			for f in (path, path[:-7] + '.md'):
+				if os.path.exists(f):
+					os.remove(f)
+	elif cmd == 'record':
+		print(record(args[0] if args else 'status'))
+	else:
+		print(__doc__)
+		return 2
+	return 0
+
+
+if __name__ == '__main__':
+	sys.exit(main())

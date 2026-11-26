@@ -1,0 +1,28 @@
+#!/bin/sh
+case "$1" in
+ start)
+  MODDIR=/lib/modules/5.15.196/extra
+  for m in media_clock firmware decoder_common pts_server stream_input; do
+   grep -q "^${m} " /proc/modules || insmod "$MODDIR/$m.ko" || exit 1
+  done
+  grep -q '^aml_hardware_dmx ' /proc/modules || insmod "$MODDIR/aml_hardware_dmx.ko" xc_dvb=1 || exit 1
+  for m in m88rs6000t m88rs6060 gtcombo-dvb-wrapper amvdec_mmpeg12 amvdec_mh264 amvdec_h265; do
+   insmod "$MODDIR/$m.ko" 2>/dev/null || true
+  done
+  # HEVC/4K pictures are AFBC compressed only; a quarter size linear copy as well lets
+  # screenshots (amvideocap) read the video. Display still uses the full AFBC picture.
+  [ ! -w /sys/module/amvdec_h265/parameters/double_write_mode ] || echo 2 >/sys/module/amvdec_h265/parameters/double_write_mode
+  [ ! -w /sys/class/stb/demux0_source ] || echo ts1 >/sys/class/stb/demux0_source
+  for v in /sys/class/vtconsole/vtcon*; do
+   case "$(cat "$v/name" 2>/dev/null)" in *"frame buffer"*) echo 0 >"$v/bind" 2>/dev/null || true;; esac
+  done
+  [ ! -w /sys/class/graphics/fb0/blank ] || echo 0 >/sys/class/graphics/fb0/blank
+  modprobe ir-nec-decoder 2>/dev/null || true
+  modprobe meson-ir 2>/dev/null || true
+  for rc in /sys/class/rc/rc*; do
+   [ ! -f "$rc/protocols" ] || echo nec >"$rc/protocols" 2>/dev/null
+   [ ! -f /etc/xc-nec.toml ] || ir-keytable -s "${rc##*/}" -c -w /etc/xc-nec.toml 2>/dev/null
+  done
+ ;;
+esac
+exit 0

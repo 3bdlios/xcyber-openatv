@@ -1,0 +1,60 @@
+Subject: [PATCH] Use XC DRM mode enumeration and modesetting
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Components/AVSwitch.py
++++ b/lib/python/Components/AVSwitch.py
+@@ -1036,6 +1036,19 @@
+ 		self.createConfig()
+ 
+ 	def readAvailableModes(self):
++		if MACHINEBUILD == "xconn":
++			from Components import XCVideo
++			if XCVideo.available():
++				# Translate DRM/HDMI-TX names to Enigma2's fixed-rate names.
++				modes = []
++				for native, label in XCVideo.tv_modes():
++					name = native.removesuffix("hz")
++					if name.endswith("60"):
++						name = name[:-2]
++					if name in ("576p50", "480p"):
++						name = {"576p50": "576p", "480p": "480p"}[name]
++					modes.append(name)
++				return modes
+ 		modes = eAVControl.getInstance().getAvailableModes()
+ 		return modes.split()
+ 
+@@ -1235,6 +1248,22 @@
+ 		eAVControl.getInstance().setVideoMode(mode)
+ 
+ 	def setMode(self, port, mode, rate, force=None):
++		if MACHINEBUILD == "xconn":
++			from Components import XCVideo
++			if XCVideo.available():
++				choices = self.rates[mode][rate]
++				selected = choices.get(force or 60) or next(iter(choices.values()))
++				if selected in ("480p", "480i"):
++					selected += "60"
++				elif selected in ("576p", "576i"):
++					selected += "50"
++				elif selected in ("720p", "1080p", "1080i", "2160p"):
++					selected += "60"
++				native = selected + "hz"
++				if native == XCVideo.current_mode() or XCVideo.set_mode_live(native):
++					self.current_mode = mode
++					self.current_port = port
++				return
+ 		print(f"[AVSwitch] Setting mode for port '{port}', mode '{mode}', rate '{rate}'.")
+ 		modes = self.rates[mode][rate]
+ 		selectedMode = next(iter(modes.values()), mode)
+@@ -1271,6 +1300,10 @@
+ 		eAVControl.getInstance().setWSS(configElement.value, 1)
+ 
+ 	def saveMode(self, port, mode, rate):
++		if MACHINEBUILD == "xconn":
++			from Components import XCVideo
++			if XCVideo.available():
++				XCVideo.write_resolution(XCVideo.current_mode())
+ 		config.av.videoport.value = port
+ 		config.av.videoport.save()
+ 		if port in config.av.videomode:

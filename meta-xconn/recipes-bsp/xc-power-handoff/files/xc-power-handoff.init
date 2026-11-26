@@ -1,0 +1,9 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          xc-power-handoff
+# Default-Stop:      0
+# Short-Description: Blank front panel and arm BL30 remote wake before poweroff
+### END INIT INFO
+[ "$1" = stop ] || exit 0
+/usr/bin/python3 /usr/sbin/xc-power-handoff >/dev/null 2>&1 || true
+exit 0

@@ -1,0 +1,5 @@
+SRCREV = "b4ac3bd50a0717ff420b7e9c7015170bc5d510cc"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+SRC_URI:append = " file://0001-xcyber-openatv-framebuffer.patch file://0002-xcyber-wizard-drm-mode.patch file://0003-xcyber-avswitch-drm.patch file://0004-xcyber-hardware-identity.patch file://0005-xcyber-hdr-auto.patch file://0006-xcyber-flash-date.patch file://0007-xcyber-multiboot-information.patch"
+EXTRA_OECONF:append = " --sysconfdir=/etc --localstatedir=/var"
+PR:append = ".xcyber7"

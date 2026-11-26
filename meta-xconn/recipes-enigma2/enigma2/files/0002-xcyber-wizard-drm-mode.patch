@@ -1,0 +1,19 @@
+Subject: [PATCH] Preserve XC DRM output during the language wizard
+
+Upstream-Status: Inappropriate [XC hardware adaptation]
+
+--- a/lib/python/Screens/WizardStart.py
++++ b/lib/python/Screens/WizardStart.py
+@@ -487,6 +487,12 @@
+ 				print("[WizardLanguage] DEBUG start resolutionTimer")
+ 
+ 	def setMode(self):
++		# XC DRM has no STB videomode API; preserve the boot-selected output.
++		if BoxInfo.getItem("machinebuild") == "xconn":
++			from Components import XCVideo
++			if XCVideo.available():
++				print(f"[WizardLanguage] XC DRM: preserving {XCVideo.current_mode()}")
++				return
+ 		print(f"[WizardLanguage] DEBUG setMode {self.mode}")
+ 		if self.mode in ("720p", "1080p") and not BoxInfo.getItem("AmlogicFamily"):
+ 			rate = "multi"

@@ -1,0 +1,275 @@
+#!/usr/bin/python3
+"""XC picture in picture: decode Enigma2's video1 service on a second decoder.
+
+Enigma2 drives /dev/dvb/adapter0/video1 and /proc/stb/vmpeg/1/dst_*; the XC demux
+driver shows that state in /proc/xc_pip ("gen demux pid streamtype play frozen
+left top width height mleft mtop mwidth mheight"; m* is the main picture, which the
+cascade, split screen and side by side PiP modes shrink). For a playing PiP this daemon reads the PID's PES from
+the demux, writes one access unit per write (with its PTS) to a frame based decoder
+(/dev/amstream_vframe) and routes the pictures
+    decoder -> dimulti.1 (deinterlace) -> xcpipsync (xc_pipsync.ko) -> videopip
+where xcpipsync shows each picture when the main programme's clock reaches its PTS.
+
+Never VIDEOPIP_DISABLE 1: before the XC kernel fix it recursed until the kernel stack
+overflowed (VIDEOPIP_DISABLE 0, enabling the layer, is safe). The layer is blacked out on unregister and the decoder is closed instead.
+"""
+import fcntl
+import os
+import struct
+import threading
+import time
+
+PROC = '/proc/xc_pip'
+PIPSYNC = '/lib/modules/%s/extra/xc_pipsync.ko' % os.uname().release
+LOG = '/tmp/xc-pipd.log'
+
+
+def IOW(t, n, size):
+	return 0x40000000 | (size << 16) | (ord(t) << 8) | n
+
+
+AMS_VFORMAT, AMS_PORT_INIT, AMS_TSTAMP = IOW('S', 0x04, 4), 0x5311, IOW('S', 0x0e, 4)
+AMS_SYSINFO, AMS_SET = IOW('S', 0x0a, 4), IOW('S', 0xc2, 16)
+AMS_SET_FRAME_BASE_PATH, PATH_PIP_TUNNEL = 0x174, 10
+PIP_OUTPUT, PIP_DISABLE = IOW('S', 0x2c, 4), IOW('S', 0x2e, 4)
+DMX_SET_PES_FILTER, DMX_SET_BUFFER_SIZE, DMX_STOP = IOW('o', 44, 20), 0x6f2d, 0x6f2a
+DMX_IN_FRONTEND, DMX_OUT_TAP, DMX_PES_OTHER, DMX_IMMEDIATE_START = 0, 1, 20, 4
+# Dreambox VIDEO_SET_STREAMTYPE -> (VFORMAT, VIDEO_DEC_FORMAT, provider)
+CODECS = {
+	0: (0, 0, 'vdec.mpeg12'), 6: (0, 0, 'vdec.mpeg12'),
+	1: (2, 4, 'vdec.h264'),
+	7: (11, 0, 'vdec.h265'), 22: (11, 0, 'vdec.h265'),
+}
+MAP_IDS = (1, 2, 3)	# decoder instances the PiP decoder can get (the main one is 0)
+HEVC = (7, 22)
+# The codec memory pool is 432 MB and one 4K HEVC programme takes ~200 MB of scatter
+# memory. Two of them run it out, and the decoder then hangs the whole box instead of
+# failing: never start a HEVC PiP next to a 4K programme, and stop any PiP once the
+# decoders' scatter memory passes this.
+SCATTER_LIMIT = 300 * 1024 * 1024
+
+
+def log(*a):
+	try:
+		with open(LOG, 'a') as f:
+			f.write(time.strftime('%H:%M:%S ') + ' '.join(str(x) for x in a) + '\n')
+	except OSError:
+		pass
+
+
+def sysw(path, value):
+	try:
+		with open(path, 'w') as f:
+			f.write(value)
+		return True
+	except OSError as e:
+		log('write', path, e)
+		return False
+
+
+def read_state():
+	try:
+		v = [int(x) for x in open(PROC).read().split()]
+		return dict(zip(('gen', 'demux', 'pid', 'streamtype', 'play', 'frozen', 'left', 'top', 'width', 'height',
+			'mleft', 'mtop', 'mwidth', 'mheight'), v))
+	except (OSError, ValueError):
+		return None
+
+
+def uhd_decoders():
+	"""How many decoders are showing a 2160 line (4K) picture now."""
+	try:
+		return sum(1 for line in open('/sys/class/vdec/vdec_status')
+			if 'frame height' in line and int(line.split(':')[1]) >= 2000)
+	except (OSError, ValueError, IndexError):
+		return 0
+
+
+def scatter_alloced():
+	try:
+		for line in open('/sys/class/codec_mm/codec_mm_scatter_dump'):
+			if 'alloced size' in line:
+				return int(line.split(',')[1].split()[0])	# "...:NM, BYTES Bypes,pages:N"
+	except (OSError, ValueError, IndexError):
+		pass
+	return 0
+
+
+def screen_size():
+	try:
+		w, h = open('/sys/class/video/device_resolution').read().strip().split('x')
+		return int(w), int(h)
+	except (OSError, ValueError):
+		return 1920, 1080
+
+
+def axis(left, top, width, height):
+	"""720x576 Enigma2 window -> 'x0 y0 x1 y1' on the output"""
+	w, h = screen_size()
+	return '%d %d %d %d' % (left * w // 720, top * h // 576,
+		(left + width) * w // 720 - 1, (top + height) * h // 576 - 1)
+
+
+def set_window(s):
+	if s['width'] > 0 and s['height'] > 0:
+		sysw('/sys/class/video/axis_pip', axis(s['left'], s['top'], s['width'], s['height']))
+
+
+main_axis = None	# what we wrote; None = the main picture is as the system set it
+
+
+def set_main_window(s):
+	"""Main picture: shrunk by the cascade/split/side by side modes, else full screen
+	(0x0 or 720x576 from Enigma2 both mean that). Writing '0 0 0 0' resets the axis to
+	the driver's own full screen value ('0 0 -1 -1'; writing that back is ignored)."""
+	global main_axis
+	full = s.get('mwidth', 0) <= 0 or s.get('mheight', 0) <= 0 or \
+		(s['mleft'], s['mtop'], s['mwidth'], s['mheight']) == (0, 0, 720, 576)
+	if full:
+		if main_axis is not None:
+			sysw('/sys/class/video/axis', '0 0 0 0')
+		main_axis = None
+		return
+	value = axis(s['mleft'], s['mtop'], s['mwidth'], s['mheight'])
+	if value != main_axis and sysw('/sys/class/video/axis', value):
+		main_axis = value
+
+
+def routes(provider, add):
+	"""Route the PiP decoder through the deinterlacer and xcpipsync. Added under the
+	decoder's own map id ahead of it, so the vfm lookup finds this chain first."""
+	for i in MAP_IDS:
+		name = 'vdec-map-%d' % i
+		if add:
+			sysw('/sys/class/vfm/map', 'add %s %s.%02x dimulti.1 xcpipsync videopip' % (name, provider, i))
+		else:
+			sysw('/sys/class/vfm/map', 'rm %s' % name)
+
+
+class Session(threading.Thread):
+	def __init__(self, s):
+		threading.Thread.__init__(self, daemon=True)
+		self.state, self.stop_req = s, False
+
+	def run(self):
+		s = self.state
+		vf, decfmt, provider = CODECS.get(s['streamtype'], CODECS[1])
+		dmx = port = amv = None
+		try:
+			routes(provider, True)
+			dmx = os.open('/dev/dvb/adapter0/demux%d' % s['demux'], os.O_RDWR | os.O_NONBLOCK)
+			fcntl.ioctl(dmx, DMX_SET_BUFFER_SIZE, 2 * 1024 * 1024)
+			fcntl.ioctl(dmx, DMX_SET_PES_FILTER, struct.pack('=H2xiiiI', s['pid'], DMX_IN_FRONTEND, DMX_OUT_TAP, DMX_PES_OTHER, DMX_IMMEDIATE_START))
+			port = os.open('/dev/amstream_vframe', os.O_WRONLY)
+			fcntl.ioctl(port, AMS_SET, struct.pack('=QI4x', PATH_PIP_TUNNEL, AMS_SET_FRAME_BASE_PATH))
+			fcntl.ioctl(port, AMS_VFORMAT, vf)
+			if decfmt:
+				# frame duration (25/s until the stream says otherwise): without it every
+				# picture would be handed on as soon as it is decoded
+				fcntl.ioctl(port, AMS_SYSINFO, bytearray(struct.pack('=7I4xQQ', decfmt, 1920, 1080, 3840, 0, 0, 0, 0, 0)))
+			fcntl.ioctl(port, AMS_PORT_INIT)
+			amv = os.open('/dev/amvideo', os.O_RDWR)
+			sysw('/sys/class/video/blackout_pip_policy', '1')
+			set_window(s)
+			fcntl.ioctl(amv, PIP_OUTPUT, 1)
+			# closing a PiP leaves the layer disabled (disable_videopip 1): enable it again.
+			# Only ever 0 here; 1 is the call that recursed in the old kernel.
+			fcntl.ioctl(amv, PIP_DISABLE, struct.pack('i', 0))
+			log('play demux%d pid 0x%x streamtype %d' % (s['demux'], s['pid'], s['streamtype']))
+			self.pump(dmx, port)
+		except OSError as e:
+			log('session', e)
+		finally:
+			for fd in (dmx, port):
+				if fd is not None:
+					try:
+						os.close(fd)
+					except OSError:
+						pass
+			time.sleep(0.3)
+			if amv is not None:
+				os.close(amv)
+			routes(provider, False)
+			log('stopped')
+
+	def pump(self, dmx, port):
+		"""One access unit per write: a PES that carries a PTS starts a new one."""
+		buf, au, au_pts = b'', b'', None
+		while not self.stop_req:
+			try:
+				buf += os.read(dmx, 512 * 1024)
+			except BlockingIOError:
+				time.sleep(0.01)
+				continue
+			while len(buf) >= 9 and buf[:3] == b'\0\0\1':
+				plen = (buf[4] << 8) | buf[5]
+				if plen == 0:
+					nxt = buf.find(b'\0\0\1', 9)
+					while nxt >= 0 and (nxt + 3 >= len(buf) or not 0xe0 <= buf[nxt + 3] <= 0xef):
+						nxt = buf.find(b'\0\0\1', nxt + 3) if nxt + 3 < len(buf) else -1
+					if nxt < 0:
+						break
+					pes, buf = buf[:nxt], buf[nxt:]
+				else:
+					if len(buf) < 6 + plen:
+						break
+					pes, buf = buf[:6 + plen], buf[6 + plen:]
+				es = pes[9 + pes[8]:]
+				if pes[7] & 0x80:
+					if au:
+						self.write(port, au, au_pts)
+					p = pes[9:14]
+					au_pts = (((p[0] >> 1) & 7) << 30 | p[1] << 22 | (p[2] >> 1) << 15 | p[3] << 7 | p[4] >> 1) & 0xffffffff
+					au = es
+				else:
+					au += es
+			if buf and buf[:3] != b'\0\0\1':
+				i = buf.find(b'\0\0\1')
+				buf = buf[i:] if i >= 0 else b''
+
+	def write(self, port, frame, pts):
+		if pts is not None:
+			fcntl.ioctl(port, AMS_TSTAMP, pts - (1 << 32) if pts >= 1 << 31 else pts)
+		off = 0
+		while off < len(frame) and not self.stop_req:
+			try:
+				off += os.write(port, frame[off:])
+			except BlockingIOError:
+				time.sleep(0.005)
+
+
+def main():
+	if not os.path.isdir('/sys/module/xc_pipsync') and os.path.exists(PIPSYNC):
+		os.system('insmod %s' % PIPSYNC)
+	session, key, gen = None, None, None
+	while True:
+		s = read_state()
+		if s and s['gen'] != gen:
+			gen = s['gen']
+			set_main_window(s)
+			want = (s['demux'], s['pid'], s['streamtype']) if s['play'] and s['pid'] >= 0 else None
+			if want != key:
+				if session:
+					session.stop_req = True
+					session.join(3)
+					session = None
+				key = want
+				if want and s['streamtype'] in HEVC and uhd_decoders():
+					log('HEVC PiP refused: a 4K programme is playing (both would not fit in codec memory)')
+				elif want and s['streamtype'] in CODECS:
+					session = Session(s)
+					session.start()
+				elif want:
+					log('streamtype %d not supported' % s['streamtype'])
+			elif session:
+				set_window(s)
+		if session and scatter_alloced() > SCATTER_LIMIT:
+			log('PiP stopped: decoders use %d MB scatter memory (limit %d MB)' % (scatter_alloced() >> 20, SCATTER_LIMIT >> 20))
+			session.stop_req = True
+			session.join(3)
+			session = None
+		time.sleep(0.1)
+
+
+if __name__ == '__main__':
+	main()

@@ -1,0 +1,7 @@
+#!/bin/sh
+# Re-apply after Add Remote is (re)installed; never touches other plugin versions.
+case "$1" in
+ start|restart) /usr/sbin/xc-addremote-repeat apply ;;
+ stop) : ;;
+ *) exit 1 ;;
+esac

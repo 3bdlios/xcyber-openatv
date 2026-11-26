@@ -1,0 +1,44 @@
+#!/usr/bin/python3
+"""Move aside leftover Enigma2 .py sources that shadow packaged .pyc files.
+
+Python prefers foo.py over foo.pyc, so a hand-copied foo.py (left from testing
+in early release images) silently overrides every later package update of that
+module. A .py is moved to the backup folder only when nothing owns it and its
+.pyc sibling belongs to an installed package. Third-party Extensions are left alone.
+"""
+import glob
+import os
+import shutil
+import time
+
+ROOT = '/usr/lib/enigma2/python'
+BACKUP = '/home/root/xc-stale-py-backup'
+
+owned = set()
+for listing in glob.glob('/var/lib/opkg/info/*.list'):
+    try:
+        with open(listing, errors='replace') as f:
+            owned.update(line.split('\t')[0].strip() for line in f)  # "path<TAB>mode"
+    except OSError:
+        pass
+
+moved = []
+for top, dirs, files in os.walk(ROOT):
+    if top.startswith(ROOT + '/Plugins/Extensions'):
+        dirs[:] = []
+        continue
+    for name in files:
+        if not name.endswith('.py'):
+            continue
+        path = os.path.join(top, name)
+        if path in owned or path + 'c' not in owned or not os.path.exists(path + 'c'):
+            continue
+        target = os.path.join(BACKUP, time.strftime('%Y%m%d-%H%M%S'), os.path.relpath(path, ROOT))
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        shutil.move(path, target)
+        cache = os.path.join(top, '__pycache__')
+        for stale in glob.glob(os.path.join(cache, name[:-3] + '.*.pyc')):
+            os.unlink(stale)
+        moved.append(os.path.relpath(path, ROOT))
+
+print('xc-stale-py-cleanup: %s' % (('moved %d to %s: %s' % (len(moved), BACKUP, ' '.join(moved))) if moved else 'nothing to do'))

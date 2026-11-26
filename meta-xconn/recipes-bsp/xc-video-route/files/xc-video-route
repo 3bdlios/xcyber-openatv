@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+"""Configure XC's decoder path before playback; never rewire an active path."""
+from pathlib import Path
+import re
+
+p = Path('/sys/class/vfm/map')
+s = p.read_text()
+m = re.search(r'^\[\d+\]\s+default\s+\{([^}]+)\}', s, re.M)
+if not m:
+    raise SystemExit('XC video: default VFM route missing; unchanged')
+route = m.group(1)
+if 'deinterlace' in route:
+    raise SystemExit(0)
+if re.search(r'\([1-9]\d*\)', route):
+    raise SystemExit('XC video: decoder active; refusing live route change')
+if not re.search(r'^\s*deinterlace\s*$', s, re.M):
+    raise SystemExit('XC video: deinterlacer unavailable; route unchanged')
+with p.open('w') as f:
+    f.write('rm default\n')
+with p.open('w') as f:
+    f.write('add default decoder deinterlace amvideo\n')
+if not re.search(r'^\[\d+\]\s+default\s+\{[^}]*deinterlace', p.read_text(), re.M):
+    with p.open('w') as f:
+        f.write('add default decoder amvideo\n')
+    raise SystemExit('XC video: deinterlace route failed; restored direct route')
+print('XC video: decoder -> deinterlace -> amvideo')

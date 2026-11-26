@@ -1,0 +1,150 @@
+Subject: [PATCH] gdi: adapt X-CYBER single-page display and cached compositor
+
+Upstream-Status: Inappropriate [device specific]
+
+--- a/lib/gdi/fb.cpp
++++ b/lib/gdi/fb.cpp
+@@ -227,7 +227,7 @@
+ #endif
+ 	screeninfo.yres_virtual = nyRes * wanted_pages;
+ #else
+-	screeninfo.yres_virtual=(screeninfo.yres=nyRes)*2;
++	screeninfo.yres_virtual=screeninfo.yres=nyRes;
+ #endif
+ 	screeninfo.activate = FB_ACTIVATE_ALL;
+ 	screeninfo.height=0;
+--- a/lib/gdi/gfbdc.h
++++ b/lib/gdi/gfbdc.h
+@@ -7,10 +7,14 @@
+ 
+ #ifndef SWIG
+ #include <mutex>
++#include <vector>
+ 
+ class gFBDC: public gMainDC
+ {
+ 	fbClass *fb;
++	std::vector<unsigned char> xc_shadow, xc_presented;
++	bool xc_force_present = true;
++	void xcPresent();
+ 	int brightness, gamma, alpha;
+ 	gUnmanagedSurface surface;
+ 	gUnmanagedSurface surface_back;
+--- a/lib/gdi/gfbdc.cpp
++++ b/lib/gdi/gfbdc.cpp
+@@ -10,6 +10,11 @@
+ #endif
+ 
+ #include <algorithm>
++#include <cstdlib>
++#include <fcntl.h>
++#include <stdint.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
+ #include <cstring>
+ 
+ #if defined(DREAMBCM_ION_ACCEL)
+@@ -164,6 +169,63 @@
+ }
+ #endif
+ 
++static int xc_drm_fd = -2;
++static time_t xc_vblank_off_until = 0;
++
++static void xcWaitVBlank()
++{
++	if (xc_drm_fd == -2)
++	{
++		xc_drm_fd = open("/dev/dri/card0", O_RDWR | O_CLOEXEC);
++		// The first opener of card0 becomes DRM master, and only the master may modeset:
++		// give it up at once (a vblank wait needs none), or xc-display-fix and the live
++		// resolution change get EACCES.
++		if (xc_drm_fd >= 0)
++			ioctl(xc_drm_fd, _IO('d', 0x1f));	/* DRM_IOCTL_DROP_MASTER */
++	}
++	if (xc_drm_fd < 0)
++		return;
++	struct timespec t0, t1;
++	clock_gettime(CLOCK_MONOTONIC, &t0);
++	if (t0.tv_sec < xc_vblank_off_until)
++		return;
++	union {
++		struct { uint32_t type, sequence; unsigned long signal; } request;
++		struct { uint32_t type, sequence; long tval_sec, tval_usec; } reply;
++	} vbl;
++	memset(&vbl, 0, sizeof(vbl));
++	vbl.request.type = 0x1;	/* DRM_VBLANK_RELATIVE */
++	vbl.request.sequence = 1;
++	int ret = ioctl(xc_drm_fd, _IOWR('d', 0x3a, vbl), &vbl);	/* DRM_IOCTL_WAIT_VBLANK */
++	clock_gettime(CLOCK_MONOTONIC, &t1);
++	long ms = (t1.tv_sec - t0.tv_sec) * 1000 + (t1.tv_nsec - t0.tv_nsec) / 1000000;
++	// display off / mode change: no vblanks to wait for, so do not stall the
++	// render thread; present unsynchronised for a while and try again later
++	if (ret < 0 || ms > 100)
++		xc_vblank_off_until = t1.tv_sec + 10;
++}
++
++void gFBDC::xcPresent()
++{
++    if (xc_shadow.empty()) return;
++    if (islocked()) { xc_force_present = true; return; }
++    const size_t row = surface.stride;
++    std::vector<int> changed;
++    for (int y=0; y<surface.y; ++y) {
++        const size_t off = static_cast<size_t>(y) * row;
++        if (xc_force_present || memcmp(xc_shadow.data()+off, xc_presented.data()+off, row))
++            changed.push_back(y);
++    }
++    if (changed.empty()) return;
++    xcWaitVBlank();
++    for (int y : changed) {
++        const size_t off = static_cast<size_t>(y) * row;
++        memcpy(fb->lfb+off, xc_shadow.data()+off, row);
++        memcpy(xc_presented.data()+off, xc_shadow.data()+off, row);
++    }
++    xc_force_present = false;
++}
++
+ void gFBDC::exec(const gOpcode *o)
+ {
+ 	std::lock_guard<std::recursive_mutex> lock(m_graphics_mutex);
+@@ -221,11 +283,13 @@
+ 
+ 		++t;
+ 
++		xcPresent();
+ 		fb->blit();
+ 		fb->waitVSync();
+ 		break;
+ 	}
+ 	case gOpcode::flush:
++		xcPresent();
+ #ifdef USE_LIBVUGLES2
+ 		if (gles_is_animation())
+ 			gles_do_animation();
+@@ -497,6 +561,25 @@
+ 	surface_third.data_phys = 0;
+ #endif
+ 
++    xc_shadow.clear();
++    xc_presented.clear();
++    const size_t xc_bytes = static_cast<size_t>(surface.stride) * surface.y;
++    if (!getenv("XC_OSD_DIRECT") && m_number_of_pages == 1 && bpp == 32 &&
++        xc_bytes && xc_bytes <= static_cast<size_t>(fb->Available())) {
++        try {
++            const size_t capacity = static_cast<size_t>(fb->Available());
++            if (xc_shadow.capacity() < capacity) xc_shadow.reserve(capacity);
++            if (xc_presented.capacity() < capacity) xc_presented.reserve(capacity);
++            xc_shadow.assign(xc_bytes, 0);
++            xc_presented.assign(xc_bytes, 0);
++            surface.data = xc_shadow.data();
++            xc_force_present = true;
++        } catch (const std::bad_alloc &) {
++            xc_shadow.clear(); xc_presented.clear();
++            eDebug("[XC OSD] retaining direct framebuffer rendering");
++        }
++    }
++
+ 	eDebug("[gFBDC] resolution: %d x %d x %d (stride: %d) pages: %d", surface.x, surface.y, surface.bpp, fb->Stride(), fb->getNumPages());
+ 
+ #ifndef CONFIG_ION

@@ -1,0 +1,8 @@
+<keymap>
+ <map context="XCIPADelayControls">
+  <key id="KEY_YELLOW" mapto="menu" flags="b" />
+  <key id="KEY_YELLOW" mapto="ignore" flags="l" />
+  <key id="KEY_RED" mapto="reset" flags="b" />
+  <key id="KEY_RED" mapto="ignore" flags="l" />
+ </map>
+</keymap>
