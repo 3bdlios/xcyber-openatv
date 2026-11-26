@@ -44,5 +44,29 @@
     "other_slots_unchanged": true,
     "selected_slot_unchanged": true,
     "verified_at": "2026-11-26T13:27:12.139378+00:00"
+  },
+  "automatic_fix_delivery": {
+    "package": "xc-gui-startup",
+    "version": "1.0-r2",
+    "upgrade_from": "1.0-r1",
+    "device_upgrade_verified": true,
+    "depends_on": [
+      "xc-image-name",
+      "xc-password-pam-fix"
+    ]
+  },
+  "hdr_fix": {
+    "package": "xc-video-route",
+    "version": "0.1-r6",
+    "upgrade_from": "0.1-r5",
+    "installed_from_github": true,
+    "verified_after_package_install": [
+      "QBC 4K -> HLG BT.2020 10-bit",
+      "Qatar TV Quran -> SDR BT.709"
+    ],
+    "source_detection": "Current-frame primaries and transfer characteristics; not cached output HDR type",
+    "independent_hdr10_broadcast_tested": false,
+    "reboot_tested": false,
+    "verified_at": "2026-11-26T16:17:11.022781+00:00"
   }
 }
