@@ -2,7 +2,7 @@ from pathlib import Path
 import hashlib,json,gzip,tarfile,io,struct
 import os
 root=Path(os.environ.get('XC_PROJECT_ROOT', Path(__file__).resolve().parents[2]));w=root/'snapshot-20261126';out=root/'release';fs=Path(os.environ.get('XC_SLOT_ROOTFS', w/'clean-slot.ext4'));boot=w/'boot'
-name='OpenATV-8.0.1-X-CYBER-SLOT-CLEAN-NoAudioShift-20261126-r2.tar.gz'
+name='OpenATV-8.0.1-X-CYBER-SLOT-20261126-r2.tar.gz'
 def sha(p):
  h=hashlib.sha256()
  with p.open('rb') as f:
@@ -11,7 +11,7 @@ def sha(p):
 with fs.open('rb') as f:f.seek(1024);sb=f.read(1024)
 assert sb[56:58]==b'\x53\xef'
 assert struct.unpack_from('<I',sb,4)[0]*(1024<<struct.unpack_from('<I',sb,24)[0])==fs.stat().st_size
-manifest={'format':'XCEnigma-slot-v2','model':'XCONN-Forever-X-CYBER','image_name':'OpenATV','version':'8.0.1 Clean r2 NoAudioShift','architecture':'aarch64','base_kernel_sha256':sha(boot/'kernel.img'),'base_dtb_sha256':sha(boot/'dtb.img'),'filesystem':'ext4','expand_to_slot':True,'hardware_boot_tested':False,'files':{'rootfs.img':{'size':fs.stat().st_size,'sha256':sha(fs)}}}
+manifest={'format':'XCEnigma-slot-v2','model':'XCONN-Forever-X-CYBER','image_name':'OpenATV','version':'8.0.1','architecture':'aarch64','base_kernel_sha256':sha(boot/'kernel.img'),'base_dtb_sha256':sha(boot/'dtb.img'),'filesystem':'ext4','expand_to_slot':True,'hardware_boot_tested':False,'files':{'rootfs.img':{'size':fs.stat().st_size,'sha256':sha(fs)}}}
 p=out/name
 with p.open('wb') as raw,gzip.GzipFile(filename='',fileobj=raw,mode='wb',compresslevel=6,mtime=0) as gz,tarfile.open(fileobj=gz,mode='w|',format=tarfile.GNU_FORMAT) as t:
  data=(json.dumps(manifest,indent=2)+'\n').encode();m=tarfile.TarInfo('manifest.json');m.mode=0o644;m.size=len(data);t.addfile(m,io.BytesIO(data))

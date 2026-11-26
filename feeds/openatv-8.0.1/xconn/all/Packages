@@ -3440,3 +3440,16 @@ Size: 888
 SHA256sum: f8355d7bf99b1ed04fbccd34fd10fbcc679af09cec3e70b704d173363026c247
 MD5Sum: 8797bb333985c0cb26cf0f7b2839d580
 
+Package: xc-image-name
+Version: 1.0-r0
+Architecture: all
+Maintainer: X-CYBER
+Section: base
+Priority: optional
+Depends: python3-core, python3-json
+Description: Use the distribution name and version for the current OpenATV slot
+Filename: xc-image-name_1.0-r0_all.ipk
+Size: 1640
+SHA256sum: 27b7fa9591dbc62c26d1e3cea237adb8e3e1f08d562e3dcbdf4a06d71bbdd7a0
+MD5Sum: aef5d7427d7c00cf6ca43dbb25cea24a
+

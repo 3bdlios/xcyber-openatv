@@ -4,3 +4,5 @@ IMAGE_INSTALL:append = " xc-hardware xc-gui-startup xc-wifi xc-hdmi-route xc-rem
 IMAGE_INSTALL:append = " python3-multiprocessing python3-requests"
 
 IMAGE_INSTALL:append = " xc-password-pam-fix"
+
+IMAGE_INSTALL:append = " xc-image-name"
