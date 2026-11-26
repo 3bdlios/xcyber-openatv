@@ -1,0 +1,20 @@
+{
+  "status": "published-and-device-verified",
+  "repository": "https://github.com/3bdlios/xcyber-openatv",
+  "normal_packages": 7646,
+  "release_debug_packages": 2,
+  "total_packages": 7648,
+  "verification": [
+    "all normal package SHA256 and sizes matched build indexes",
+    "GitHub release asset digests matched local SHA256",
+    "receiver opkg update succeeded for all configured feeds",
+    "python3-multiprocessing installed directly from GitHub",
+    "requests and multiprocessing ThreadPool tests passed",
+    "BouquetMakerXtream dependency checker passed",
+    "only python3-multiprocessing added to installed packages",
+    "temporary STORAGE feed removed",
+    "BitBake feed configuration parsed successfully"
+  ],
+  "source_hotfix_packages_pending_rebuild": true,
+  "verified_at": "2026-11-26T01:15:23.483715+00:00"
+}
