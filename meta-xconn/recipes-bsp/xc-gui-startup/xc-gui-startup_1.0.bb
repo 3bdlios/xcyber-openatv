@@ -1,4 +1,4 @@
-SUMMARY = "Minimal XC hardware and framebuffer startup for OpenBH GUI"
+SUMMARY = "Minimal XC hardware and framebuffer startup for OpenATV GUI"
 PR = "r1"
 LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e6a75371ba4d16749254a51215d13f97"

@@ -21,3 +21,13 @@ The receiver booted from XC slot 2. IPTV dependencies are being validated from t
 ## Update policy
 
 Publish fixes only after building versioned IPKs and checking installation on the receiver. Update the package indexes after their payloads are uploaded and verified. Preserve old package versions for rollback. Keep source changes, package changes, and hardware-test coverage in release notes.
+
+## Install the feed on an existing receiver
+
+Download `scripts/install-feed.sh` to `/tmp`, inspect it, then run it as root on OpenATV 8.0.1 / xconn. It validates the image, checks GitHub index availability and backs up previous distro feed configuration before activating the independent feed. Third-party, settings and picon configurations are retained.
+
+For BouquetMakerXtream the missing dependency observed on the receiver was `python3-multiprocessing`; install it with `opkg install python3-multiprocessing`. The image recipe now includes multiprocessing and requests for future images. This source change is not retroactively present in the original firmware archives.
+
+Normal package payloads and indexes are under `feeds/openatv-8.0.1/xconn/{all,cortexa55,xconn}`. Two large optional debug packages are release assets under `feed-debug-8.0.1-20261125`, with their own opkg index. Package SHA256 values are included in each index.
+
+Publishing a source change does not build an IPK automatically. Build and verify changed packages before replacing package files; publish payloads before the corresponding indexes. Do not perform a blanket system upgrade against the initial feed on a receiver with manually applied hotfixes.

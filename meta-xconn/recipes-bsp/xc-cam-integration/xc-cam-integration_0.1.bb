@@ -1,4 +1,4 @@
-SUMMARY = "XC standard softcam integration for OpenBH"
+SUMMARY = "XC standard softcam integration for OpenATV"
 LICENSE = "CLOSED"
 SRC_URI = "file://XCCamIntegration.py file://xc-cam-integrate"
 S = "${UNPACKDIR}"

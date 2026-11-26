@@ -1,4 +1,4 @@
-"""Bridge standard softcam services to OpenBH without changing their config."""
+"""Bridge standard softcam services to OpenATV without changing their config."""
 from pathlib import Path
 import os
 import re
