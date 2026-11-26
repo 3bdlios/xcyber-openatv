@@ -3414,3 +3414,16 @@ HomePage: https://wireless.wiki.kernel.org/en/developers/regulatory/crda
 License: ISC
 Priority: optional
 
+Package: enigma2-plugin-extensions-xc-update-test
+Version: 0.2
+Architecture: all
+Maintainer: X-CYBER
+Section: extra
+Priority: optional
+Depends: enigma2, python3-core
+Filename: enigma2-plugin-extensions-xc-update-test_0.2_all.ipk
+Size: 918
+MD5Sum: 19c4165dae98d98bc4737c7e3832aec8
+SHA256sum: abef18326ed0ba8f36e1350106b1603b1c1416a34150a642e2c5b0ca64ceb316
+Description: Harmless GitHub feed delivery test
+
