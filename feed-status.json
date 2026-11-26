@@ -1,9 +1,9 @@
 {
   "status": "published-and-device-verified",
   "repository": "https://github.com/3bdlios/xcyber-openatv",
-  "normal_packages": 7646,
+  "normal_packages": 7647,
   "release_debug_packages": 2,
-  "total_packages": 7648,
+  "total_packages": 7649,
   "verification": [
     "all normal package SHA256 and sizes matched build indexes",
     "GitHub release asset digests matched local SHA256",
@@ -16,5 +16,13 @@
     "BitBake feed configuration parsed successfully"
   ],
   "source_hotfix_packages_pending_rebuild": true,
-  "verified_at": "2026-11-26T01:15:23.483715+00:00"
+  "verified_at": "2026-11-26T01:15:23.483715+00:00",
+  "github_update_test": {
+    "baseline": "0.1",
+    "published": "0.2",
+    "list_upgradable_confirmed": true,
+    "upgraded_directly_from_github": true,
+    "installed_version": "0.2",
+    "verified_at": "2026-11-26T01:55:23.617694+00:00"
+  }
 }
