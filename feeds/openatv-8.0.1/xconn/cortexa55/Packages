@@ -120575,18 +120575,18 @@ License: GPL-2.0-only
 Priority: optional
 
 Package: xc-gui-startup
-Version: 1.0-r1
-Depends: ir-keytable, xc-hardware
+Version: 1.0-r2
+Depends: ir-keytable, xc-hardware, xc-image-name, xc-password-pam-fix
 Recommends: update-rc.d
 Section: base
 Architecture: cortexa55
 Maintainer: openATV
-MD5Sum: 8a3f0da2e85f9482903b227116f26f52
-SHA256sum: d89eb79bf3951a5af3c7fea8a7d522edaba3a5076611a0ecf4195f04557fa0a4
-Size: 2246
-Filename: xc-gui-startup_1.0-r1_cortexa55.ipk
+MD5Sum: e665d2e43996e672933333c5b1ee39d7
+SHA256sum: 473c68154d704050d2bd0108aea64932224c7b256b85e44202c6ad8422307043
+Size: 2268
+Filename: xc-gui-startup_1.0-r2_cortexa55.ipk
 Source: xc-gui-startup_1.0.bb
-Description: Minimal XC hardware and framebuffer startup for OpenBH GUI
+Description: Minimal XC hardware and framebuffer startup for OpenATV GUI
 OE: xc-gui-startup
 HomePage: https://www.opena.tv
 License: GPL-2.0-only
