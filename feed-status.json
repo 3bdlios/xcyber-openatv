@@ -1,9 +1,9 @@
 {
   "status": "published-and-device-verified",
   "repository": "https://github.com/3bdlios/xcyber-openatv",
-  "normal_packages": 7647,
+  "normal_packages": 7648,
   "release_debug_packages": 2,
-  "total_packages": 7649,
+  "total_packages": 7650,
   "verification": [
     "all normal package SHA256 and sizes matched build indexes",
     "GitHub release asset digests matched local SHA256",
@@ -24,5 +24,15 @@
     "upgraded_directly_from_github": true,
     "installed_version": "0.2",
     "verified_at": "2026-11-26T01:55:23.617694+00:00"
+  },
+  "password_pam_fix": {
+    "package": "xc-password-pam-fix",
+    "version": "1.0-r0",
+    "delivered_from_github": true,
+    "isolated_test_before_exit": 10,
+    "isolated_test_after_exit": 0,
+    "actual_receiver_password_unchanged": true,
+    "samba_recipe_validation": "PR r2.xc1; samba-common depends on xc-password-pam-fix",
+    "verified_at": "2026-11-26T13:18:08.543292+00:00"
   }
 }
