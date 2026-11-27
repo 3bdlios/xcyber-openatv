@@ -83,5 +83,18 @@
     "github_verification": "Downloaded published Packages.gz and all five packages; SHA256 and sizes matched",
     "receiver_feed_refresh_verified": false,
     "receiver_feed_refresh_note": "Receiver unreachable after user poweroff test; no package installation or reboot attempted"
+  },
+  "subscriber_update_20261128": {
+    "versions": {
+      "xc-audiod": "0.1-r15",
+      "xc-gui-startup": "1.0-r4",
+      "xc-video-enhancement": "1.0-r12",
+      "xc-video-setup": "0.1-r3"
+    },
+    "github_payload_sha256_verified": true,
+    "offline_opkg_upgrade_verified": true,
+    "receiver_online_install_of_this_release_verified": false,
+    "experimental_recovery_and_seek_changes_included": false,
+    "release_notes": "UPDATE-2026-11-28.md"
   }
 }

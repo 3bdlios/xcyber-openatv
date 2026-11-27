@@ -120422,23 +120422,22 @@ License: GPL-2.0-or-later
 Priority: optional
 
 Package: xc-audiod
-Version: 0.1-r14
-Description: XC standard DVB audio system backend
- XC standard DVB audio system backend.
-Section: base
-Priority: optional
-Maintainer: openATV
-License: GPL-2.0-or-later
-Architecture: cortexa55
-OE: xc-audiod
-Homepage: https://www.opena.tv
+Version: 0.1-r15
 Depends: libasound2 (>= 1.2.16.1), libavcodec63 (>= 9.0.2), libavutil61 (>= 9.0.2), libc6 (>= 2.44+git0+34106fee69), libswresample7 (>= 9.0.2)
 Recommends: update-rc.d
+Section: base
+Architecture: cortexa55
+Maintainer: openATV
+MD5Sum: ad3fef062a8bda9ed2516d0519955f72
+SHA256sum: 023d1010b46c11ea5f2cf4c118afc33f5e3c8a044e3a0b9deffa25b84ca6a60e
+Size: 10020
+Filename: xc-audiod_0.1-r15_cortexa55.ipk
 Source: xc-audiod_0.1.bb
-MD5Sum: 4ddc3313c0a2ace729bfb61818b4e76a
-SHA256sum: 58886e738b2ab12fc0dca5a974bf8a9b1e36897167cb6b9d19b95628497b57b9
-Size: 9866
-Filename: xc-audiod_0.1-r14_cortexa55.ipk
+Description: XC standard DVB audio system backend
+OE: xc-audiod
+HomePage: https://www.opena.tv
+License: GPL-2.0-or-later
+Priority: optional
 
 Package: xc-frontpanel-dbg
 Version: 0.1-r0
@@ -120576,23 +120575,22 @@ License: GPL-2.0-only
 Priority: optional
 
 Package: xc-gui-startup
-Version: 1.0-r3
-Description: Minimal XC hardware and framebuffer startup for OpenATV GUI
- Minimal XC hardware and framebuffer startup for OpenATV GUI.
-Section: base
-Priority: optional
-Maintainer: openATV
-License: GPL-2.0-only
-Architecture: cortexa55
-OE: xc-gui-startup
-Homepage: https://www.opena.tv
-Depends: ir-keytable, xc-audiod, xc-hardware, xc-image-name, xc-password-pam-fix, xc-power-handoff, xc-volume-bridge
+Version: 1.0-r4
+Depends: ir-keytable, xc-audiod (>= 0.1-r15), xc-hardware, xc-image-name, xc-password-pam-fix, xc-power-handoff, xc-video-enhancement (>= 1.0-r12), xc-video-setup (>= 0.1-r3), xc-volume-bridge
 Recommends: update-rc.d
+Section: base
+Architecture: cortexa55
+Maintainer: openATV
+MD5Sum: 34ee9e62efdc72b26fe939ef96e13053
+SHA256sum: 5497967476b3fff8abcb78c47fcdd1568499faa74639a0a6cc423ec801313781
+Size: 2336
+Filename: xc-gui-startup_1.0-r4_cortexa55.ipk
 Source: xc-gui-startup_1.0.bb
-MD5Sum: 11336c675874783351b27cde664ae944
-SHA256sum: 6bb03e29dff609af1695779bc0207bc478f4c3f53fe8da6b5d3bee314aaf5d9a
-Size: 2294
-Filename: xc-gui-startup_1.0-r3_cortexa55.ipk
+Description: Minimal XC hardware and framebuffer startup for OpenATV GUI
+OE: xc-gui-startup
+HomePage: https://www.opena.tv
+License: GPL-2.0-only
+Priority: optional
 
 Package: xc-hdmi-route-dbg
 Version: 0.1-r0
@@ -120831,15 +120829,15 @@ License: CLOSED
 Priority: optional
 
 Package: xc-video-setup
-Version: 0.1-r1
+Version: 0.1-r3
 Depends: python3-core
 Section: base
 Architecture: cortexa55
 Maintainer: openATV
-MD5Sum: 866de9987e183b98751cb2ea6db09020
-SHA256sum: 6c5e70ca00ed7e3584b51b47c63ee3a3784cfa6bbb34afdc0b03f3d9f9009623
-Size: 3896
-Filename: xc-video-setup_0.1-r1_cortexa55.ipk
+MD5Sum: 3d22fb918f375e669f09373a2149466e
+SHA256sum: a19d295f68ab864be7e8e41cc139bae127bd874c95bd55f8f829197c8c85198c
+Size: 4360
+Filename: xc-video-setup_0.1-r3_cortexa55.ipk
 Source: xc-video-setup_0.1.bb
 Description: XC video output: resolution from the TV's DRM modes (applied at boot) and HDR output policy
 OE: xc-video-setup
@@ -122349,4 +122347,21 @@ MD5Sum: 20cc93dcbc0f023f69a6f54771c1112e
 SHA256sum: df218be6532e54da914fa97b617214dddb485243d0519fb0491b96ea906a9e2e
 Size: 37056
 Filename: xc-power-handoff_0.1-r0_cortexa55.ipk
+
+Package: xc-video-enhancement
+Version: 1.0-r12
+Depends: python3-core, xc-video-route (>= 0.1-r5), xc-video-setup
+Section: base
+Architecture: cortexa55
+Maintainer: openATV
+MD5Sum: 553bf548f2a797df21fc317f2a395276
+SHA256sum: b6a9c0db6b3e6e6bc1a062a77c9430ce52cf7f73221fa5572fb11b7f65ccb840
+Size: 3952
+Filename: xc-video-enhancement_1.0-r12_cortexa55.ipk
+Source: xc-video-enhancement_1.0.bb
+Description: XC video enhancement: brightness, contrast, saturation and hue on the Amlogic picture engine
+OE: xc-video-enhancement
+HomePage: https://www.opena.tv
+License: CLOSED
+Priority: optional
 
