@@ -32,22 +32,24 @@ License: GPL-2.0-or-later AND MIT
 Priority: optional
 
 Package: alsa-state
-Version: 0.2.0-r0.11
+Version: 0.2.0-r0.11.xc1
+Description: Alsa scenario files to enable alsa state restoration
+ Alsa Scenario Files - an init script and state files to restore sound
+ state at system boot and save it at system shut down.
+Section: base
+Priority: optional
+Maintainer: openATV
+License: GPL-2.0-or-later AND MIT
+Architecture: xconn
+OE: alsa-state
+Homepage: http://www.alsa-project.org/
 Depends: alsa-utils-alsactl, initd-functions
 Recommends: alsa-states, libasound-module-ctl-oss, libasound-module-pcm-oss, update-rc.d
-Section: base
-Architecture: xconn
-Maintainer: openATV
-MD5Sum: 7fa8acc17a2d33a7ea2698006687b6fe
-SHA256sum: 0ea3cdf6a3b50fbddad71f63b2504bcbc33ad627a12cc80f911483317dfc1760
-Size: 2004
-Filename: alsa-state_0.2.0-r0.11_xconn.ipk
 Source: alsa-state.bb
-Description: Alsa scenario files to enable alsa state restoration
-OE: alsa-state
-HomePage: http://www.alsa-project.org/
-License: GPL-2.0-or-later AND MIT
-Priority: optional
+MD5Sum: 572edf06253cd8e79f75fcca73640e59
+SHA256sum: d07cb544287933b9156c8a1a3f3e3f35ad9aff86a4f000845cb5fe507c75cef6
+Size: 2338
+Filename: alsa-state_0.2.0-r0.11.xc1_xconn.ipk
 
 Package: alsa-states
 Version: 0.2.0-r0.11

@@ -120422,22 +120422,23 @@ License: GPL-2.0-or-later
 Priority: optional
 
 Package: xc-audiod
-Version: 0.1-r13
+Version: 0.1-r14
+Description: XC standard DVB audio system backend
+ XC standard DVB audio system backend.
+Section: base
+Priority: optional
+Maintainer: openATV
+License: GPL-2.0-or-later
+Architecture: cortexa55
+OE: xc-audiod
+Homepage: https://www.opena.tv
 Depends: libasound2 (>= 1.2.16.1), libavcodec63 (>= 9.0.2), libavutil61 (>= 9.0.2), libc6 (>= 2.44+git0+34106fee69), libswresample7 (>= 9.0.2)
 Recommends: update-rc.d
-Section: base
-Architecture: cortexa55
-Maintainer: openATV
-MD5Sum: 17e9743cb64e97205d4562558dfc3943
-SHA256sum: 1b496e8e71623908633ef14067c277cf164174cdab13d35bbc73adaf37fa6a7f
-Size: 9908
-Filename: xc-audiod_0.1-r13_cortexa55.ipk
 Source: xc-audiod_0.1.bb
-Description: XC standard DVB audio system backend
-OE: xc-audiod
-HomePage: https://www.opena.tv
-License: GPL-2.0-or-later
-Priority: optional
+MD5Sum: 4ddc3313c0a2ace729bfb61818b4e76a
+SHA256sum: 58886e738b2ab12fc0dca5a974bf8a9b1e36897167cb6b9d19b95628497b57b9
+Size: 9866
+Filename: xc-audiod_0.1-r14_cortexa55.ipk
 
 Package: xc-frontpanel-dbg
 Version: 0.1-r0
@@ -120575,22 +120576,23 @@ License: GPL-2.0-only
 Priority: optional
 
 Package: xc-gui-startup
-Version: 1.0-r2
-Depends: ir-keytable, xc-hardware, xc-image-name, xc-password-pam-fix
-Recommends: update-rc.d
-Section: base
-Architecture: cortexa55
-Maintainer: openATV
-MD5Sum: e665d2e43996e672933333c5b1ee39d7
-SHA256sum: 473c68154d704050d2bd0108aea64932224c7b256b85e44202c6ad8422307043
-Size: 2268
-Filename: xc-gui-startup_1.0-r2_cortexa55.ipk
-Source: xc-gui-startup_1.0.bb
+Version: 1.0-r3
 Description: Minimal XC hardware and framebuffer startup for OpenATV GUI
-OE: xc-gui-startup
-HomePage: https://www.opena.tv
-License: GPL-2.0-only
+ Minimal XC hardware and framebuffer startup for OpenATV GUI.
+Section: base
 Priority: optional
+Maintainer: openATV
+License: GPL-2.0-only
+Architecture: cortexa55
+OE: xc-gui-startup
+Homepage: https://www.opena.tv
+Depends: ir-keytable, xc-audiod, xc-hardware, xc-image-name, xc-password-pam-fix, xc-power-handoff, xc-volume-bridge
+Recommends: update-rc.d
+Source: xc-gui-startup_1.0.bb
+MD5Sum: 11336c675874783351b27cde664ae944
+SHA256sum: 6bb03e29dff609af1695779bc0207bc478f4c3f53fe8da6b5d3bee314aaf5d9a
+Size: 2294
+Filename: xc-gui-startup_1.0-r3_cortexa55.ipk
 
 Package: xc-hdmi-route-dbg
 Version: 0.1-r0
@@ -120879,22 +120881,24 @@ License: CLOSED
 Priority: optional
 
 Package: xc-volume-bridge
-Version: 0.1-r1
+Version: 0.1-r2
+Description: XC: mirror Enigma2 volume/mute to the ALSA softvol used by IPTV/GStreamer and other ALSA clients
+ XC: mirror Enigma2 volume/mute to the ALSA softvol used by IPTV/GStreamer
+ and other ALSA clients.
+Section: base
+Priority: optional
+Maintainer: openATV
+License: CLOSED
+Architecture: cortexa55
+OE: xc-volume-bridge
+Homepage: https://www.opena.tv
 Depends: alsa-state, alsa-utils-amixer, python3-core
 Recommends: update-rc.d
-Section: base
-Architecture: cortexa55
-Maintainer: openATV
-MD5Sum: 752293d455e6c8db33d44adf80a9e7b2
-SHA256sum: 23694bd0f85be2241a9111dc15429396d9c4971315b391fbab816c2445d8f482
-Size: 1924
-Filename: xc-volume-bridge_0.1-r1_cortexa55.ipk
 Source: xc-volume-bridge_0.1.bb
-Description: XC: mirror Enigma2 volume/mute to the ALSA softvol used by IPTV/GStreamer and other ALSA clients
-OE: xc-volume-bridge
-HomePage: https://www.opena.tv
-License: CLOSED
-Priority: optional
+MD5Sum: 88e47f7c23ab9fb0d0a673c907e5c0f6
+SHA256sum: 89138cb54f050e81c392e1a291f3c5f1845927489315a91fb6261f63a2e49d8d
+Size: 1916
+Filename: xc-volume-bridge_0.1-r2_cortexa55.ipk
 
 Package: xc-wifi-dbg
 Version: 0.1-r0
@@ -122325,4 +122329,24 @@ OE: zstd
 HomePage: http://www.zstd.net/
 License: BSD-3-Clause OR GPL-2.0-only
 Priority: optional
+
+Package: xc-power-handoff
+Version: 0.1-r0
+Description: XC deep standby: blank front panel and arm BL30 IR wake (vendor meson-remote) at poweroff
+ XC deep standby: blank front panel and arm BL30 IR wake (vendor meson-
+ remote) at poweroff.
+Section: base
+Priority: optional
+Maintainer: openATV
+License: CLOSED
+Architecture: cortexa55
+OE: xc-power-handoff
+Homepage: https://www.opena.tv
+Depends: python3-core, xc-frontpanel, xc-hardware
+Recommends: update-rc.d
+Source: xc-power-handoff_0.1.bb
+MD5Sum: 20cc93dcbc0f023f69a6f54771c1112e
+SHA256sum: df218be6532e54da914fa97b617214dddb485243d0519fb0491b96ea906a9e2e
+Size: 37056
+Filename: xc-power-handoff_0.1-r0_cortexa55.ipk
 

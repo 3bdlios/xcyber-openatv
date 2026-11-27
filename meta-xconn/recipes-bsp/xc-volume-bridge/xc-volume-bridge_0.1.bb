@@ -1,5 +1,5 @@
 SUMMARY = "XC: mirror Enigma2 volume/mute to the ALSA softvol used by IPTV/GStreamer and other ALSA clients"
-PR = "r1"
+PR = "r2"
 LICENSE = "CLOSED"
 SRC_URI = "file://xc-volume-bridge file://xc-volume-bridge.init"
 S = "${UNPACKDIR}"

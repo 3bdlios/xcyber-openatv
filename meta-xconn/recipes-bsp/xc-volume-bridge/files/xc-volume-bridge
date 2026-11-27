@@ -12,10 +12,10 @@ while True:
         f = open(PROC).read().split()
         mute, left, right = int(f[6]), int(f[7]), int(f[8])
         att = min(63, max(0, (left + right) // 2))      # Enigma2: 63 - volume * 63 / 100
-        # Loudness curve, as in xc-audiod: gain = level^2 (50% -12 dB, 10% -40 dB);
+        # Linear amplitude for plugin audio: 50% about -6 dB, 10% about -20 dB;
         # the softvol control is 0..63 = -63..0 dB.
         level = (63 - att) / 63
-        raw = 0 if mute or level <= 0 else max(0, min(63, round(63 + 40 * math.log10(level))))
+        raw = 0 if mute or level <= 0 else max(0, min(63, round(63 + 20 * math.log10(level))))
         if raw != last:
             r = subprocess.run(['amixer', '-c', '0', '-q', 'sset', CONTROL, str(raw)], capture_output=True)
             if r.returncode == 0:

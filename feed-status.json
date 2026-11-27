@@ -68,5 +68,17 @@
     "independent_hdr10_broadcast_tested": false,
     "reboot_tested": false,
     "verified_at": "2026-11-26T16:17:11.022781+00:00"
+  },
+  "volume_and_power_update": {
+    "versions": {
+      "xc-audiod": "0.1-r14",
+      "xc-volume-bridge": "0.1-r2",
+      "xc-gui-startup": "1.0-r3",
+      "xc-power-handoff": "0.1-r0",
+      "alsa-state": "0.2.0-r0.11.xc1"
+    },
+    "user_device_test": "Remote volume, volume curve, IPAudioPro and poweroff reported working by user on 2026-11-27",
+    "github_delivery_verified": false,
+    "notes": "GUI restart required to reload ALSA configuration. No modified third-party plugin binaries. No OpenBlackHole files changed."
   }
 }
