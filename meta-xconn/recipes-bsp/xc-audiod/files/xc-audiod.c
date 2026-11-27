@@ -109,7 +109,23 @@ static int emit_frame(struct engine *e,AVFrame *f){struct state s;if(!current(e,
     -31.5 dB at 50%, far too quiet; use linear amplitude instead: gain = level
     (20*log10: 50% -6 dB, 25% -12 dB, 10% -20 dB), same as xc-volume-bridge. */
  double gl=s.mute||s.left>=63?0:(63.0-s.left)/63.0,gr=s.mute||s.right>=63?0:(63.0-s.right)/63.0;for(int i=0;i<count;i++){int16_t a=buf[2*i],b=buf[2*i+1];if(s.channel==1)b=a;else if(s.channel==2)a=b;else if(s.channel==3)a=b=(int16_t)(((int)a+b)/2);else if(s.channel==4){int16_t t=a;a=b;b=t;}buf[2*i]=(int16_t)(a*gl);buf[2*i+1]=(int16_t)(b*gr);}
- int offset=first;while(offset<count&&!quit){if(!current(e,&s)){av_free(buf);return -1;}if(s.play==2){if(!e->paused){snd_pcm_pause(e->pcm,1);e->paused=1;}usleep(10000);continue;}if(e->paused){snd_pcm_pause(e->pcm,0);e->paused=0;}snd_pcm_sframes_t n=snd_pcm_writei(e->pcm,buf+offset*2,count-offset);if(n==-EAGAIN){usleep(5000);continue;}if(n<0){
+ int64_t blocked_since=0;uint32_t blocked_video=0;
+ int offset=first;while(offset<count&&!quit){if(!current(e,&s)){av_free(buf);return -1;}if(s.play==2){blocked_since=0;if(!e->paused){snd_pcm_pause(e->pcm,1);e->paused=1;}usleep(10000);continue;}if(e->paused){snd_pcm_pause(e->pcm,0);e->paused=0;}snd_pcm_sframes_t n=snd_pcm_writei(e->pcm,buf+offset*2,count-offset);if(n==-EAGAIN||n==0){
+  /* A HIU pause/seek can leave ALSA RUNNING with a full, frozen ring.
+     Only recover after the picture advances: a real pause must stay paused. */
+  if(e->fileclock){
+   uint32_t video=0;
+   if(!clock_read("pts_video",&video)){
+    if(!blocked_since){blocked_since=now_ms();blocked_video=video;}
+    else if(now_ms()-blocked_since>750&&xc_delta(video,blocked_video)>9000){
+     fprintf(stderr,"XC PCM stalled after HIU resume; reopening gen=%u\n",s.gen);
+     av_free(buf);return -1;
+    }
+   }
+  }
+  usleep(5000);continue;
+ }
+ blocked_since=0;if(n<0){
   if(n==-EPIPE){e->xruns++;fprintf(stderr,"XC r13 ALSA underrun #%d gen=%u\n",e->xruns,s.gen);}
   if(snd_pcm_recover(e->pcm,n,1)<0){av_free(buf);return -1;}
   memset(&e->sync,0,sizeof(e->sync));swr_set_compensation(e->swr,0,0);continue;

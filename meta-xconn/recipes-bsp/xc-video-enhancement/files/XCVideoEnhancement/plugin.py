@@ -12,6 +12,8 @@ import subprocess
 from os.path import exists
 
 from enigma import eTimer, iPlayableService
+from Components.ActionMap import HelpableActionMap
+from Components.Sources.StaticText import StaticText
 from Components.config import config, ConfigSubsection, ConfigSelectionNumber, ConfigSelection
 from Plugins.Plugin import PluginDescriptor
 from Screens.Setup import Setup
@@ -132,9 +134,13 @@ def apply_all():
 class XCVideoEnhancementSetup(Setup):
 	"""Laid out like Enigma2's own Video enhancement setup: red Cancel, green OK, yellow Last config, blue Default."""
 	def __init__(self, session):
-		Setup.__init__(self, session, 'xcvideoenhancement', plugin='SystemPlugins/XCVideoEnhancement',
-			yellow_button={'text': _('Last config'), 'function': self.last_config, 'helptext': _('Back to the values saved last')},
-			blue_button={'text': _('Default'), 'function': self.defaults, 'helptext': _('Set all values to their defaults')})
+		Setup.__init__(self, session, 'xcvideoenhancement', plugin='SystemPlugins/XCVideoEnhancement')
+		self['key_yellow'] = StaticText(_('Last config'))
+		self['key_blue'] = StaticText(_('Default'))
+		self['xcColourActions'] = HelpableActionMap(self, ['ColorActions'], {
+			'yellow': (self.last_config, _('Back to the values saved last')),
+			'blue': (self.defaults, _('Set all values to their defaults')),
+		}, prio=-2)
 		if 'key_green' in self:
 			self['key_green'].setText(_('OK'))
 
@@ -172,9 +178,9 @@ def main(session, **kwargs):
 
 
 def startSetup(menuid):
-	if menuid != 'av':
+	if menuid != 'video_menu':
 		return []
-	return [(_('Video enhancement'), main, 'videoenhancement_setup', 41)]
+	return [(_('Video enhancement setup'), main, 'videoenhancement_setup', 5)]
 
 
 def sessionstart(reason, session=None, **kwargs):

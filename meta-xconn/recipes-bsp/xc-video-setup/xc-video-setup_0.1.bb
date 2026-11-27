@@ -1,5 +1,5 @@
 SUMMARY = "XC video output: resolution from the TV's DRM modes (applied at boot) and HDR output policy"
-PR = "r2"
+PR = "r3"
 LICENSE = "CLOSED"
 SRC_URI = "file://XCVideo.py file://XCVideoSetup/__init__.py file://XCVideoSetup/plugin.py"
 S = "${UNPACKDIR}"
