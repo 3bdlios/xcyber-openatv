@@ -78,7 +78,10 @@
       "alsa-state": "0.2.0-r0.11.xc1"
     },
     "user_device_test": "Remote volume, volume curve, IPAudioPro and poweroff reported working by user on 2026-11-27",
-    "github_delivery_verified": false,
-    "notes": "GUI restart required to reload ALSA configuration. No modified third-party plugin binaries. No OpenBlackHole files changed."
+    "github_delivery_verified": true,
+    "notes": "GUI restart required to reload ALSA configuration. No modified third-party plugin binaries. No OpenBlackHole files changed.",
+    "github_verification": "Downloaded published Packages.gz and all five packages; SHA256 and sizes matched",
+    "receiver_feed_refresh_verified": false,
+    "receiver_feed_refresh_note": "Receiver unreachable after user poweroff test; no package installation or reboot attempted"
   }
 }
